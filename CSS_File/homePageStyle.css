@@ -1,0 +1,158 @@
+body {
+  background: rgb(4, 38, 102); 
+}
+
+.banner {
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card {
+    background: rgb(61, 62, 65);
+    width: 700px;
+    margin: 40px auto; 
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    background-color: #ffffff;
+    text-align: center; 
+    font-family: Arial, sans-serif;
+}
+
+.card-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.match-details {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.team {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+}
+
+.team img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.vs {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.NextMatchTime {
+    font-size: 1em;
+    color: #555;
+}
+
+.card2-header {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.match-card {
+    width: 80%;
+    max-width: 700px;
+    margin: 20px auto; 
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.match-date {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.teams {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.team {
+    text-align: center;
+}
+
+.team img {
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.result {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.links {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.Main-topic-header {
+    text-align: center;        
+    font-size: 2rem;            
+    font-weight: bold;           
+    margin: 30px 0;            
+    color: #ffffff;            
+    letter-spacing: 2px;       
+    text-transform: uppercase;  
+}
+
+.Teams-Logo {
+  display: flex;              
+  justify-content: center;     
+  align-items: center;         
+  gap: 150px;                  
+  flex-wrap: wrap;             
+  margin: 20px 0;     
+}
+
+.Teams-Logo img {
+  max-width: 140px;         
+  height: auto;               
+  display: block;
+}
+
+.fixtures-results {
+  display: block;          /* makes the button act like a block element */
+  margin: 20px auto;       /* auto on left & right = center horizontally */
+  padding: 18px 30px;      /* size of button */
+  background-color: #0a024a;  /* button background */
+  color: #fff;             /* text color */
+  border: none;
+  border-radius: 8px;      /* rounded corners */
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.fixtures-results:hover {
+  background-color: #ffffff;  /* darker shade on hover */
+  color: #000000;
+}
