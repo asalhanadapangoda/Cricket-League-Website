@@ -20,13 +20,13 @@
       <ul class="nav-list">
         <li><a href="homePage.php">HOME</a></li>
         <li class="dropdown">
-          <a href="#">TEAMS ▾</a>
+          <a href="teamPage.php">TEAMS ▾</a>
           <ul class="dropdown-menu">
-            <li><a href="#">B-Love Kandy</a></li>
-            <li><a href="#">Dambulla Aura</a></li>
-            <li><a href="#">Galle Titans</a></li>
-            <li><a href="#">Colombo Strikers</a></li>
-            <li><a href="#">Jaffna Kings</a></li>
+            <li><a href="Teams/teamKandy.php">B-Love Kandy</a></li>
+            <li><a href="Teams/teamDambulla.php">Dambulla Aura</a></li>
+            <li><a href="Teams/teamGalle.php">Galle Titans</a></li>
+            <li><a href="Teams/teamColombo.php">Colombo Strikers</a></li>
+            <li><a href="Teams/teamJaffna.php">Jaffna Kings</a></li>
           </ul>
         </li>
         <li><a href="#">FIXTURES & RESULTS</a></li>
