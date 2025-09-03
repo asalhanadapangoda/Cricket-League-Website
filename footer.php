@@ -47,12 +47,12 @@
     <!-- Admin Login We have to add Admin Login page -->
 
     <div class="admin-login">
-      <a href="admin-login.php">Admin Login</a>
+      <a href="adminLogin.php">Admin Login</a>
     </div>
 
 
     <div class="copyright">
-      <p>Copyright © LPL 2025 All Rights Reserved.</p>
+      <p>Copyright &copy; LPL 2025 All Rights Reserved.</p>
     </div>
    </footer> 
 </body>
