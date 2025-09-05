@@ -5,7 +5,7 @@ if (isset($_POST["submit"])) {
     $username = $_POST["uid"];
     $pwd = $_POST["pwd"];
 
-    require_once 'dbh.inc.php';
+    require_once 'db.php';
 
     if(emptyInputLogin($username, $pwd) !== false) { 
         echo "<script>alert('Please fill in all fields!'); window.location.href='../adminLogin.php';</script>";
@@ -33,7 +33,7 @@ function emptyInputLogin($username, $pwd){
 
 // Check if admin exists
 function adminExists($conn, $username) {
-    $sql = "SELECT * FROM admins WHERE username = ?";
+    $sql = "SELECT * FROM admin WHERE username = ?";
     $stmt = mysqli_stmt_init($conn);
     
     if (!mysqli_stmt_prepare($stmt, $sql)) {
