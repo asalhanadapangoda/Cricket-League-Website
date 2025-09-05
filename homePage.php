@@ -11,7 +11,7 @@
   <main>
     <!-- Home Page Image -->
     <div class="banner">
-      <img src="Pictures/Home.jpeg" alt="Cricket Banner">
+      <img src="Pictures/Home_img.jpg" alt="Cricket Banner">
     </div>
 
     <!-- Next Match-->
