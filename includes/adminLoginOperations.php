@@ -72,6 +72,7 @@ function loginAdmin($conn, $username, $pwd) {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_id'] = $adminExists["id"];
         $_SESSION['admin_username'] = $adminExists["username"];
+        $_SESSION['admin_name'] = $adminExists["admin_name"];
         
         header("Location: ../adminDashboard.php");
         exit();

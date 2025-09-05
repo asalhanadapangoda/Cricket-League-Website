@@ -45,7 +45,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
     <!-- Body content -->
     <div class="main-content">
         <div class="header">
-            <div class="welcome">Welcome, <?php echo $_SESSION['admin_username'] ?? 'Admin'; ?>!</div>
+            <div class="welcome">Welcome, <?php echo  $_SESSION['admin_name'] ?? 'Admin'; ?>!</div>
             <button class="logout-btn" onclick="location.href='logout.php'">Logout</button>
         </div>
 
