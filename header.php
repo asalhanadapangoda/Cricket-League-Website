@@ -30,7 +30,7 @@
           </ul>
         </li>
         <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
-        <li><a href="#">STATS</a></li>
+        <li><a href="stats.php">STATS</a></li>
       </ul>
     </nav>
 
