@@ -29,7 +29,7 @@
             <li><a href="Teams/teamJaffna.php">Jaffna Kings</a></li>
           </ul>
         </li>
-        <li><a href="#">FIXTURES & RESULTS</a></li>
+        <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
         <li><a href="#">STATS</a></li>
       </ul>
     </nav>

@@ -80,16 +80,12 @@ $result = mysqli_query($conn, $sql);
         <div class="result">
             <strong>B-Love Kandy won by 5 wickets</strong>
         </div>
-
-        <div class="links">
-            T20 24 of 24 
-        </div>
     </div>
 
       <!-- Button-FIXTURES & RESULTS We have to add direction to FIXTURES & RESULTS-->
 
     <div>
-      <button class="fixtures-results" onclick="">FIXTURES & RESULTS</button>
+      <a href="fixturesAndResults.php" class="button-fixtures-results">Fixtures and Results</a>
     </div>
 
       <!-- POINTS TABLE  -->
