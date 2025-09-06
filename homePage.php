@@ -1,4 +1,12 @@
 <?php include 'header.php'; ?>
+ <!-- Get team data-->
+<?php
+require_once 'includes/db.php';
+
+$sql = "SELECT * FROM teams ORDER BY points DESC, nrr DESC";
+$result = mysqli_query($conn, $sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +96,43 @@
 
     <div class="Main-topic-header">POINTS TABLE</div>
 
+    <div class="points-table">
+  <table>
+    <thead>
+      <tr>
+        <th>POS</th>
+        <th>TEAM</th>
+        <th>P</th>
+        <th>W</th>
+        <th>L</th>
+        <th>NR</th>
+        <th>NRR</th>
+        <th>PTS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      $pos = 1;
+      while($row = mysqli_fetch_assoc($result)) {
+          echo "<tr>";
+          echo "<td>".$pos."</td>";
+          echo "<td><img src='".$row['logo']."' alt='logo' class='table-team-logo'> ".$row['team_name']."</td>";
+          echo "<td>".$row['played']."</td>";
+          echo "<td>".$row['won']."</td>";
+          echo "<td>".$row['lost']."</td>";
+          echo "<td>".$row['no_result']."</td>";
+          echo "<td>".$row['nrr']."</td>";
+          echo "<td><strong>".$row['points']."</strong></td>";
+          echo "</tr>";
+          $pos++;
+      }
+      ?>
+    </tbody>
+  </table>
+</div>
+
+       
+
       <!-- TEAMS We have to add direction to team page -->
 
     <div class="Main-topic-header">TEAMS</div>
@@ -112,7 +157,6 @@
 
     <!-- MEDIA We have to add some media release -->
 
-  <div class="Main-topic-header">MEDIA</div>
 
   </main>
 </body>

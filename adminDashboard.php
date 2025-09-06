@@ -21,7 +21,7 @@ if ($teamResult && mysqli_num_rows($teamResult) > 0) {
 }
 
 // Get number of players
-$playerQuery = "SELECT COUNT(*) as count FROM players";
+$playerQuery = "SELECT COUNT(*) as count FROM player";
 $playerResult = mysqli_query($conn, $playerQuery);
 if ($playerResult && mysqli_num_rows($playerResult) > 0) {
     $playerData = mysqli_fetch_assoc($playerResult);

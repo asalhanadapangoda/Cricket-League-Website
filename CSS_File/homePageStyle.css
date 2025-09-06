@@ -156,3 +156,47 @@ body {
   background-color: #ffffff;  /* darker shade on hover */
   color: #000000;
 }
+
+body.points-body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5; /* only applies if you add class="points-body" */
+}
+
+.points-table {
+  width: 90%;
+  margin: 30px auto;
+  overflow-x: auto;
+}
+
+.points-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.points-table thead {
+  background: #0073e6; /* Blue header */
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.points-table th, 
+.points-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.points-table tbody tr:hover {
+  background: #f1f1f1;
+}
+
+.table-team-logo {
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: middle;
+}

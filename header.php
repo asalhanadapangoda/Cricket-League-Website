@@ -31,8 +31,6 @@
         </li>
         <li><a href="#">FIXTURES & RESULTS</a></li>
         <li><a href="#">STATS</a></li>
-        <li><a href="#">GALLERY</a></li>
-        <li><a href="#">MEDIA RELEASES</a></li>
       </ul>
     </nav>
 
