@@ -75,8 +75,6 @@
         
 
     </main>
-
-    <script src="teamsPage.js"></script>
 </body>
 </html>
 

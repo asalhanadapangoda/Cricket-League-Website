@@ -3,9 +3,36 @@
 <?php
 require_once 'includes/db.php';
 
-$sql = "SELECT * FROM teams ORDER BY points DESC, nrr DESC";
+$sql ="SELECT t.team_id, t.team_name, t.logo, p.played, p.won, p.lost, p.no_result, p.nrr, p.points
+          FROM teams t
+          JOIN point_table p ON t.team_id = p.team_id
+          ORDER BY p.points DESC, p.nrr DESC";
+
 $result = mysqli_query($conn, $sql);
+
+//rm.* means shortcut of rm.match_id, rm.date,.... this
+$sql_1 = "SELECT rm.*, 
+               t1.team_name AS home_team, t1.logo AS home_logo,
+               t2.team_name AS visit_team, t2.logo AS visit_logo
+        FROM recent_match rm
+        JOIN teams t1 ON rm.home_team_id = t1.team_id
+        JOIN teams t2 ON rm.visit_team_id = t2.team_id
+        ORDER BY rm.date DESC
+        LIMIT 1";
+
+$sql_2 = "SELECT um.*,
+               t1.team_name AS home_team, t1.logo AS home_logo,
+               t2.team_name AS visit_team, t2.logo AS visit_logo
+          FROM upcoming_match um
+          JOIN teams t1 ON um.home_team_id = t1.team_id
+          JOIN teams t2 ON um.visit_team_id = t2.team_id
+          ORDER BY date ASC, time ASC
+          LIMIT 1";
+
+$result_pre = mysqli_query($conn, $sql_1);
+$result_next = mysqli_query($conn, $sql_2);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,67 +49,67 @@ $result = mysqli_query($conn, $sql);
       <img src="Pictures/Home_img.jpg" alt="Cricket Banner">
     </div>
 
-    <!-- Next Match-->
+    <?php
 
-    <div class="card">
-   
-        <div class="card-header">
-         Next Match
-        </div>
-    
-  
-      <div class="match-details">
-          <div class="team">
-            <img src="Pictures/DabullaLogo.png" alt="Team A Logo">
-            <p>Dambulla Aura</p>
-          </div>
-      
-          <div class="vs">
-             VS
-          </div>
+      // Next Match
+      if($row = mysqli_fetch_assoc($result_next)){
+        
+    echo '  <div class="card">';
+    echo '     <div class="card-header">';
+    echo '          Next Match';
+    echo '      </div>';
+    echo '     <div class="match-details">';
+    echo '        <div class="team">';
+    echo '        <img src="' . $row['home_logo'] . '" alt="' . $row['home_team'] . ' Logo">';
+    echo '        <p>' . $row['home_team'] . '</p>';
+    echo '        </div>';
 
-          <div class="team">
-             <img src="Pictures/Kandy-1.png" alt="Team B Logo">
-             <p>B-Love Kandy</p>
-          </div>      
-      </div>
-          <div class="NextMatchTime">
-             Match starts in: August 20, 2023 8:30 PM
-          </div>
-      </div>
+    echo '        <div class="vs">';
+    echo '         VS';
+    echo '        </div>';
 
-    <!-- Recent Results  -->
+    echo '        <div class="team">';
+    echo '         <img src="' . $row['visit_logo'] . '" alt="' . $row['visit_team'] . ' Logo">';
+    echo '         <p>' . $row['visit_team'] . '</p>';
+    echo '        </div>';      
+    echo '    </div>';
+    echo '      <div class="NextMatchTime">';
+    echo '         Match starts in: ' . date("F d, Y", strtotime($row['date'])) .' ' . $row['time'] . '';
+    echo '      </div>';
+    echo '    </div>';
+    }
 
-     <div class="match-card">
-        <div class="card2-header">
-         Recent Results
-        </div>
-        <div class="match-date">
-            August 20, 2023
-        </div>
+    // Recent Results  
 
-        <div class="teams">
-            <div class="team">
-                <img src="Pictures/DabullaLogo.png" alt="Dambulla Aura Logo" width="80">
-                <p>Dambulla Aura</p>
-                <p>147/4</p>
-                <p>(20)</p>
-            </div>
+    if ($row = mysqli_fetch_assoc($result_pre)){
+    echo '<div class="match-card">';
+    echo '    <div class="card2-header">';
+    echo '            Recent Results';
+    echo '    </div>';
+    echo '    <div class="match-date">' . date("F d, Y", strtotime($row['date'])) . '</div>';
 
-            <div class="team">
-                <img src="Pictures/Kandy-1.png" alt="B-Love Kandy Logo" width="80">
-                <p>B-Love Kandy</p>
-                <p>151/5</p>
-                <p>(19.5)</p>
-            </div>
-        </div>
+    echo '    <div class="teams">';
+    echo '        <div class="team">';
+    echo '            <img src="' . $row['home_logo'] . '" alt="' . $row['home_team'] . ' Logo" width="80">';
+    echo '            <p>' . $row['home_team'] . '</p>';
+    echo '            <p>' . $row['home_team_runs'] . '/' . $row['home_team_wickets'] . '</p>';
+    echo '            <p>(' . $row['home_team_overs'] . ')</p>';
+    echo '        </div>';
 
-        <div class="result">
-            <strong>B-Love Kandy won by 5 wickets</strong>
-        </div>
-    </div>
+    echo '        <div class="team">';
+    echo '            <img src="' . $row['visit_logo'] . '" alt="' . $row['visit_team'] . ' Logo" width="80">';
+    echo '            <p>' . $row['visit_team'] . '</p>';
+    echo '            <p>' . $row['visit_team_runs'] . '/' . $row['visit_team_wickets'] . '</p>';
+    echo '            <p>(' . $row['visit_team_overs'] . ')</p>';
+    echo '        </div>';
+    echo '    </div>';
 
-      <!-- Button-FIXTURES & RESULTS We have to add direction to FIXTURES & RESULTS-->
+    echo '    <div class="result"><strong>' . $row['final_result'] . '</strong></div>';
+    echo '</div>';
+    }
+    ?>
+
+      <!-- Button-FIXTURES & RESULTS -->
 
     <div>
       <a href="fixturesAndResults.php" class="button-fixtures-results">Fixtures and Results</a>
@@ -122,6 +149,7 @@ $result = mysqli_query($conn, $sql);
           echo "</tr>";
           $pos++;
       }
+      mysqli_close($conn);
       ?>
     </tbody>
   </table>
@@ -129,31 +157,27 @@ $result = mysqli_query($conn, $sql);
 
        
 
-      <!-- TEAMS We have to add direction to team page -->
+      <!-- TEAMS -->
 
     <div class="Main-topic-header">TEAMS</div>
 
     <div class="Teams-Logo">
-      <a href="kandy.html">
+      <a href="teamKandy.php">
         <img src="Pictures/Kandy-1.png" alt="B-Love Kandy Logo">
       </a>
-      <a href="dambulla.html">
+      <a href="teamDambulla.php">
         <img src="Pictures/DabullaLogo.png" alt="Dambulla Aura Logo">
       </a>
-      <a href="colombo.html">
+      <a href="teamColombo.php">
        <img src="Pictures/Colombo-1.png" alt="Colombo Logo">
       </a>
-      <a href="jaffna.html">
+      <a href="teamJaffna.php">
         <img src="Pictures/Jaffna-1.png" alt="Jaffna Logo">
       </a>
-      <a href="galle.html">
+      <a href="teamGalle.php">
        <img src="Pictures/Galle-1.png" alt="Galle Logo">
       </a>
    </div>
-
-    <!-- MEDIA We have to add some media release -->
-
-
   </main>
 </body>
 </html>

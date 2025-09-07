@@ -3,7 +3,11 @@
 <?php
 require_once 'includes/db.php';
 
-$sql_1 = "SELECT * FROM teams ORDER BY points DESC, nrr DESC";
+$sql_1 = "SELECT t.team_id, t.team_name, t.logo, p.played, p.won, p.lost, p.no_result, p.nrr, p.points
+          FROM teams t
+          JOIN point_table p ON t.team_id = p.team_id
+          ORDER BY p.points DESC, p.nrr DESC";
+
 $result_point = mysqli_query($conn, $sql_1);
 
 $sql_2 = "SELECT 
@@ -129,10 +133,11 @@ $result_wickets = mysqli_query($conn, $sql_3);
                     echo "</tr>";
                     $pos++;
                 }
+                mysqli_close($conn);
                 ?>
             </tbody>
         </table>
     </div>
-
 </body>
 </html>
+<?php include 'footer.php'; ?>

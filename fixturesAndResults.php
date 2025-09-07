@@ -33,6 +33,7 @@ $result_next = mysqli_query($conn, $sql_2);
 <body>
     <div class="Main-topic-header">Fixtures & Results</div>
     <?php
+    //Recent matches
     while ($row = mysqli_fetch_assoc($result_pre)){
     echo '<div class="match-card">';
     echo '    <div class="match-date">' . date("F d, Y", strtotime($row['date'])) . '</div>';
@@ -56,6 +57,8 @@ $result_next = mysqli_query($conn, $sql_2);
     echo '    <div class="result"><strong>' . $row['final_result'] . '</strong></div>';
     echo '</div>';
 }
+
+    //Upcoming matches
     while($row = mysqli_fetch_assoc($result_next)){
         
     echo '  <div class="card">';
@@ -84,3 +87,4 @@ mysqli_close($conn);
 ?>
 </body>
 </html>
+<?php include 'footer.php'; ?>

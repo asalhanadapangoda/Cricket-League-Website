@@ -22,11 +22,11 @@
         <li class="dropdown">
           <a href="teamPage.php">TEAMS ▾</a>
           <ul class="dropdown-menu">
-            <li><a href="Teams/teamKandy.php">B-Love Kandy</a></li>
-            <li><a href="Teams/teamDambulla.php">Dambulla Aura</a></li>
-            <li><a href="Teams/teamGalle.php">Galle Titans</a></li>
-            <li><a href="Teams/teamColombo.php">Colombo Strikers</a></li>
-            <li><a href="Teams/teamJaffna.php">Jaffna Kings</a></li>
+            <li><a href="teamKandy.php">B-Love Kandy</a></li>
+            <li><a href="teamDambulla.php">Dambulla Aura</a></li>
+            <li><a href="teamGalle.php">Galle Titans</a></li>
+            <li><a href="teamColombo.php">Colombo Strikers</a></li>
+            <li><a href="teamJaffna.php">Jaffna Kings</a></li>
           </ul>
         </li>
         <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
