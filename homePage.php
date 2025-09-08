@@ -4,7 +4,7 @@
 require_once 'includes/db.php';
 
 $sql ="SELECT t.team_id, t.team_name, t.logo, p.played, p.won, p.lost, p.no_result, p.nrr, p.points
-          FROM teams t
+          FROM team t
           JOIN point_table p ON t.team_id = p.team_id
           ORDER BY p.points DESC, p.nrr DESC";
 
@@ -15,8 +15,8 @@ $sql_1 = "SELECT rm.*,
                t1.team_name AS home_team, t1.logo AS home_logo,
                t2.team_name AS visit_team, t2.logo AS visit_logo
         FROM recent_match rm
-        JOIN teams t1 ON rm.home_team_id = t1.team_id
-        JOIN teams t2 ON rm.visit_team_id = t2.team_id
+        JOIN team t1 ON rm.home_team_id = t1.team_id
+        JOIN team t2 ON rm.visit_team_id = t2.team_id
         ORDER BY rm.date DESC
         LIMIT 1";
 
@@ -24,8 +24,8 @@ $sql_2 = "SELECT um.*,
                t1.team_name AS home_team, t1.logo AS home_logo,
                t2.team_name AS visit_team, t2.logo AS visit_logo
           FROM upcoming_match um
-          JOIN teams t1 ON um.home_team_id = t1.team_id
-          JOIN teams t2 ON um.visit_team_id = t2.team_id
+          JOIN team t1 ON um.home_team_id = t1.team_id
+          JOIN team t2 ON um.visit_team_id = t2.team_id
           ORDER BY date ASC, time ASC
           LIMIT 1";
 

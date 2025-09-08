@@ -1,0 +1,251 @@
+-- -----------------------------------------------------
+-- Create Database
+-- -----------------------------------------------------
+DROP DATABASE IF EXISTS LPL;
+CREATE DATABASE LPL;
+USE LPL;
+
+-- -----------------------------------------------------
+-- Table: admin
+-- -----------------------------------------------------
+CREATE TABLE admin (
+    username VARCHAR(50) PRIMARY KEY,
+    admin_name VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Table: team
+-- -----------------------------------------------------
+CREATE TABLE team (
+    team_id VARCHAR(10) PRIMARY KEY,
+    team_name VARCHAR(100) NOT NULL,
+    logo VARCHAR(255)
+);
+
+-- -----------------------------------------------------
+-- Table: point_table
+-- -----------------------------------------------------
+CREATE TABLE point_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    team_id VARCHAR(10),
+    played INT DEFAULT 0,
+    won INT DEFAULT 0,
+    lost INT DEFAULT 0,
+    no_result INT DEFAULT 0,
+    nrr DECIMAL(5,2) DEFAULT 0.00,
+    points INT DEFAULT 0,
+    FOREIGN KEY (team_id) REFERENCES team(team_id)
+);
+
+-- -----------------------------------------------------
+-- Table: player
+-- -----------------------------------------------------
+CREATE TABLE player (
+    player_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    type ENUM('Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper') NOT NULL,
+    number_of_match INT DEFAULT 0,
+    runs INT DEFAULT 0,
+    wickets INT DEFAULT 0,
+    team_id VARCHAR(10),
+    FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table: upcoming_match
+-- -----------------------------------------------------
+CREATE TABLE upcoming_match (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
+    home_team_id VARCHAR(10) NOT NULL,
+    visit_team_id VARCHAR(10) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    FOREIGN KEY (home_team_id) REFERENCES team(team_id) ON DELETE CASCADE,
+    FOREIGN KEY (visit_team_id) REFERENCES team(team_id) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table: recent_match
+-- -----------------------------------------------------
+CREATE TABLE recent_match (
+    match_id INT AUTO_INCREMENT PRIMARY KEY,
+    home_team_id VARCHAR(10) NOT NULL,
+    visit_team_id VARCHAR(10) NOT NULL,
+    home_team_runs INT,
+    home_team_wickets INT,
+    home_team_overs DECIMAL(4,1),
+    visit_team_runs INT,
+    visit_team_wickets INT,
+    visit_team_overs DECIMAL(4,1),
+    final_result TEXT,
+    date DATE NOT NULL,
+    FOREIGN KEY (home_team_id) REFERENCES team(team_id) ON DELETE CASCADE,
+    FOREIGN KEY (visit_team_id) REFERENCES team(team_id) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table: coach
+-- -----------------------------------------------------
+CREATE TABLE coach (
+    coach_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role VARCHAR(100),
+    team_id VARCHAR(10),
+    FOREIGN KEY (team_id) REFERENCES team(team_id)
+);
+
+-- -----------------------------------------------------
+-- Insert Sample Data
+-- -----------------------------------------------------
+-- Admins
+INSERT INTO admin (username, admin_name, password) VALUES
+('admin1', 'Super Admin', 'password123'),
+('manager1', 'Tournament Manager', 'securePass');
+
+-- Teams
+INSERT INTO team (team_id, team_name, logo) VALUES
+('T01', 'Colombo Kings', 'Pictures/Colombo-1.png'),
+('T02', 'Galle Gladiators', 'Pictures/Galle-1.png'),
+('T03', 'B-Love Kandy', 'Pictures/Kandy-1.png'),
+('T04', 'Jaffna Stallions', 'Pictures/Jaffna-1.png'),
+('T05', 'Dambulla Giants', 'Pictures/DabullaLogo.png');
+
+-- Point Table
+INSERT INTO point_table (team_id, played, won, lost, no_result, nrr, points) VALUES
+('T01', 2, 1, 1, 0, 0.25, 2),
+('T02', 2, 2, 0, 0, 1.50, 4),
+('T03', 2, 0, 2, 0, -1.20, 0),
+('T04', 2, 1, 1, 0, 0.10, 2),
+('T05', 0, 0, 0, 0, 0.00, 0);
+
+-- -----------------------------------------------------
+-- Players
+-- -----------------------------------------------------
+-- Colombo Kings (T01)
+INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
+('Kusal', 'Perera', 'Wicket-Keeper', 45, 1200, 0, 'T01'),
+('Avishka', 'Fernando', 'Batsman', 38, 980, 0, 'T01'),
+('Dinesh', 'Chandimal', 'Batsman', 52, 1400, 0, 'T01'),
+('Angelo', 'Mathews', 'All-Rounder', 65, 2200, 60, 'T01'),
+('Thisara', 'Perera', 'All-Rounder', 70, 1800, 95, 'T01'),
+('Lahiru', 'Kumara', 'Bowler', 30, 120, 45, 'T01'),
+('Suranga', 'Lakmal', 'Bowler', 80, 300, 110, 'T01'),
+('Wanindu', 'Hasaranga', 'All-Rounder', 40, 900, 75, 'T01'),
+('Charith', 'Asalanka', 'Batsman', 28, 750, 0, 'T01'),
+('Isuru', 'Udana', 'Bowler', 60, 450, 82, 'T01'),
+('Dimuth', 'Karunaratne', 'Batsman', 100, 3200, 0, 'T01');
+
+-- Galle Gladiators (T02)
+INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
+('Danushka', 'Gunathilaka', 'Batsman', 55, 1500, 0, 'T02'),
+('Bhanuka', 'Rajapaksa', 'Batsman', 47, 1320, 0, 'T02'),
+('Mohammad', 'Amir', 'Bowler', 90, 250, 150, 'T02'),
+('Lakshan', 'Sandakan', 'Bowler', 60, 120, 85, 'T02'),
+('Ben', 'Cutting', 'All-Rounder', 70, 1600, 70, 'T02'),
+('Colin', 'Ingram', 'Batsman', 75, 2100, 0, 'T02'),
+('Dhananjaya', 'de Silva', 'All-Rounder', 85, 2000, 65, 'T02'),
+('Akila', 'Dananjaya', 'Bowler', 45, 200, 50, 'T02'),
+('Shoaib', 'Malik', 'All-Rounder', 200, 5000, 150, 'T02'),
+('Niroshan', 'Dickwella', 'Wicket-Keeper', 95, 2700, 0, 'T02'),
+('Shanaka', 'Dhananjaya', 'All-Rounder', 50, 1300, 45, 'T02');
+
+-- B-Love Kandy (T03)
+INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
+('Chris', 'Gayle', 'Batsman', 400, 14500, 30, 'T03'),
+('Andre', 'Russell', 'All-Rounder', 350, 7200, 350, 'T03'),
+('Kusal', 'Mendis', 'Batsman', 80, 2300, 0, 'T03'),
+('Ajantha', 'Mendis', 'Bowler', 160, 300, 180, 'T03'),
+('Lahiru', 'Thirimanne', 'Batsman', 120, 3500, 0, 'T03'),
+('Chaminda', 'Vaas', 'Bowler', 250, 500, 400, 'T03'),
+('Mujeeb', 'ur Rahman', 'Bowler', 60, 100, 70, 'T03'),
+('Pathum', 'Nissanka', 'Batsman', 30, 890, 0, 'T03'),
+('Ashen', 'Bandara', 'All-Rounder', 20, 400, 15, 'T03'),
+('Kusal', 'Janith', 'Wicket-Keeper', 110, 2800, 0, 'T03'),
+('Kevin', 'O Brien', 'All-Rounder', 210, 4200, 120, 'T03');
+
+-- Jaffna Stallions (T04)
+INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
+('Upul', 'Tharanga', 'Wicket-Keeper', 220, 6800, 0, 'T04'),
+('Mahela', 'Jayawardene', 'Batsman', 500, 12000, 0, 'T04'),
+('Sanath', 'Jayasuriya', 'All-Rounder', 450, 13500, 300, 'T04'),
+('Muttiah', 'Muralitharan', 'Bowler', 495, 800, 530, 'T04'),
+('Anil', 'Kumble', 'Bowler', 300, 500, 400, 'T04'),
+('Dwayne', 'Bravo', 'All-Rounder', 400, 6000, 500, 'T04'),
+('Michael', 'Hussey', 'Batsman', 250, 7500, 0, 'T04'),
+('Faf', 'du Plessis', 'Batsman', 150, 4500, 0, 'T04'),
+('Mitchell', 'Starc', 'Bowler', 120, 300, 220, 'T04'),
+('Kagiso', 'Rabada', 'Bowler', 80, 200, 130, 'T04'),
+('Hashim', 'Amla', 'Batsman', 250, 9000, 0, 'T04');
+
+-- Dambulla Giants (T05)
+INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
+('Tillakaratne', 'Dilshan', 'All-Rounder', 330, 10500, 120, 'T05'),
+('Marvan', 'Atapattu', 'Batsman', 350, 8500, 0, 'T05'),
+('Roshan', 'Mahanama', 'Batsman', 200, 5500, 0, 'T05'),
+('Kumar', 'Sangakkara', 'Wicket-Keeper', 450, 14200, 0, 'T05'),
+('Aravinda', 'de Silva', 'All-Rounder', 380, 9700, 150, 'T05'),
+('Chamari', 'Atapattu', 'All-Rounder', 250, 6500, 120, 'T05'),
+('Lasith', 'Malinga', 'Bowler', 226, 550, 390, 'T05'),
+('Nuwan', 'Kulasekara', 'Bowler', 190, 350, 200, 'T05'),
+('Rangana', 'Herath', 'Bowler', 175, 250, 180, 'T05'),
+('Ajantha', 'Fernando', 'Bowler', 120, 220, 130, 'T05'),
+('Upul', 'Chandana', 'All-Rounder', 250, 3700, 180, 'T05');
+
+-- -----------------------------------------------------
+-- Coaches
+-- -----------------------------------------------------
+-- Colombo Kings (T01)
+INSERT INTO coach (first_name, last_name, role, team_id) VALUES
+('Alex', 'Ferguson', 'Head Coach', 'T01'),
+('Trevor', 'Bayliss', 'Batting Coach', 'T01'),
+('Chaminda', 'Vaas', 'Bowling Coach', 'T01');
+
+-- Galle Gladiators (T02)
+INSERT INTO coach (first_name, last_name, role, team_id) VALUES
+('Pep', 'Guardiola', 'Head Coach', 'T02'),
+('Grant', 'Flower', 'Batting Coach', 'T02'),
+('Waqar', 'Younis', 'Bowling Coach', 'T02');
+
+-- B-Love Kandy (T03)
+INSERT INTO coach (first_name, last_name, role, team_id) VALUES
+('Zinedine', 'Zidane', 'Head Coach', 'T03'),
+('Mahela', 'Jayawardene', 'Batting Coach', 'T03'),
+('Allan', 'Donald', 'Bowling Coach', 'T03');
+
+-- Jaffna Stallions (T04)
+INSERT INTO coach (first_name, last_name, role, team_id) VALUES
+('Jurgen', 'Klopp', 'Head Coach', 'T04'),
+('Hashan', 'Tillakaratne', 'Batting Coach', 'T04'),
+('Chamila', 'Gamage', 'Bowling Coach', 'T04');
+
+-- Dambulla Giants (T05)
+INSERT INTO coach (first_name, last_name, role, team_id) VALUES
+('Ravi', 'Shastri', 'Head Coach', 'T05'),
+('Arjuna', 'Ranatunga', 'Batting Coach', 'T05'),
+('Courtney', 'Walsh', 'Bowling Coach', 'T05');
+
+-- -----------------------------------------------------
+-- Upcoming Matches
+-- -----------------------------------------------------
+INSERT INTO upcoming_match (home_team_id, visit_team_id, date, time) VALUES
+('T01', 'T02', '2025-09-10', '15:00:00'),
+('T03', 'T04', '2025-09-12', '16:00:00'),
+('T05', 'T01', '2025-09-15', '14:30:00'),
+('T02', 'T03', '2025-09-18', '17:00:00'),
+('T04', 'T05', '2025-09-20', '18:00:00');
+
+-- -----------------------------------------------------
+-- Recent Matches
+-- -----------------------------------------------------
+INSERT INTO recent_match 
+(home_team_id, visit_team_id, home_team_runs, home_team_wickets, home_team_overs, 
+ visit_team_runs, visit_team_wickets, visit_team_overs, final_result, date) 
+VALUES
+('T01', 'T03', 180, 6, 20.0, 175, 8, 20.0, 'Colombo Kings won by 5 runs', '2025-09-01'),
+('T02', 'T05', 200, 5, 20.0, 198, 7, 20.0, 'Galle Gladiators won by 2 runs', '2025-09-02'),
+('T03', 'T01', 150, 10, 18.4, 151, 4, 17.3, 'Colombo Kings won by 6 wickets', '2025-09-03'),
+('T04', 'T02', 210, 7, 20.0, 205, 9, 20.0, 'Jaffna Stallions won by 5 runs', '2025-09-04'),
+('T05', 'T03', 160, 8, 19.5, 161, 5, 20.0, 'B-Love Kandy won by 5 wickets', '2025-09-05');
