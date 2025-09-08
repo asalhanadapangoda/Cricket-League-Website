@@ -14,12 +14,12 @@
         
         <ul class="sidebar-menu">
             <li><a href="adminDashboard.php">Dashboard</a></li>
-            <li><a href="manage-teams.php">Teams</a></li>
-            <li><a href="manage-players.php">Players</a></li>
-            <li><a href="manage-fixtures.php">Fixtures</a></li>
-            <li><a href="manage-results.php">Match Results</a></li>
-            <li><a href="manage-player-performance.php">Player Performance</a></li>
-            <li><a href="manage-live-score.php">Update Live Score</a></li>
+            <li><a href="adminDashboard.php?page=teams">Teams</a></li>
+            <li><a href="adminDashboard.php?page=players">Players</a></li>
+            <li><a href="adminDashboard.php?page=fixtures">Fixtures</a></li>
+            <li><a href="adminDashboard.php?page=results">Match Results</a></li>
+            <li><a href="adminDashboard.php?page=performance">Player Performance</a></li>
+            <li><a href="adminDashboard.php?page=livescore">Update Live Score</a></li>
         </ul>
     </div>
 </body>

@@ -2,17 +2,18 @@
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $team1 = $_POST['team1'];
-    $team2 = $_POST['team2'];
+    $home_team = $_POST['team1'];   // Home team
+    $visit_team = $_POST['team2'];  // Visiting team
     $date = $_POST['match_date'];
     $time = $_POST['match_time'];
-    $venue = $_POST['venue'];
-    $status = $_POST['status'];
 
-    $sql = "INSERT INTO fixtures (team1, team2, match_date, match_time, venue, status) 
-            VALUES ('$team1', '$team2', '$date', '$time', '$venue', '$status')";
+    // Insert into upcoming_match table
+    $sql = "INSERT INTO upcoming_match (home_team_id, visit_team_id, date, time) 
+            VALUES ('$home_team', '$visit_team', '$date', '$time')";
+
     if ($conn->query($sql) === TRUE) {
         header("Location: fixtures.php");
+        exit;
     } else {
         echo "Error: " . $conn->error;
     }

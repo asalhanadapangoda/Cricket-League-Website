@@ -1,10 +1,63 @@
-.table th, .table td {
-    text-align: center;
-    vertical-align: middle;
+/* Container styling */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #f4f7f8;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.btn-sm {
-    border-radius: 6px;
-    padding: 5px 10px;
+/* Table styling */
+.fixtures-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Table headers */
+.fixtures-table thead th {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Table body */
+.fixtures-table tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
     font-size: 14px;
+}
+
+/* Row hover effect */
+.fixtures-table tbody tr:hover {
+    background-color: #e0f7fa;
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Alternate row colors */
+.fixtures-table tbody tr:nth-child(even) {
+    background-color: #f0f9ff;
+}
+
+/* Add button styling */
+.btn-add {
+    padding: 10px 20px;
+    background: linear-gradient(to right, #43e97b, #38f9d7);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
