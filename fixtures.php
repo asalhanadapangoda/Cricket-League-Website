@@ -4,17 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Fixtures</title>
+
     <!-- Link CSS file -->
-    <link rel="stylesheet" href="CSS/fixturesStyle.css">
+    <link rel="stylesheet" href="CSS_File/fixturesStyle.css">
 </head>
 <body>
 
 <div class="container">
     <h2 class="text-center">Manage Fixtures</h2>
 
-    <div class="text-right mb-3">
+
+    <br>
+
+    <div class="button-row">
         <button class="btn-add" onclick="openAddModal()">Add New Match</button>
+        <button class="btn-edit" onclick="openEditModal()">Edit Match</button>
+        <button class="btn-delete" onclick="openDeleteModal()">Delete Match</button>
     </div>
+
 
     <table class="fixtures-table">
         <thead>
@@ -31,7 +38,9 @@
             <!-- No rows shown -->
         </tbody>
     </table>
-</div>
+</div> --
+
+<br><br><br>
 
 <!-- Add Fixture Modal -->
 <div id="addModal" class="modal">
@@ -55,6 +64,8 @@
         </form>
     </div>
 </div>
+
+<br><br>
 
 <!-- Edit Fixture Modal -->
 <div id="editModal" class="modal">
