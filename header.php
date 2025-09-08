@@ -11,7 +11,7 @@
     <!-- LPL Logo -->
     <div class="logo-container">
       <a href="homePage.php">
-       <img src="Pictures/LPL_LOGO.webp" alt="Cricket Logo">
+       <img src="Pictures/lpl_logo.jpg" alt="Cricket Logo">
       </a>
     </div>
 
