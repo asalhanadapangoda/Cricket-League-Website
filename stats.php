@@ -4,37 +4,41 @@
 require_once 'includes/db.php';
 
 $sql_1 = "SELECT t.team_id, t.team_name, t.logo, p.played, p.won, p.lost, p.no_result, p.nrr, p.points
-          FROM teams t
+          FROM team t
           JOIN point_table p ON t.team_id = p.team_id
           ORDER BY p.points DESC, p.nrr DESC";
 
 $result_point = mysqli_query($conn, $sql_1);
 
 $sql_2 = "SELECT 
-        t.logo AS team_logo,
-        t.team_name,
-        p.first_name,
-        p.last_name,
-        p.runs AS total_runs
-    FROM player p
-    JOIN teams t ON p.team_id = t.team_id
-    ORDER BY p.runs DESC
-    LIMIT 10";
+            t.logo AS team_logo,
+            t.team_name,
+            p.first_name,
+            p.last_name,
+            pp.runs AS total_runs
+          FROM player p
+          JOIN team t ON p.team_id = t.team_id
+          JOIN player_performance pp ON p.player_id = pp.player_id
+          ORDER BY pp.runs DESC
+          LIMIT 10";
 
 $result_runs = mysqli_query($conn, $sql_2);
 
+
 $sql_3 = "SELECT 
-        t.logo AS team_logo,
-        t.team_name,
-        p.first_name,
-        p.last_name,
-        p.wickets AS total_wickets
-    FROM player p
-    JOIN teams t ON p.team_id = t.team_id
-    ORDER BY p.wickets DESC
-    LIMIT 5";
+            t.logo AS team_logo,
+            t.team_name,
+            p.first_name,
+            p.last_name,
+            pp.wickets AS total_wickets
+          FROM player p
+          JOIN team t ON p.team_id = t.team_id
+          JOIN player_performance pp ON p.player_id = pp.player_id
+          ORDER BY pp.wickets DESC
+          LIMIT 5";
 
 $result_wickets = mysqli_query($conn, $sql_3);
+
 ?>
 
 <!DOCTYPE html>

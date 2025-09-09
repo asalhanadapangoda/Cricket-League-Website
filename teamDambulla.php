@@ -2,12 +2,13 @@
 <?php 
     require_once 'includes/db.php';
     $sql_1 = "SELECT 
-                p.first_name,
-                p.last_name,
-                p.type AS role
-              FROM player p
-              JOIN teams t ON p.team_id = t.team_id
-              WHERE t.team_id = 'T05'";
+            p.first_name,
+            p.last_name,
+            pp.type AS role
+          FROM player p
+          JOIN player_performance pp ON p.player_id = pp.player_id
+          WHERE p.team_id = 'T05'";
+
 
     $result_players = mysqli_query($conn, $sql_1);
 
@@ -16,7 +17,7 @@
                 c.last_name,
                 c.role 
               FROM coach c
-              JOIN teams t ON c.team_id = t.team_id
+              JOIN team t ON c.team_id = t.team_id
               WHERE t.team_id = 'T05'";
 
     $result_coaches = mysqli_query($conn, $sql_2);

@@ -7,16 +7,16 @@ $sql_1 = "SELECT rm.*,
                t1.team_name AS home_team, t1.logo AS home_logo,
                t2.team_name AS visit_team, t2.logo AS visit_logo
         FROM recent_match rm
-        JOIN teams t1 ON rm.home_team_id = t1.team_id
-        JOIN teams t2 ON rm.visit_team_id = t2.team_id
+        JOIN team t1 ON rm.home_team_id = t1.team_id
+        JOIN team t2 ON rm.visit_team_id = t2.team_id
         ORDER BY rm.date ASC";
 
 $sql_2 = "SELECT um.*,
                t1.team_name AS home_team, t1.logo AS home_logo,
                t2.team_name AS visit_team, t2.logo AS visit_logo
           FROM upcoming_match um
-          JOIN teams t1 ON um.home_team_id = t1.team_id
-          JOIN teams t2 ON um.visit_team_id = t2.team_id
+          JOIN team t1 ON um.home_team_id = t1.team_id
+          JOIN team t2 ON um.visit_team_id = t2.team_id
           ORDER BY date ASC, time ASC";
 
 $result_pre = mysqli_query($conn, $sql_1);
