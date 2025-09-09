@@ -1,74 +1,90 @@
-/* Reset some defaults */
+/* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
 }
 
-/* Page background */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 
-  /* Background image */
+  /* Keep your background image */
   background: url("../Pictures/Login_Page.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 
 /* Login form container */
 .form {
-  background: rgba(156, 141, 170, 0.9); /* semi-transparent white */
-  padding: 40px 30px;
-  border-radius: 15px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  background: rgba(47, 39, 67, 0.25); /* purple shade with transparency */
+  padding: 45px 35px;
+  border-radius: 18px;
+  box-shadow: 0px 10px 30px rgba(23, 23, 17, 0.6); /* deep shadow */
   width: 100%;
-  max-width: 350px;
+  max-width: 380px;
   text-align: center;
+  backdrop-filter: blur(12px); /* Glass effect */
+  border: 1px solid rgba(171, 166, 163, 0.4); /* soft gray border */
 }
 
 /* Header text */
 .hederText {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  color: #751d3d;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #aba6a3; /* soft gray */
+  letter-spacing: 0.5px;
+  text-shadow: 0px 2px 8px rgba(23, 23, 17, 0.6); /* subtle deep shadow */
 }
 
 /* Input fields */
 .form input[type="text"],
 .form input[type="password"] {
   width: 100%;
-  padding: 12px 15px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  border: none;
+  border-radius: 12px;
   outline: none;
-  font-size: 14px;
-  transition: border-color 0.3s;
+  font-size: 15px;
+  color: #fff;
+  background: rgba(43, 52, 33, 0.3); /* dark green transparent */
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.form input[type="text"]::placeholder,
+.form input[type="password"]::placeholder {
+  color: rgba(171, 166, 163, 0.8); /* soft gray placeholder */
 }
 
 .form input[type="text"]:focus,
 .form input[type="password"]:focus {
-  border-color: #1976d2;
+  background: rgba(104, 61, 48, 0.4); /* warm brownish when focus */
+  box-shadow: 0px 0px 8px rgba(171, 166, 163, 0.8);
 }
 
 /* Submit button */
 .form input[type="submit"] {
   width: 100%;
-  padding: 12px;
-  margin-top: 15px;
+  padding: 14px;
+  margin-top: 20px;
   border: none;
-  border-radius: 8px;
-  background: #11508f;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #683d30, #2f2743); /* brown to purple */
   color: #fff;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .form input[type="submit"]:hover {
-  background: #0a3b85;
+  background: linear-gradient(135deg, #2f2743, #683d30); /* reverse gradient */
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 15px rgba(23, 23, 17, 0.6);
 }

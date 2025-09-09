@@ -43,11 +43,23 @@ body {
   display: inline-flex;
   gap: 28px;
 }
-.nav-list a {
-  color: #ffffff;
+/*.nav-list a {
+  color: #eee0e0;
   text-decoration: none;
   font-weight: 500;
   padding: 8px 10px;
+  font-family: 'Poppins', sans-serif;
+}
+  */
+  .nav-list a {
+  color: #a7e4ee; /* greenish/nav color */
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif; /* use Google Font */
+  font-weight: 600;  /* bolder for professional look */
+  font-style: normal;
+  letter-spacing: 0.5px; /* subtle spacing improves readability */
+  padding: 8px 10px;
+  transition: all 0.3s ease; /* smooth hover effect */
 }
 .nav-list a:hover {
   background: rgba(255,255,255,0.15);

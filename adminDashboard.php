@@ -13,7 +13,7 @@ $teamCount = 0;
 $playerCount = 0;
 
 // Get number of teams
-$teamQuery = "SELECT COUNT(*) as count FROM teams";
+$teamQuery = "SELECT COUNT(*) as count FROM team";
 $teamResult = mysqli_query($conn, $teamQuery);
 if ($teamResult && mysqli_num_rows($teamResult) > 0) {
     $teamData = mysqli_fetch_assoc($teamResult);
@@ -21,7 +21,7 @@ if ($teamResult && mysqli_num_rows($teamResult) > 0) {
 }
 
 // Get number of players
-$playerQuery = "SELECT COUNT(*) as count FROM players";
+$playerQuery = "SELECT COUNT(*) as count FROM player";
 $playerResult = mysqli_query($conn, $playerQuery);
 if ($playerResult && mysqli_num_rows($playerResult) > 0) {
     $playerData = mysqli_fetch_assoc($playerResult);
@@ -68,7 +68,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
         <h2 class="section-title">Quick Actions</h2>
         <div class="quick-actions">
             <button class="action-btn" onclick="location.href='#.php'">Teams</button>
-            <button class="action-btn" onclick="location.href='#.php'">Players</button>
+            <button class="action-btn" onclick="location.href='player.php'">Players</button>
             <button class="action-btn" onclick="location.href='#.php'">Fixture</button>
             <button class="action-btn" onclick="location.href='#.php'">Match Results</button>
             <button class="action-btn" onclick="location.href='#.php'">Player Performance</button>
