@@ -2,7 +2,7 @@
 // player.php
 session_start();
 
-// Access control: reuse the same session check you have in adminDashboard
+// Access control
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: adminLogin.php");
     exit;
@@ -11,6 +11,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once 'includes/db.php';
 
 $errors = [];
+$success = ""; // for success message
 $old = [
     'first_name'=>'',
     'last_name'=>'',
@@ -28,7 +29,6 @@ while ($r = $teamRes->fetch_assoc()) $teams[] = $r;
 
 // Handle form submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // sanitize
     $old['first_name'] = trim($_POST['first_name'] ?? '');
     $old['last_name'] = trim($_POST['last_name'] ?? '');
     $old['type'] = $_POST['type'] ?? '';
@@ -38,35 +38,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old['team_id'] = $_POST['team_id'] ?? '';
 
     // validate
-    if ($old['first_name'] === '' || $old['last_name'] === '') {
-        $errors[] = "First name and last name are required.";
-    }
+    if ($old['first_name'] === '' || $old['last_name'] === '') $errors[] = "First name and last name are required.";
 
     $valid_types = ['Batsman','Bowler','All-Rounder','Wicket-Keeper'];
-    if (!in_array($old['type'], $valid_types, true)) {
-        $errors[] = "Invalid player type.";
-    }
+    if (!in_array($old['type'], $valid_types, true)) $errors[] = "Invalid player type.";
 
-    if (!ctype_digit((string)$old['number_of_match']) || (int)$old['number_of_match'] < 0) {
-        $errors[] = "Number of matches must be a non-negative integer.";
-    }
-    if (!ctype_digit((string)$old['runs']) || (int)$old['runs'] < 0) {
-        $errors[] = "Runs must be a non-negative integer.";
-    }
-    if (!ctype_digit((string)$old['wickets']) || (int)$old['wickets'] < 0) {
-        $errors[] = "Wickets must be a non-negative integer.";
-    }
+    if (!ctype_digit((string)$old['number_of_match']) || (int)$old['number_of_match'] < 0) $errors[] = "Number of matches must be non-negative.";
+    if (!ctype_digit((string)$old['runs']) || (int)$old['runs'] < 0) $errors[] = "Runs must be non-negative.";
+    if (!ctype_digit((string)$old['wickets']) || (int)$old['wickets'] < 0) $errors[] = "Wickets must be non-negative.";
 
     // ensure team exists
     $stmt = $conn->prepare("SELECT team_id FROM team WHERE team_id = ?");
     $stmt->bind_param("s", $old['team_id']);
     $stmt->execute();
     $res = $stmt->get_result();
-    if ($res->num_rows === 0) {
-        $errors[] = "Selected team does not exist. Please pick a team from the list.";
-    }
+    if ($res->num_rows === 0) $errors[] = "Selected team does not exist.";
     $stmt->close();
 
+    // insert if no errors
     if (empty($errors)) {
         $sql = "INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -85,10 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($stmt->execute()) {
-            // success: set a flash message and go back to dashboard (or wherever you want)
-            $_SESSION['flash_success'] = "Player added successfully.";
-            header("Location: adminDashboard.php");
-            exit;
+            $success = "Player added successfully.";
+            $old = ['first_name'=>'','last_name'=>'','type'=>'Batsman','number_of_match'=>'0','runs'=>'0','wickets'=>'0','team_id'=>''];
         } else {
             $errors[] = "Database error: " . $stmt->error;
         }
@@ -102,12 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8">
   <title>Add Player - Admin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- If you use Bootstrap in adminDashboard, it will inherit that styling -->
   <style>
     body{font-family:Arial,Helvetica,sans-serif;padding:20px}
     form{max-width:720px;margin:auto}
     .error{color:#b00020;margin-bottom:10px}
-    .success{color:green;margin-bottom:10px}
+    .success{color:green;margin-bottom:10px;font-weight:bold}
     label{display:block;margin-top:10px}
     input[type="text"], input[type="number"], select {width:100%;padding:8px;margin-top:4px}
     .row{display:flex;gap:10px}
@@ -119,10 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <h2>Add Player</h2>
 
+  <?php if ($success): ?>
+    <div class="success"><?php echo htmlspecialchars($success); ?></div>
+  <?php endif; ?>
   <?php if (!empty($errors)): ?>
-    <div class="error">
-      <?php echo implode('<br>', array_map('htmlspecialchars', $errors)); ?>
-    </div>
+    <div class="error"><?php echo implode('<br>', array_map('htmlspecialchars', $errors)); ?></div>
   <?php endif; ?>
 
   <form method="post" action="player.php" novalidate>
@@ -136,13 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <label>Type
       <select name="type" required>
-        <?php
-        $types = ['Batsman','Bowler','All-Rounder','Wicket-Keeper'];
-        foreach ($types as $t) {
-            $sel = ($old['type'] === $t) ? 'selected' : '';
+        <?php foreach (['Batsman','Bowler','All-Rounder','Wicket-Keeper'] as $t):
+            $sel = ($old['type']===$t)?'selected':'';
             echo "<option value=\"" . htmlspecialchars($t) . "\" $sel>" . htmlspecialchars($t) . "</option>";
-        }
-        ?>
+        endforeach; ?>
       </select>
     </label>
 
@@ -167,14 +151,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Team
       <select name="team_id" required>
         <option value="">-- Select team --</option>
-        <?php foreach ($teams as $t): 
-           $sel = ($old['team_id'] === $t['team_id']) ? 'selected' : '';
-           echo '<option value="' . htmlspecialchars($t['team_id']) . '" ' . $sel . '>' . htmlspecialchars($t['team_name']) . ' (' . htmlspecialchars($t['team_id']) . ')</option>';
+        <?php foreach ($teams as $t):
+          $sel = ($old['team_id']===$t['team_id'])?'selected':'';
+          echo '<option value="'.htmlspecialchars($t['team_id']).'" '.$sel.'>'.htmlspecialchars($t['team_name']).'</option>';
         endforeach; ?>
       </select>
     </label>
 
     <button class="btn" type="submit">Add Player</button>
+    <button type="button" onclick="location.href='managePlayers.php'" class="btn secondary">Show Players</button>
     <button type="button" onclick="location.href='adminDashboard.php'" class="btn secondary">Cancel</button>
   </form>
 </body>
