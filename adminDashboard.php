@@ -13,7 +13,7 @@ $teamCount = 0;
 $playerCount = 0;
 
 // Get number of teams
-$teamQuery = "SELECT COUNT(*) as count FROM team"; // ✅ fix: your table is "team", not "teams"
+$teamQuery = "SELECT COUNT(*) as count FROM team"; 
 $teamResult = mysqli_query($conn, $teamQuery);
 if ($teamResult && mysqli_num_rows($teamResult) > 0) {
     $teamData = mysqli_fetch_assoc($teamResult);
@@ -88,11 +88,12 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             <!-- Quick Actions -->
             <h2 class="section-title">Quick Actions</h2>
             <div class="quick-actions">
-                <button class="action-btn" onclick="location.href='adminDashboard.php?page=teams'">Teams</button>
+                <button class="action-btn" onclick="location.href='updateTeamPoint.php'">Update Team Point</button>
+                <button class="action-btn" onclick="location.href='adminDashboard.php?page=teams'">Team Coach</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=players'">Players</button>
+                <button class="action-btn" onclick="location.href='adminDashboard.php?page=performance'">Player Performance</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=fixtures'">Fixtures</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=results'">Match Results</button>
-                <button class="action-btn" onclick="location.href='adminDashboard.php?page=performance'">Player Performance</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=livescore'">Update Live Score</button>
             </div>
             <?php
