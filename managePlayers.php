@@ -41,61 +41,71 @@ else $errors[] = "Database error: " . $conn->error;
   <meta charset="utf-8">
   <title>Manage Players</title>
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;padding:20px}
+    body{font-family:Arial,Helvetica,sans-serif;padding:0;margin:0}
+    .main-content{margin-left:250px;padding:20px} /* Adjust if sidebar width changes */
     table{width:100%;border-collapse:collapse;margin-top:20px}
     th, td{border:1px solid #ccc;padding:8px;text-align:left}
     th{background:#f4f4f4}
     .btn{padding:6px 12px;border:0;border-radius:4px;cursor:pointer}
     .btn.delete{background:#b00020;color:#fff}
     .btn.add{background:#1976d2;color:#fff;margin-bottom:10px}
-    .success{color:green;font-weight:bold}
-    .error{color:#b00020;font-weight:bold}
+    .success{color:green;font-weight:bold;margin-bottom:10px}
+    .error{color:#b00020;font-weight:bold;margin-bottom:10px}
   </style>
+  <?php if($success): ?>
+    <!-- Auto refresh after 2 seconds to show success message briefly -->
+    <meta http-equiv="refresh" content="2;url=managePlayers.php">
+  <?php endif; ?>
 </head>
 <body>
-  <h2>Manage Players</h2>
+  <!-- Sidebar Navigation -->
+  <?php include 'adminDashboardNav.php'; ?>
 
-  <button class="btn add" onclick="location.href='player.php'">Add New Player</button>
+  <div class="main-content">
+    <h2>Manage Players</h2>
 
-  <?php if ($success): ?><div class="success"><?php echo htmlspecialchars($success); ?></div><?php endif; ?>
-  <?php if (!empty($errors)): ?><div class="error"><?php echo implode('<br>', array_map('htmlspecialchars',$errors)); ?></div><?php endif; ?>
+    <button class="btn add" onclick="location.href='player.php'">Add New Player</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Type</th>
-        <th>Matches</th>
-        <th>Runs</th>
-        <th>Wickets</th>
-        <th>Team</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php if (empty($players)): ?>
-        <tr><td colspan="9">No players found.</td></tr>
-      <?php else: ?>
-        <?php foreach ($players as $p): ?>
-          <tr>
-            <td><?php echo htmlspecialchars($p['player_id']); ?></td>
-            <td><?php echo htmlspecialchars($p['first_name']); ?></td>
-            <td><?php echo htmlspecialchars($p['last_name']); ?></td>
-            <td><?php echo htmlspecialchars($p['type']); ?></td>
-            <td><?php echo htmlspecialchars($p['number_of_match']); ?></td>
-            <td><?php echo htmlspecialchars($p['runs']); ?></td>
-            <td><?php echo htmlspecialchars($p['wickets']); ?></td>
-            <td><?php echo htmlspecialchars($p['team_name']); ?></td>
-            <td>
-              <a class="btn delete" href="managePlayers.php?delete_id=<?php echo $p['player_id']; ?>"
-                 onclick="return confirm('Are you sure you want to delete this player?');">Delete</a>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      <?php endif; ?>
-    </tbody>
-  </table>
+    <?php if ($success): ?><div class="success"><?php echo htmlspecialchars($success); ?></div><?php endif; ?>
+    <?php if (!empty($errors)): ?><div class="error"><?php echo implode('<br>', array_map('htmlspecialchars',$errors)); ?></div><?php endif; ?>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Type</th>
+          <th>Matches</th>
+          <th>Runs</th>
+          <th>Wickets</th>
+          <th>Team</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php if (empty($players)): ?>
+          <tr><td colspan="9">No players found.</td></tr>
+        <?php else: ?>
+          <?php foreach ($players as $p): ?>
+            <tr>
+              <td><?php echo htmlspecialchars($p['player_id']); ?></td>
+              <td><?php echo htmlspecialchars($p['first_name']); ?></td>
+              <td><?php echo htmlspecialchars($p['last_name']); ?></td>
+              <td><?php echo htmlspecialchars($p['type']); ?></td>
+              <td><?php echo htmlspecialchars($p['number_of_match']); ?></td>
+              <td><?php echo htmlspecialchars($p['runs']); ?></td>
+              <td><?php echo htmlspecialchars($p['wickets']); ?></td>
+              <td><?php echo htmlspecialchars($p['team_name']); ?></td>
+              <td>
+                <a class="btn delete" href="managePlayers.php?delete_id=<?php echo $p['player_id']; ?>"
+                   onclick="return confirm('Are you sure you want to delete this player?');">Delete</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
