@@ -70,7 +70,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             <button class="action-btn" onclick="location.href='#.php'">Teams</button>
             <button class="action-btn" onclick="location.href='player.php'">Players</button>
             <button class="action-btn" onclick="location.href='#.php'">Fixture</button>
-            <button class="action-btn" onclick="location.href='#.php'">Match Results</button>
+            <button class="action-btn" onclick="location.href='matchResult.php'">Match Results</button>
             <button class="action-btn" onclick="location.href='#.php'">Player Performance</button>
             <button class="action-btn" onclick="location.href='#.php'">Update Live Score</button>
         </div>
