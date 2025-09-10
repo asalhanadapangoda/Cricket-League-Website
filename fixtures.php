@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Fixtures</title>
-
-    <!-- Link CSS file -->
     <link rel="stylesheet" href="CSS_File/fixturesStyle.css">
 </head>
 <body>
@@ -13,15 +11,9 @@
 <div class="container">
     <h2 class="text-center">Manage Fixtures</h2>
 
-
-    <br>
-
     <div class="button-row">
         <button class="btn-add" onclick="openAddModal()">Add New Match</button>
-        <button class="btn-edit" onclick="openEditModal()">Edit Match</button>
-        <button class="btn-delete" onclick="openDeleteModal()">Delete Match</button>
     </div>
-
 
     <table class="fixtures-table">
         <thead>
@@ -35,19 +27,38 @@
             </tr>
         </thead>
         <tbody>
-            <!-- No rows shown -->
+            <?php
+            $sql = "SELECT * FROM upcoming_match ORDER BY date, time";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                        <td>{$row['match_id']}</td>
+                        <td>{$row['home_team_id']}</td>
+                        <td>{$row['visit_team_id']}</td>
+                        <td>{$row['date']}</td>
+                        <td>{$row['time']}</td>
+                        <td>
+                            <button class='btn-edit' onclick=\"openEditModal('{$row['match_id']}', '{$row['home_team_id']}', '{$row['visit_team_id']}', '{$row['date']}', '{$row['time']}')\">Edit</button>
+                            <a href='fixtures_delete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
+                        </td>
+                    </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='6'>No matches found</td></tr>";
+            }
+            ?>
         </tbody>
     </table>
-</div> --
-
-<br><br><br>
+</div>
 
 <!-- Add Fixture Modal -->
 <div id="addModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Match</h3>
-        <form action="fixtures_add.php" method="POST">
+        <form action="fixturesAdd.php" method="POST">
             <label>Home Team</label>
             <input type="text" name="team1" required>
             <br><br>
@@ -65,14 +76,12 @@
     </div>
 </div>
 
-<br><br>
-
 <!-- Edit Fixture Modal -->
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
         <h3>Edit Match</h3>
-        <form action="fixtures_update.php" method="POST">
+        <form action="fixturesUpdate.php" method="POST">
             <input type="hidden" name="match_id" id="edit_id">
             <label>Home Team</label>
             <input type="text" name="team1" id="edit_team1" required>
@@ -110,7 +119,6 @@ function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
 }
 
-// Close modals when clicking outside
 window.onclick = function(event) {
     if (event.target == document.getElementById('addModal')) {
         closeAddModal();
