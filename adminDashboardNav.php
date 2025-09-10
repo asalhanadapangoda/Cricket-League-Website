@@ -15,7 +15,7 @@
         <ul class="sidebar-menu">
             <li><a href="adminDashboard.php">Dashboard</a></li>
             <li><a href="updateTeamPoint.php">Update Team Point</a></li>
-            <li><a href="adminDashboard.php?page=teams">Team Coaches</a></li>
+            <li><a href="adminDashboard.php?page=coaches">Team Coach</a></li>
             <li><a href="adminDashboard.php?page=players">Players</a></li>
             <li><a href="adminDashboard.php?page=performance">Player Performance</a></li>
             <li><a href="adminDashboard.php?page=fixtures">Fixtures</a></li>

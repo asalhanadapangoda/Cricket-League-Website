@@ -1,6 +1,7 @@
 <?php
 session_start();
-// prevent unauthorized login
+
+// Prevent unauthorized access
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: adminLogin.php");
     exit;
@@ -48,27 +49,36 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
         </div>
 
         <?php
-        // check if sidebar link selected
+        // Check if a sidebar link is selected
         if (isset($_GET['page'])) {
             $page = $_GET['page'];
 
-            if ($page === "teams") {
-                include "manage-teams.php";
-            } elseif ($page === "players") {
-                include "manage-players.php";
-            } elseif ($page === "fixtures") {
-                include __DIR__ . '/includes/fixtures.php';   // your fixtures table here
-            } elseif ($page === "results") {
-                include "manage-results.php";
-            } elseif ($page === "performance") {
-                include "manage-player-performance.php";
-            } elseif ($page === "livescore") {
-                include "manage-live-score.php";
-            } else {
-                echo "<h2>Page not found</h2>";
+            // Only allow specific pages
+            switch($page) {
+                case 'coaches':
+                    include __DIR__ . '/includes/coaches.php';
+                    break;
+                case 'players':
+                    include __DIR__ . '/includes/manage-players.php';
+                    break;
+                case 'fixtures':
+                    include __DIR__ . '/includes/fixtures.php';
+                    break;
+                case 'results':
+                    include __DIR__ . '/includes/manage-results.php';
+                    break;
+                case 'performance':
+                    include __DIR__ . '/includes/manage-player-performance.php';
+                    break;
+                case 'livescore':
+                    include __DIR__ . '/includes/manage-live-score.php';
+                    break;
+                default:
+                    echo "<h2>Page not found</h2>";
             }
+
         } else {
-            // Default dashboard (stats + quick actions)
+            // Default dashboard view
             ?>
             <h1>Admin Dashboard</h1>
 
@@ -89,7 +99,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             <h2 class="section-title">Quick Actions</h2>
             <div class="quick-actions">
                 <button class="action-btn" onclick="location.href='updateTeamPoint.php'">Update Team Point</button>
-                <button class="action-btn" onclick="location.href='adminDashboard.php?page=teams'">Team Coach</button>
+                <button class="action-btn" onclick="location.href='adminDashboard.php?page=coaches'">Team Coach</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=players'">Players</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=performance'">Player Performance</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=fixtures'">Fixtures</button>
