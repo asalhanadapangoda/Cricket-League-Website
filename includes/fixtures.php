@@ -7,6 +7,7 @@ include __DIR__ . '/db.php'; // DB connection
 <head>
     <meta charset="UTF-8">
     <title>Manage Fixtures</title>
+
     <!-- Correct path to CSS file -->
     <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/fixturesStyle.css">
 </head>
@@ -32,23 +33,26 @@ include __DIR__ . '/db.php'; // DB connection
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM upcoming_match ORDER BY date, time";
+            // Fetch matches in chronological order
+            $sql = "SELECT * FROM upcoming_match ORDER BY date ASC, time ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
+                $counter = 1; // logical numbering
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
-                        <td>{$row['match_id']}</td>
+                        <td>{$counter}</td> 
                         <td>{$row['home_team_id']}</td>
                         <td>{$row['visit_team_id']}</td>
                         <td>{$row['date']}</td>
                         <td>{$row['time']}</td>
                         <td>
                             <button class='btn-edit' onclick=\"openEditModal('{$row['match_id']}', '{$row['home_team_id']}', '{$row['visit_team_id']}', '{$row['date']}', '{$row['time']}')\">Edit</button>
-                            <!-- Use absolute path so Delete works when included -->
+
                             <a href='/Cricket-League-Website/includes/fixturesDelete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
                         </td>
                     </tr>";
+                    $counter++;
                 }
             } else {
                 echo "<tr><td colspan='6'>No matches found</td></tr>";
@@ -63,11 +67,9 @@ include __DIR__ . '/db.php'; // DB connection
     <div class="modal-content">
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Match</h3>
-        <!-- Absolute path for Add script -->
+
         <form action="includes/fixturesAdd.php" method="POST">
-            <label>Match ID</label>
-            <input type="number" name="match_id" required>
-            <br><br>
+
             <label>Home Team</label>
             <input type="text" name="team1" required>
             <br><br>
@@ -90,8 +92,7 @@ include __DIR__ . '/db.php'; // DB connection
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
         <h3>Edit Match</h3>
-        <!-- Absolute path for Update script -->
-        <form action="./includes/fixturesUpdate.php" method="POST">
+        <form action="/Cricket-League-Website/includes/fixturesUpdate.php" method="POST">
             <input type="hidden" name="match_id" id="edit_id">
             <label>Home Team</label>
             <input type="text" name="team1" id="edit_team1" required>
@@ -130,12 +131,8 @@ function closeEditModal() {
 }
 
 window.onclick = function(event) {
-    if (event.target == document.getElementById('addModal')) {
-        closeAddModal();
-    }
-    if (event.target == document.getElementById('editModal')) {
-        closeEditModal();
-    }
+    if (event.target == document.getElementById('addModal')) closeAddModal();
+    if (event.target == document.getElementById('editModal')) closeEditModal();
 }
 </script>
 

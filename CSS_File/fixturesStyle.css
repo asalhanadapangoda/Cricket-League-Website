@@ -101,13 +101,22 @@ button {
 }
 
 .btn-delete {
-    background: #003558; /* same light blue for uniformity */
-    color: #fff;
+    display: inline-block;      /* make it behave like a button */
+    text-decoration: none;      /* remove underline */
+    background: #003558;        /* same blue as other buttons */
+    color: #fff;                /* text color */
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-delete:hover {
-    background: #0062a3;
+    background: #0062a3;        /* darker blue on hover */
 }
+
 
 /* -------------------------
    Modal Styles
