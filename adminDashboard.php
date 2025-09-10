@@ -57,7 +57,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             } elseif ($page === "players") {
                 include "manage-players.php";
             } elseif ($page === "fixtures") {
-                include "fixtures.php";   // your fixtures table here
+                include __DIR__ . '/includes/fixtures.php';   // your fixtures table here
             } elseif ($page === "results") {
                 include "manage-results.php";
             } elseif ($page === "performance") {

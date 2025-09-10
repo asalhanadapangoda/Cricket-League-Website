@@ -1,12 +1,14 @@
 <?php 
-include __DIR__ . '/includes/db.php'; ?>
+include __DIR__ . '/db.php'; // DB connection
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Manage Fixtures</title>
-    <link rel="stylesheet" href="CSS_File/fixturesStyle.css">
+    <!-- Correct path to CSS file -->
+    <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/fixturesStyle.css">
 </head>
 <body>
 
@@ -43,7 +45,8 @@ include __DIR__ . '/includes/db.php'; ?>
                         <td>{$row['time']}</td>
                         <td>
                             <button class='btn-edit' onclick=\"openEditModal('{$row['match_id']}', '{$row['home_team_id']}', '{$row['visit_team_id']}', '{$row['date']}', '{$row['time']}')\">Edit</button>
-                            <a href='fixturesDelete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
+                            <!-- Use absolute path so Delete works when included -->
+                            <a href='/Cricket-League-Website/includes/fixturesDelete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
                         </td>
                     </tr>";
                 }
@@ -60,7 +63,8 @@ include __DIR__ . '/includes/db.php'; ?>
     <div class="modal-content">
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Match</h3>
-        <form action="fixturesAdd.php" method="POST">
+        <!-- Absolute path for Add script -->
+        <form action="includes/fixturesAdd.php" method="POST">
             <label>Match ID</label>
             <input type="number" name="match_id" required>
             <br><br>
@@ -86,7 +90,8 @@ include __DIR__ . '/includes/db.php'; ?>
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
         <h3>Edit Match</h3>
-        <form action="fixturesUpdate.php" method="POST">
+        <!-- Absolute path for Update script -->
+        <form action="./includes/fixturesUpdate.php" method="POST">
             <input type="hidden" name="match_id" id="edit_id">
             <label>Home Team</label>
             <input type="text" name="team1" id="edit_team1" required>
