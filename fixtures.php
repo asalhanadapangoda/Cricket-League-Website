@@ -1,4 +1,6 @@
-<?php include __DIR__ . '/includes/db.php'; ?>
+<?php 
+include __DIR__ . '/includes/db.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +43,7 @@
                         <td>{$row['time']}</td>
                         <td>
                             <button class='btn-edit' onclick=\"openEditModal('{$row['match_id']}', '{$row['home_team_id']}', '{$row['visit_team_id']}', '{$row['date']}', '{$row['time']}')\">Edit</button>
-                            <a href='fixtures_delete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
+                            <a href='fixturesDelete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
                         </td>
                     </tr>";
                 }

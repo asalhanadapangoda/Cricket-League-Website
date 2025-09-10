@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include __DIR__ . '/includes/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['match_id'];

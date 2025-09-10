@@ -1,5 +1,5 @@
-<?php
-include 'db.php';
+<?php 
+include __DIR__ . '/includes/db.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $home_team = $_POST['team1'];   // Home team
