@@ -61,6 +61,9 @@ include __DIR__ . '/includes/db.php'; ?>
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Match</h3>
         <form action="fixturesAdd.php" method="POST">
+            <label>Match ID</label>
+            <input type="number" name="match_id" required>
+            <br><br>
             <label>Home Team</label>
             <input type="text" name="team1" required>
             <br><br>
