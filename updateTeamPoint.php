@@ -71,33 +71,38 @@ if (isset($_POST['update'])) {
     </div>
 
     <!-- Right card: Team details form -->
-    <?php if ($teamData): ?>
-        <div class="card">
-            <form method="post">
-                <input type="hidden" name="team_id" value="<?= $teamData['team_id'] ?>">
+    <?php 
+        if ($teamData){ 
+        echo "
+         <div class='card'>
+           <form method='post'>
+            <input type='hidden' name='team_id' value='{$teamData['team_id']}'>
 
-                <label>Played:</label>
-                <input type="number" name="played" value="<?= $teamData['played'] ?>">
+            <label>Played:</label>
+            <input type='number' name='played' value='{$teamData['played']}'>
 
-                <label>Won:</label>
-                <input type="number" name="won" value="<?= $teamData['won'] ?>">
+            <label>Won:</label>
+            <input type='number' name='won' value='{$teamData['won']}'>
 
-                <label>Lost:</label>
-                <input type="number" name="lost" value="<?= $teamData['lost'] ?>">
+            <label>Lost:</label>
+            <input type='number' name='lost' value='{$teamData['lost']}'>
 
-                <label>No Result:</label>
-                <input type="number" name="no_result" value="<?= $teamData['no_result'] ?>">
+            <label>No Result:</label>
+            <input type='number' name='no_result' value='{$teamData['no_result']}'>
 
-                <label>NRR:</label>
-                <input type="text" name="nrr" value="<?= $teamData['nrr'] ?>">
+            <label>NRR:</label>
+            <input type='text' name='nrr' value='{$teamData['nrr']}'>
 
-                <label>Points:</label>
-                <input type="number" name="points" value="<?= $teamData['points'] ?>">
+            <label>Points:</label>
+            <input type='number' name='points' value='{$teamData['points']}'>
 
-                <button type="submit" name="update">Update</button>
-            </form>
-        </div>
-    <?php endif; ?>
+            <button type='submit' name='update'>Update</button>
+        </form>
+
+         </div>
+         ";
+        }
+     ?>
 
 </div>
 

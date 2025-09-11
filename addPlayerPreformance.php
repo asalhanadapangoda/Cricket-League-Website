@@ -1,105 +1,119 @@
 <?php
-require_once "includes/db.php";
+require_once "includes/db.php"; 
 
-// Step 1: Get all team IDs for dropdown
-$sql_1= "SELECT team_id FROM point_table";
-$teamResult = mysqli_query($conn, $sql_1);
+// get team - id and name
+$teamsQuery = "SELECT team_id, team_name FROM team";
+$teamsResult = mysqli_query($conn, $teamsQuery);
 
-// Initialize variables
-$selectedTeam = null;
-$teamData = null;
+$playersResult = null;
+$performanceData = null;
 
-// Step 2: Load selected team details
-if (isset($_POST['load_team'])) {
+// get add team players
+if (isset($_POST['load_players'])) {
     $selectedTeam = $_POST['team_id'];
-    $sql_2= "SELECT * FROM point_table WHERE team_id = '$selectedTeam'";
-    $result = mysqli_query($conn, $sql_2);
-    $teamData = mysqli_fetch_assoc($result);
+    $playersQuery = "SELECT player_id, first_name, last_name FROM player WHERE team_id = '$selectedTeam'";
+    $playersResult = mysqli_query($conn, $playersQuery);
 }
 
-// Step 3: Handle update
-if (isset($_POST['update'])) {
-    $team_id = $_POST['team_id'];
-    $played = $_POST['played'];
-    $won = $_POST['won'];
-    $lost = $_POST['lost'];
-    $no_result = $_POST['no_result'];
-    $nrr = $_POST['nrr'];
-    $points = $_POST['points'];
+// load selected player preformrnce
+if (isset($_POST['load_performance'])) {
+    $selectedPlayer = $_POST['player_id'];
+    $performanceQuery = "SELECT * FROM player_performance WHERE player_id = $selectedPlayer";
+    $performanceResult = mysqli_query($conn, $performanceQuery);
+    $performanceData = mysqli_fetch_assoc($performanceResult);
+}
 
-    $sql_3 = "UPDATE point_table 
-                    SET played='$played', won='$won', lost='$lost', no_result='$no_result', nrr='$nrr', points='$points' 
-                    WHERE team_id='$team_id'";
+// if user change data update database
+if (isset($_POST['update_performance'])) {
+    $playerId = $_POST['player_id'];
+    $matches = $_POST['number_of_match'];
+    $runs = $_POST['runs'];
+    $wickets = $_POST['wickets'];
 
-    if (mysqli_query($conn, $sql_3)) {
-        echo "<script>alert('Data updated successfully!');</script>";
-    } else {
-        echo "<script>alert('Error updating data!');</script>";
-    }
+    $updateQuery = "UPDATE player_performance 
+                    SET number_of_match = $matches, runs = $runs, wickets = $wickets 
+                    WHERE player_id = $playerId";
+    mysqli_query($conn, $updateQuery);
+
+    // display if data update successfully
+    echo "<p style='color:green;'>Performance updated successfully!</p>";
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="CSS_File/updateTeamPointStyle.css">
+    <link rel="stylesheet" href="CSS_File/addPlayerPreformance.css">
 </head>
 <body>
-<?php include 'adminDashboardNav.php'; ?>
+    <?php include 'adminDashboardNav.php'; ?>
 
-<h2>Update Point Table</h2>
+    <h2>Select Team</h2>
 
-<div class="container">
+    <form method="POST">
+        <select name="team_id" required>
+            <option value=""> Select Team </option>
 
-    <!-- Left card: Select Team -->
-    <div class="card">
-        <form method="post">
-            <label for="team_id">Select Team ID:</label>
-            <select name="team_id" required>
-                <option value="">Select team</option>
-                <?php
-                while ($row = mysqli_fetch_assoc($teamResult)) {
-                    $selected = ($selectedTeam == $row['team_id']) ? 'selected' : '';
-                    echo "<option value='{$row['team_id']}' $selected>{$row['team_id']}</option>";
+            <!-- load team id and name to drop down -->
+
+           <?php 
+                while ($row = mysqli_fetch_assoc($teamsResult)) {
+                    echo "<option value='{$row['team_id']}'>
+                             {$row['team_name']} ({$row['team_id']})
+                          </option>";
                 }
-                ?>
-            </select>
-            <button type="submit" name="load_team">Load team details</button>
-            <a href="adminDashboard.php" class="back-btn">Back</a>
-        </form>
-    </div>
+            ?>
 
-    <!-- Right card: Team details form -->
-    <?php if ($teamData): ?>
-        <div class="card">
-            <form method="post">
-                <input type="hidden" name="team_id" value="<?= $teamData['team_id'] ?>">
+        </select>
+        <button type="submit" name="load_players">Load Players</button>
+        <a href="adminDashboard.php" class="back-btn">Back</a>
+    </form>
 
-                <label>Played:</label>
-                <input type="number" name="played" value="<?= $teamData['played'] ?>">
+            <!-- load player name to drop down -->
+    <?php 
+        if ($playersResult) { 
+        echo '
+        <h2>Select Player</h2>
+        <form method="POST">
+                <select name="player_id" required>
+                <option value=""> Select Player </option>';
+    
+        while ($row = mysqli_fetch_assoc($playersResult)) {
+         echo "<option value='{$row['player_id']}'>
+                    {$row['first_name']} {$row['last_name']}
+                </option>";
+        }
 
-                <label>Won:</label>
-                <input type="number" name="won" value="<?= $teamData['won'] ?>">
+        echo '
+                </select>
+            <button type="submit" name="load_performance">Load Performance</button>
+        </form>';
+} 
+?>
 
-                <label>Lost:</label>
-                <input type="number" name="lost" value="<?= $teamData['lost'] ?>">
 
-                <label>No Result:</label>
-                <input type="number" name="no_result" value="<?= $teamData['no_result'] ?>">
+                    
+            <!-- update performance -->
+ <?php 
+if ($performanceData) {
+    echo "
+        <h2>Update Performance</h2>
+        <form method='POST'>
+        <input type='hidden' name='player_id' value='{$performanceData['player_id']}'>
 
-                <label>NRR:</label>
-                <input type="text" name="nrr" value="<?= $teamData['nrr'] ?>">
+        <label>Matches:</label>
+        <input type='number' name='number_of_match' value='{$performanceData['number_of_match']}'><br>
 
-                <label>Points:</label>
-                <input type="number" name="points" value="<?= $teamData['points'] ?>">
+        <label>Runs:</label>
+        <input type='number' name='runs' value='{$performanceData['runs']}'><br>
 
-                <button type="submit" name="update">Update</button>
-            </form>
-        </div>
-    <?php endif; ?>
+        <label>Wickets:</label>
+        <input type='number' name='wickets' value='{$performanceData['wickets']}'><br>
 
-</div>
+        <button type='submit' name='update_performance'>Update</button>
+    </form>";
+    }
+?>
 
 </body>
 </html>

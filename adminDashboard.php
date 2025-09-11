@@ -91,7 +91,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                 <button class="action-btn" onclick="location.href='updateTeamPoint.php'">Update Team Point</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=teams'">Team Coach</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=players'">Players</button>
-                <button class="action-btn" onclick="location.href='adminDashboard.php?page=performance'">Player Performance</button>
+                <button class="action-btn" onclick="location.href='addPlayerPreformance.php'">Player Performance</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=fixtures'">Fixtures</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=results'">Match Results</button>
                 <button class="action-btn" onclick="location.href='adminDashboard.php?page=livescore'">Update Live Score</button>

@@ -17,7 +17,7 @@
             <li><a href="updateTeamPoint.php">Update Team Point</a></li>
             <li><a href="adminDashboard.php?page=teams">Team Coaches</a></li>
             <li><a href="adminDashboard.php?page=players">Players</a></li>
-            <li><a href="adminDashboard.php?page=performance">Player Performance</a></li>
+            <li><a href="updateTeamPoint.php">Player Performance</a></li>
             <li><a href="adminDashboard.php?page=fixtures">Fixtures</a></li>
             <li><a href="adminDashboard.php?page=results">Match Results</a></li>
             <li><a href="adminDashboard.php?page=livescore">Update Live Score</a></li>
