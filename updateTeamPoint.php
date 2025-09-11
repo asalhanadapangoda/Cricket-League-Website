@@ -2,7 +2,8 @@
 require_once "includes/db.php";
 
 // Step 1: Get all team IDs for dropdown
-$teamResult = mysqli_query($conn, "SELECT team_id FROM point_table");
+$sql_1= "SELECT team_id FROM point_table";
+$teamResult = mysqli_query($conn, $sql_1);
 
 // Initialize variables
 $selectedTeam = null;
@@ -11,7 +12,8 @@ $teamData = null;
 // Step 2: Load selected team details
 if (isset($_POST['load_team'])) {
     $selectedTeam = $_POST['team_id'];
-    $result = mysqli_query($conn, "SELECT * FROM point_table WHERE team_id = '$selectedTeam'");
+    $sql_2= "SELECT * FROM point_table WHERE team_id = '$selectedTeam'";
+    $result = mysqli_query($conn, $sql_2);
     $teamData = mysqli_fetch_assoc($result);
 }
 
@@ -25,11 +27,11 @@ if (isset($_POST['update'])) {
     $nrr = $_POST['nrr'];
     $points = $_POST['points'];
 
-    $updateQuery = "UPDATE point_table 
+    $sql_3 = "UPDATE point_table 
                     SET played='$played', won='$won', lost='$lost', no_result='$no_result', nrr='$nrr', points='$points' 
                     WHERE team_id='$team_id'";
 
-    if (mysqli_query($conn, $updateQuery)) {
+    if (mysqli_query($conn, $sql_3)) {
         echo "<script>alert('Data updated successfully!');</script>";
     } else {
         echo "<script>alert('Error updating data!');</script>";
@@ -41,7 +43,6 @@ if (isset($_POST['update'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update Point Table</title>
     <link rel="stylesheet" href="CSS_File/updateTeamPointStyle.css">
 </head>
 <body>
