@@ -59,7 +59,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                     include __DIR__ . '/includes/coaches.php';
                     break;
                 case 'players':
-                    include __DIR__ . '/includes/manage-players.php';
+                    include __DIR__ . '/includes/players.php';
                     break;
                 case 'fixtures':
                     include __DIR__ . '/includes/fixtures.php';
