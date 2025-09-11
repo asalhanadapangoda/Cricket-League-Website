@@ -27,9 +27,9 @@ if (isset($_GET['delete_id'])) {
 
 // Fetch all players
 $players = [];
-$sql = "SELECT p.player_id, p.first_name, p.last_name, p.type, p.number_of_match, p.runs, p.wickets, t.team_name 
+$sql = "SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
         FROM player p 
-        LEFT JOIN team t ON p.team_id = t.team_id
+        LEFT JOIN teams t ON p.team_id = t.team_id
         ORDER BY p.player_id ASC";
 $res = $conn->query($sql);
 if ($res) while ($row = $res->fetch_assoc()) $players[] = $row;
@@ -42,7 +42,7 @@ else $errors[] = "Database error: " . $conn->error;
   <title>Manage Players</title>
   <style>
     body{font-family:Arial,Helvetica,sans-serif;padding:0;margin:0}
-    .main-content{margin-left:250px;padding:20px} /* Adjust if sidebar width changes */
+    .main-content{margin-left:250px;padding:20px}
     table{width:100%;border-collapse:collapse;margin-top:20px}
     th, td{border:1px solid #ccc;padding:8px;text-align:left}
     th{background:#f4f4f4}
@@ -53,12 +53,10 @@ else $errors[] = "Database error: " . $conn->error;
     .error{color:#b00020;font-weight:bold;margin-bottom:10px}
   </style>
   <?php if($success): ?>
-    <!-- Auto refresh after 2 seconds to show success message briefly -->
     <meta http-equiv="refresh" content="2;url=managePlayers.php">
   <?php endif; ?>
 </head>
 <body>
-  <!-- Sidebar Navigation -->
   <?php include 'adminDashboardNav.php'; ?>
 
   <div class="main-content">
@@ -73,29 +71,19 @@ else $errors[] = "Database error: " . $conn->error;
       <thead>
         <tr>
           <th>ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Type</th>
-          <th>Matches</th>
-          <th>Runs</th>
-          <th>Wickets</th>
+          <th>Name</th>
           <th>Team</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         <?php if (empty($players)): ?>
-          <tr><td colspan="9">No players found.</td></tr>
+          <tr><td colspan="4">No players found.</td></tr>
         <?php else: ?>
           <?php foreach ($players as $p): ?>
             <tr>
               <td><?php echo htmlspecialchars($p['player_id']); ?></td>
-              <td><?php echo htmlspecialchars($p['first_name']); ?></td>
-              <td><?php echo htmlspecialchars($p['last_name']); ?></td>
-              <td><?php echo htmlspecialchars($p['type']); ?></td>
-              <td><?php echo htmlspecialchars($p['number_of_match']); ?></td>
-              <td><?php echo htmlspecialchars($p['runs']); ?></td>
-              <td><?php echo htmlspecialchars($p['wickets']); ?></td>
+              <td><?php echo htmlspecialchars($p['full_name']); ?></td>
               <td><?php echo htmlspecialchars($p['team_name']); ?></td>
               <td>
                 <a class="btn delete" href="managePlayers.php?delete_id=<?php echo $p['player_id']; ?>"

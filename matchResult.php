@@ -22,8 +22,8 @@ if (isset($_POST['insert_match'])) {
     }
 
     if (empty($errors)) {
-        $home_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$home_team_id'"))['team_name'];
-        $visit_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$visit_team_id'"))['team_name'];
+        $home_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM teams WHERE team_id='$home_team_id'"))['team_name'];
+        $visit_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM teams WHERE team_id='$visit_team_id'"))['team_name'];
 
         if ($home_runs > $visit_runs) {
             $final_result = "$home_team_name won by " . ($home_runs - $visit_runs) . " runs";
@@ -77,8 +77,8 @@ $matches = mysqli_query($conn, "SELECT rm.*,
     t1.team_name AS home_team_name, 
     t2.team_name AS visit_team_name 
     FROM recent_match rm
-    JOIN team t1 ON rm.home_team_id = t1.team_id
-    JOIN team t2 ON rm.visit_team_id = t2.team_id
+    JOIN teams t1 ON rm.home_team_id = t1.team_id
+    JOIN teams t2 ON rm.visit_team_id = t2.team_id
     ORDER BY rm.date DESC");
 ?>
 
@@ -176,7 +176,7 @@ tr:hover { background: rgba(241, 196, 15, 0.2); }
             <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
                 <option value="">Select Home Team</option>
                 <?php
-                $teams = mysqli_query($conn, "SELECT * FROM team");
+                $teams = mysqli_query($conn, "SELECT * FROM teams");
                 while ($team = mysqli_fetch_assoc($teams)) {
                     echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
                 }
@@ -186,7 +186,7 @@ tr:hover { background: rgba(241, 196, 15, 0.2); }
             <select name="visit_team_id" id="visit_team" required>
                 <option value="">Select Visiting Team</option>
                 <?php
-                $teams = mysqli_query($conn, "SELECT * FROM team");
+                $teams = mysqli_query($conn, "SELECT * FROM teams");
                 while ($team = mysqli_fetch_assoc($teams)) {
                     echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
                 }

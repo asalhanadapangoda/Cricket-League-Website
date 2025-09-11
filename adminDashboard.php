@@ -13,7 +13,7 @@ $teamCount = 0;
 $playerCount = 0;
 
 // Get number of teams
-$teamQuery = "SELECT COUNT(*) as count FROM team";
+$teamQuery = "SELECT COUNT(*) as count FROM teams";
 $teamResult = mysqli_query($conn, $teamQuery);
 if ($teamResult && mysqli_num_rows($teamResult) > 0) {
     $teamData = mysqli_fetch_assoc($teamResult);

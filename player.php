@@ -13,73 +13,78 @@ require_once 'includes/db.php';
 $errors = [];
 $success = ""; // for success message
 $old = [
-    'first_name'=>'',
-    'last_name'=>'',
-    'type'=>'Batsman',
-    'number_of_match'=>'0',
-    'runs'=>'0',
-    'wickets'=>'0',
-    'team_id'=>''
+    'first_name' => '',
+    'last_name'  => '',
+    'type'       => 'Batsman',
+    'team_id'    => ''
 ];
 
 // Fetch teams for dropdown
 $teams = [];
-$teamRes = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name");
+$teamRes = $conn->query("SELECT team_id, team_name FROM teams ORDER BY team_name");
 while ($r = $teamRes->fetch_assoc()) $teams[] = $r;
 
 // Handle form submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old['first_name'] = trim($_POST['first_name'] ?? '');
-    $old['last_name'] = trim($_POST['last_name'] ?? '');
-    $old['type'] = $_POST['type'] ?? '';
-    $old['number_of_match'] = $_POST['number_of_match'] ?? '0';
-    $old['runs'] = $_POST['runs'] ?? '0';
-    $old['wickets'] = $_POST['wickets'] ?? '0';
-    $old['team_id'] = $_POST['team_id'] ?? '';
+    $old['last_name']  = trim($_POST['last_name'] ?? '');
+    $old['type']       = $_POST['type'] ?? '';
+    $old['team_id']    = $_POST['team_id'] ?? '';
 
     // validate
-    if ($old['first_name'] === '' || $old['last_name'] === '') $errors[] = "First name and last name are required.";
+    if ($old['first_name'] === '' || $old['last_name'] === '') {
+        $errors[] = "First name and last name are required.";
+    }
 
-    $valid_types = ['Batsman','Bowler','All-Rounder','Wicket-Keeper'];
-    if (!in_array($old['type'], $valid_types, true)) $errors[] = "Invalid player type.";
-
-    if (!ctype_digit((string)$old['number_of_match']) || (int)$old['number_of_match'] < 0) $errors[] = "Number of matches must be non-negative.";
-    if (!ctype_digit((string)$old['runs']) || (int)$old['runs'] < 0) $errors[] = "Runs must be non-negative.";
-    if (!ctype_digit((string)$old['wickets']) || (int)$old['wickets'] < 0) $errors[] = "Wickets must be non-negative.";
+    $valid_types = ['Batsman','Bowler','All-Rounder','Wicket-Keeper','Captain/Batsman'];
+    if (!in_array($old['type'], $valid_types, true)) {
+        $errors[] = "Invalid player type.";
+    }
 
     // ensure team exists
-    $stmt = $conn->prepare("SELECT team_id FROM team WHERE team_id = ?");
-    $stmt->bind_param("s", $old['team_id']);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    if ($res->num_rows === 0) $errors[] = "Selected team does not exist.";
-    $stmt->close();
+    if ($old['team_id'] !== '') {
+        $stmt = $conn->prepare("SELECT team_id FROM teams WHERE team_id = ?");
+        $stmt->bind_param("s", $old['team_id']);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            $errors[] = "Selected team does not exist.";
+        }
+        $stmt->close();
+    } else {
+        $errors[] = "Please select a team.";
+    }
 
     // insert if no errors
     if (empty($errors)) {
-        $sql = "INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        // 1️⃣ Insert into player table
+        $sql = "INSERT INTO player (first_name, last_name, team_id) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $nm = (int)$old['number_of_match'];
-        $runs = (int)$old['runs'];
-        $wickets = (int)$old['wickets'];
-        $stmt->bind_param("sssiiis",
+        $stmt->bind_param("sss",
             $old['first_name'],
             $old['last_name'],
-            $old['type'],
-            $nm,
-            $runs,
-            $wickets,
             $old['team_id']
         );
 
         if ($stmt->execute()) {
-            $success = "Player added successfully.";
-            $old = ['first_name'=>'','last_name'=>'','type'=>'Batsman','number_of_match'=>'0','runs'=>'0','wickets'=>'0','team_id'=>''];
+            $player_id = $conn->insert_id; // get the new player's ID
+            $stmt->close();
+
+            // 2️⃣ Insert into player_performance
+            $sql2 = "INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES (?, ?, 0, 0, 0)";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->bind_param("is", $player_id, $old['type']);
+            if ($stmt2->execute()) {
+                $success = "Player added successfully.";
+                $old = ['first_name'=>'','last_name'=>'','type'=>'Batsman','team_id'=>''];
+            } else {
+                $errors[] = "Database error (performance): " . $stmt2->error;
+            }
+            $stmt2->close();
         } else {
-            $errors[] = "Database error: " . $stmt->error;
+            $errors[] = "Database error (player): " . $stmt->error;
+            $stmt->close();
         }
-        $stmt->close();
     }
 }
 ?>
@@ -95,9 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .error{color:#b00020;margin-bottom:10px}
     .success{color:green;margin-bottom:10px;font-weight:bold}
     label{display:block;margin-top:10px}
-    input[type="text"], input[type="number"], select {width:100%;padding:8px;margin-top:4px}
-    .row{display:flex;gap:10px}
-    .row > div{flex:1}
+    input[type="text"], select {width:100%;padding:8px;margin-top:4px}
     .btn{margin-top:12px;padding:10px 16px;border:0;background:#1976d2;color:#fff;border-radius:4px;cursor:pointer}
     .btn.secondary{background:#6c757d}
     .main-content{margin-left:250px;padding:20px} /* Adjust margin if sidebar width changes */
@@ -128,38 +131,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <label>Type
         <select name="type" required>
-          <?php foreach (['Batsman','Bowler','All-Rounder','Wicket-Keeper'] as $t):
-              $sel = ($old['type']===$t)?'selected':'';
-              echo "<option value=\"" . htmlspecialchars($t) . "\" $sel>" . htmlspecialchars($t) . "</option>";
-          endforeach; ?>
+          <?php foreach (['Batsman','Bowler','All-Rounder','Wicket-Keeper','Captain/Batsman'] as $t):
+              $sel = ($old['type']===$t)?'selected':''; ?>
+              <option value="<?php echo htmlspecialchars($t); ?>" <?php echo $sel; ?>>
+                <?php echo htmlspecialchars($t); ?>
+              </option>
+          <?php endforeach; ?>
         </select>
       </label>
-
-      <div class="row">
-        <div>
-          <label>Matches
-            <input type="number" min="0" name="number_of_match" value="<?php echo htmlspecialchars($old['number_of_match']); ?>">
-          </label>
-        </div>
-        <div>
-          <label>Runs
-            <input type="number" min="0" name="runs" value="<?php echo htmlspecialchars($old['runs']); ?>">
-          </label>
-        </div>
-        <div>
-          <label>Wickets
-            <input type="number" min="0" name="wickets" value="<?php echo htmlspecialchars($old['wickets']); ?>">
-          </label>
-        </div>
-      </div>
 
       <label>Team
         <select name="team_id" required>
           <option value="">-- Select team --</option>
           <?php foreach ($teams as $t):
-            $sel = ($old['team_id']===$t['team_id'])?'selected':'';
-            echo '<option value="'.htmlspecialchars($t['team_id']).'" '.$sel.'>'.htmlspecialchars($t['team_name']).'</option>';
-          endforeach; ?>
+            $sel = ($old['team_id']===$t['team_id'])?'selected':''; ?>
+            <option value="<?php echo htmlspecialchars($t['team_id']); ?>" <?php echo $sel; ?>>
+              <?php echo htmlspecialchars($t['team_name']); ?>
+            </option>
+          <?php endforeach; ?>
         </select>
       </label>
 
