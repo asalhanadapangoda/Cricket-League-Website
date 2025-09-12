@@ -94,17 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8">
   <title>Add Player - Admin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;padding:0;margin:0}
-    form{max-width:720px;margin:auto}
-    .error{color:#b00020;margin-bottom:10px}
-    .success{color:green;margin-bottom:10px;font-weight:bold}
-    label{display:block;margin-top:10px}
-    input[type="text"], select {width:100%;padding:8px;margin-top:4px}
-    .btn{margin-top:12px;padding:10px 16px;border:0;background:#1976d2;color:#fff;border-radius:4px;cursor:pointer}
-    .btn.secondary{background:#6c757d}
-    .main-content{margin-left:250px;padding:20px} /* Adjust margin if sidebar width changes */
-  </style>
+  <link rel="stylesheet" href="player.css">
+
 </head>
 <body>
   <!-- Sidebar Navigation -->
