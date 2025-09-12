@@ -11,6 +11,10 @@ include __DIR__ . '/db.php';
 </head>
 <body>
 
+<?php 
+include __DIR__ . '/db.php'; 
+?>
+
 <div class="container">
     <h2 class="text-center">Manage Coaches</h2>
 
@@ -59,6 +63,9 @@ include __DIR__ . '/db.php';
         </tbody>
     </table>
 </div>
+
+<!-- Keep your Add Coach Modal + JS here -->
+
 
 <!-- Add Coach Modal -->
 <div id="addModal" class="modal">

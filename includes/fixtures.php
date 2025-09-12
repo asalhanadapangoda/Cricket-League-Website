@@ -13,6 +13,10 @@ include __DIR__ . '/db.php'; // DB connection
 </head>
 <body>
 
+<?php 
+include __DIR__ . '/db.php'; // DB connection
+?>
+
 <div class="container">
     <h2 class="text-center">Manage Fixtures</h2>
 
@@ -33,12 +37,11 @@ include __DIR__ . '/db.php'; // DB connection
         </thead>
         <tbody>
             <?php
-            // Fetch matches in chronological order
             $sql = "SELECT * FROM upcoming_match ORDER BY date ASC, time ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
-                $counter = 1; // logical numbering
+                $counter = 1;
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
                         <td>{$counter}</td> 
@@ -48,7 +51,6 @@ include __DIR__ . '/db.php'; // DB connection
                         <td>{$row['time']}</td>
                         <td>
                             <button class='btn-edit' onclick=\"openEditModal('{$row['match_id']}', '{$row['home_team_id']}', '{$row['visit_team_id']}', '{$row['date']}', '{$row['time']}')\">Edit</button>
-
                             <a href='/Cricket-League-Website/includes/fixturesDelete.php?id={$row['match_id']}' class='btn-delete' onclick=\"return confirm('Are you sure you want to delete this match?');\">Delete</a>
                         </td>
                     </tr>";
@@ -61,6 +63,8 @@ include __DIR__ . '/db.php'; // DB connection
         </tbody>
     </table>
 </div>
+
+
 
 <!-- Add Fixture Modal -->
 <div id="addModal" class="modal">
