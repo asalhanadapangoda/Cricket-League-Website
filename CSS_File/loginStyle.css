@@ -12,8 +12,13 @@ body {
   align-items: center;
   height: 100vh;
 
+<<<<<<< HEAD
   /* Keep your background image */
   background: url("../Pictures/Login_Page.jpg") no-repeat center center fixed;
+=======
+  /* Background image */
+  background: url("../Pictures/1.jpg") no-repeat center center fixed;
+>>>>>>> main
   background-size: cover;
 }
 

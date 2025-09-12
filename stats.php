@@ -1,0 +1,147 @@
+<?php include 'header.php'; ?>
+
+<?php
+require_once 'includes/db.php';
+
+$sql_1 = "SELECT t.team_id, t.team_name, t.logo, p.played, p.won, p.lost, p.no_result, p.nrr, p.points
+          FROM team t
+          JOIN point_table p ON t.team_id = p.team_id
+          ORDER BY p.points DESC, p.nrr DESC";
+
+$result_point = mysqli_query($conn, $sql_1);
+
+$sql_2 = "SELECT 
+            t.logo AS team_logo,
+            t.team_name,
+            p.first_name,
+            p.last_name,
+            pp.runs AS total_runs
+          FROM player p
+          JOIN team t ON p.team_id = t.team_id
+          JOIN player_performance pp ON p.player_id = pp.player_id
+          ORDER BY pp.runs DESC
+          LIMIT 10";
+
+$result_runs = mysqli_query($conn, $sql_2);
+
+
+$sql_3 = "SELECT 
+            t.logo AS team_logo,
+            t.team_name,
+            p.first_name,
+            p.last_name,
+            pp.wickets AS total_wickets
+          FROM player p
+          JOIN team t ON p.team_id = t.team_id
+          JOIN player_performance pp ON p.player_id = pp.player_id
+          ORDER BY pp.wickets DESC
+          LIMIT 5";
+
+$result_wickets = mysqli_query($conn, $sql_3);
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS_File/statsStyle.css">
+</head>
+<body>
+
+    <!-- Most runs -->
+    <div class="Main-topic-header">MOST RUNS</div>
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>POS</th>
+                    <th>Player Name</th>
+                    <th>Runs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $pos = 1;
+                while($row = mysqli_fetch_assoc($result_runs)) {
+                    echo "<tr>";
+                    echo "<td>".$pos."</td>";
+                    echo "<td><img src='".$row['team_logo']."' alt='logo' class='table-team-logo'> ".$row['first_name']." ".$row['last_name']."</td>";
+                    echo "<td>".$row['total_runs']."</td>";
+                    echo "</tr>";
+                    $pos++;
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Most wickets -->
+    <div class="Main-topic-header">MOST WICKETS</div>
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>POS</th>
+                    <th>Player Name</th>
+                    <th>Wickets</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $pos = 1;
+                while($row = mysqli_fetch_assoc($result_wickets)) {
+                    echo "<tr>";
+                    echo "<td>".$pos."</td>";
+                    echo "<td><img src='".$row['team_logo']."' alt='logo' class='table-team-logo'> ".$row['first_name']." ".$row['last_name']."</td>";
+                    echo "<td>".$row['total_wickets']."</td>";
+                    echo "</tr>";
+                    $pos++;
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Point table -->
+    <div class="Main-topic-header">POINTS TABLE</div>
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>POS</th>
+                    <th>TEAM</th>
+                    <th>P</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>NR</th>
+                    <th>NRR</th>
+                    <th>PTS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $pos = 1;
+                mysqli_data_seek($result_point, 0); // reset pointer
+                while($row = mysqli_fetch_assoc($result_point)) {
+                    echo "<tr>";
+                    echo "<td>".$pos."</td>";
+                    echo "<td><img src='".$row['logo']."' alt='logo' class='table-team-logo'> ".$row['team_name']."</td>";
+                    echo "<td>".$row['played']."</td>";
+                    echo "<td>".$row['won']."</td>";
+                    echo "<td>".$row['lost']."</td>";
+                    echo "<td>".$row['no_result']."</td>";
+                    echo "<td>".$row['nrr']."</td>";
+                    echo "<td><strong>".$row['points']."</strong></td>";
+                    echo "</tr>";
+                    $pos++;
+                }
+                mysqli_close($conn);
+                ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<?php include 'footer.php'; ?>

@@ -45,14 +45,31 @@ CREATE TABLE player (
     player_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
+<<<<<<< HEAD
     type ENUM('Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper') NOT NULL,
     number_of_match INT DEFAULT 0,
     runs INT DEFAULT 0,
     wickets INT DEFAULT 0,
+=======
+    type ENUM('Batsman', 'Captain/Batsman', 'Bowler', 'All-Rounder', 'Wicket-Keeper') NOT NULL,
+>>>>>>> main
     team_id VARCHAR(10),
     FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE CASCADE
 );
 
+<<<<<<< HEAD
+=======
+CREATE TABLE player_performance (
+    performance_id INT AUTO_INCREMENT PRIMARY KEY,
+    player_id INT NOT NULL,
+    number_of_match INT DEFAULT 0,
+    runs INT DEFAULT 0,
+    wickets INT DEFAULT 0,
+    FOREIGN KEY (player_id) REFERENCES player(player_id) ON DELETE CASCADE
+);
+
+
+>>>>>>> main
 -- -----------------------------------------------------
 -- Table: upcoming_match
 -- -----------------------------------------------------
@@ -125,6 +142,7 @@ INSERT INTO point_table (team_id, played, won, lost, no_result, nrr, points) VAL
 -- Players
 -- -----------------------------------------------------
 -- Colombo Kings (T01)
+<<<<<<< HEAD
 INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets, team_id) VALUES
 ('Kusal', 'Perera', 'Wicket-Keeper', 45, 1200, 0, 'T01'),
 ('Avishka', 'Fernando', 'Batsman', 38, 980, 0, 'T01'),
@@ -193,6 +211,147 @@ INSERT INTO player (first_name, last_name, type, number_of_match, runs, wickets,
 ('Rangana', 'Herath', 'Bowler', 175, 250, 180, 'T05'),
 ('Ajantha', 'Fernando', 'Bowler', 120, 220, 130, 'T05'),
 ('Upul', 'Chandana', 'All-Rounder', 250, 3700, 180, 'T05');
+=======
+INSERT INTO player (first_name, last_name, team_id) VALUES
+('Kusal', 'Perera', 'T01'),
+('Avishka', 'Fernando', 'T01'),
+('Dinesh', 'Chandimal', 'T01'),
+('Angelo', 'Mathews', 'T01'),
+('Thisara', 'Perera', 'T01'),
+('Lahiru', 'Kumara', 'T01'),
+('Suranga', 'Lakmal', 'T01'),
+('Wanindu', 'Hasaranga', 'T01'),
+('Charith', 'Asalanka', 'T01'),
+('Isuru', 'Udana', 'T01'),
+('Dimuth', 'Karunaratne', 'T01');
+
+-- Galle Gladiators (T02)
+INSERT INTO player (first_name, last_name, team_id) VALUES
+('Danushka', 'Gunathilaka', 'T02'),
+('Bhanuka', 'Rajapaksa', 'T02'),
+('Mohammad', 'Amir', 'T02'),
+('Lakshan', 'Sandakan', 'T02'),
+('Ben', 'Cutting', 'T02'),
+('Colin', 'Ingram', 'T02'),
+('Dhananjaya', 'de Silva', 'T02'),
+('Akila', 'Dananjaya', 'T02'),
+('Shoaib', 'Malik', 'T02'),
+('Niroshan', 'Dickwella', 'T02'),
+('Shanaka', 'Dhananjaya', 'T02');
+
+-- B-Love Kandy (T03)
+INSERT INTO player (first_name, last_name, team_id) VALUES
+('Chris', 'Gayle', 'T03'),
+('Andre', 'Russell', 'T03'),
+('Kusal', 'Mendis', 'T03'),
+('Ajantha', 'Mendis', 'T03'),
+('Lahiru', 'Thirimanne', 'T03'),
+('Chaminda', 'Vaas', 'T03'),
+('Mujeeb', 'ur Rahman', 'T03'),
+('Pathum', 'Nissanka', 'T03'),
+('Ashen', 'Bandara', 'T03'),
+('Kusal', 'Janith', 'T03'),
+('Kevin', 'O Brien', 'T03');
+
+-- Jaffna Stallions (T04)
+INSERT INTO player (first_name, last_name, team_id) VALUES
+('Upul', 'Tharanga', 'T04'),
+('Mahela', 'Jayawardene', 'T04'),
+('Sanath', 'Jayasuriya', 'T04'),
+('Muttiah', 'Muralitharan', 'T04'),
+('Anil', 'Kumble', 'T04'),
+('Dwayne', 'Bravo', 'T04'),
+('Michael', 'Hussey', 'T04'),
+('Faf', 'du Plessis', 'T04'),
+('Mitchell', 'Starc', 'T04'),
+('Kagiso', 'Rabada', 'T04'),
+('Hashim', 'Amla', 'T04');
+
+-- Dambulla Giants (T05)
+INSERT INTO player (first_name, last_name, team_id) VALUES
+('Tillakaratne', 'Dilshan', 'T05'),
+('Marvan', 'Atapattu', 'T05'),
+('Roshan', 'Mahanama', 'T05'),
+('Kumar', 'Sangakkara', 'T05'),
+('Aravinda', 'de Silva', 'T05'),
+('Chamari', 'Atapattu', 'T05'),
+('Lasith', 'Malinga', 'T05'),
+('Nuwan', 'Kulasekara', 'T05'),
+('Rangana', 'Herath', 'T05'),
+('Ajantha', 'Fernando', 'T05'),
+('Upul', 'Chandana', 'T05');
+
+-- Colombo Kings (T01) -> player_id 1-11
+INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES
+(1, 'Wicket-Keeper', 45, 1200, 0),
+(2, 'Batsman', 38, 980, 0),
+(3, 'Batsman', 52, 1400, 0),
+(4, 'All-Rounder', 65, 2200, 60),
+(5, 'All-Rounder', 70, 1800, 95),
+(6, 'Bowler', 30, 120, 45),
+(7, 'Bowler', 80, 300, 110),
+(8, 'All-Rounder', 40, 900, 75),
+(9, 'Batsman', 28, 750, 0),
+(10, 'Bowler', 60, 450, 82),
+(11, 'Batsman', 100, 3200, 0);
+
+-- Galle Gladiators (T02) -> player_id 12-22
+INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES
+(12, 'Batsman', 55, 1500, 0),
+(13, 'Batsman', 47, 1320, 0),
+(14, 'Bowler', 90, 250, 150),
+(15, 'Bowler', 60, 120, 85),
+(16, 'All-Rounder', 70, 1600, 70),
+(17, 'Batsman', 75, 2100, 0),
+(18, 'All-Rounder', 85, 2000, 65),
+(19, 'Bowler', 45, 200, 50),
+(20, 'All-Rounder', 200, 5000, 150),
+(21, 'Wicket-Keeper', 95, 2700, 0),
+(22, 'All-Rounder', 50, 1300, 45);
+
+-- B-Love Kandy (T03) -> player_id 23-33
+INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES
+(23, 'Batsman', 400, 14500, 30),
+(24, 'All-Rounder', 350, 7200, 350),
+(25, 'Batsman', 80, 2300, 0),
+(26, 'Bowler', 160, 300, 180),
+(27, 'Batsman', 120, 3500, 0),
+(28, 'Bowler', 250, 500, 400),
+(29, 'Bowler', 60, 100, 70),
+(30, 'Batsman', 30, 890, 0),
+(31, 'All-Rounder', 20, 400, 15),
+(32, 'Wicket-Keeper', 110, 2800, 0),
+(33, 'All-Rounder', 210, 4200, 120);
+
+-- Jaffna Stallions (T04) -> player_id 34-44
+INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES
+(34, 'Wicket-Keeper', 220, 6800, 0),
+(35, 'Batsman', 500, 12000, 0),
+(36, 'All-Rounder', 450, 13500, 300),
+(37, 'Bowler', 495, 800, 530),
+(38, 'Bowler', 300, 500, 400),
+(39, 'All-Rounder', 400, 6000, 500),
+(40, 'Batsman', 250, 7500, 0),
+(41, 'Batsman', 150, 4500, 0),
+(42, 'Bowler', 120, 300, 220),
+(43, 'Bowler', 80, 200, 130),
+(44, 'Batsman', 250, 9000, 0);
+
+-- Dambulla Giants (T05) -> player_id 45-55
+INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES
+(45, 'All-Rounder', 330, 10500, 120),
+(46, 'Batsman', 350, 8500, 0),
+(47, 'Batsman', 200, 5500, 0),
+(48, 'Wicket-Keeper', 450, 14200, 0),
+(49, 'All-Rounder', 380, 9700, 150),
+(50, 'All-Rounder', 250, 6500, 120),
+(51, 'Bowler', 226, 550, 390),
+(52, 'Bowler', 190, 350, 200),
+(53, 'Bowler', 175, 250, 180),
+(54, 'Bowler', 120, 220, 130),
+(55, 'All-Rounder', 250, 3700, 180);
+
+>>>>>>> main
 
 -- -----------------------------------------------------
 -- Coaches

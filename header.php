@@ -16,7 +16,7 @@
     <!-- LPL Logo -->
     <div class="logo-container">
       <a href="homePage.php">
-       <img src="Pictures/LPL_LOGO.webp" alt="Cricket Logo">
+       <img src="Pictures/lpl_logo.jpg" alt="Cricket Logo">
       </a>
     </div>
 
@@ -27,17 +27,15 @@
         <li class="dropdown">
           <a href="teamPage.php">TEAMS ▾</a>
           <ul class="dropdown-menu">
-            <li><a href="Teams/teamKandy.php">B-Love Kandy</a></li>
-            <li><a href="Teams/teamDambulla.php">Dambulla Aura</a></li>
-            <li><a href="Teams/teamGalle.php">Galle Titans</a></li>
-            <li><a href="Teams/teamColombo.php">Colombo Strikers</a></li>
-            <li><a href="Teams/teamJaffna.php">Jaffna Kings</a></li>
+            <li><a href="teamKandy.php">B-Love Kandy</a></li>
+            <li><a href="teamDambulla.php">Dambulla Aura</a></li>
+            <li><a href="teamGalle.php">Galle Titans</a></li>
+            <li><a href="teamColombo.php">Colombo Strikers</a></li>
+            <li><a href="teamJaffna.php">Jaffna Kings</a></li>
           </ul>
         </li>
-        <li><a href="#">FIXTURES & RESULTS</a></li>
-        <li><a href="#">STATS</a></li>
-        <li><a href="#">GALLERY</a></li>
-        <li><a href="#">MEDIA RELEASES</a></li>
+        <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
+        <li><a href="stats.php">STATS</a></li>
       </ul>
     </nav>
 
