@@ -11,9 +11,7 @@ include __DIR__ . '/db.php';
 </head>
 <body>
 
-<?php 
-include __DIR__ . '/db.php'; 
-?>
+
 
 <div class="container">
     <h2 class="text-center">Manage Coaches</h2>
@@ -26,8 +24,7 @@ include __DIR__ . '/db.php';
         <thead>
             <tr>
                 <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Name</th>
                 <th>Role</th>
                 <th>Team ID</th>
                 <th>Actions</th>
@@ -40,10 +37,10 @@ include __DIR__ . '/db.php';
             if ($result->num_rows > 0) {
                 $counter = 1;
                 while($row = $result->fetch_assoc()) {
+                    $fullName = $row['first_name'] . ' ' . $row['last_name']; // combine names
                     echo "<tr>
                         <td>{$counter}</td>
-                        <td>{$row['first_name']}</td>
-                        <td>{$row['last_name']}</td>
+                        <td>{$fullName}</td>
                         <td>{$row['role']}</td>
                         <td>{$row['team_id']}</td>
                         <td>
@@ -57,14 +54,14 @@ include __DIR__ . '/db.php';
                     $counter++;
                 }
             } else {
-                echo "<tr><td colspan='6'>No coaches found</td></tr>";
+                echo "<tr><td colspan='5'>No coaches found</td></tr>";
             }
             ?>
         </tbody>
     </table>
 </div>
 
-<!-- Keep your Add Coach Modal + JS here -->
+
 
 
 <!-- Add Coach Modal -->
@@ -74,18 +71,23 @@ include __DIR__ . '/db.php';
         <h3>Add New Coach</h3>
 
         <form action="includes/coachesAdd.php" method="POST">
-            <label>First Name</label>
-            <input type="text" name="first_name" required>
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Full Name" required>
             <br><br>
-            <label>Last Name</label>
-            <input type="text" name="last_name" required>
-            <br><br>
+
             <label>Role</label>
-            <input type="text" name="role" required>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="Head Coach">Head Coach</option>
+                <option value="Batting Coach">Batting Coach</option>
+                <option value="Bowling Coach">Bowling Coach</option>
+            </select>
             <br><br>
+
             <label>Team ID</label>
             <input type="text" name="team_id" required>
             <br><br>
+
             <button type="submit" class="btn-submit">Add Coach</button>
         </form>
     </div>
@@ -106,6 +108,7 @@ window.onclick = function(event) {
     if (event.target == document.getElementById('addModal')) closeAddModal();
     
 }
+
 </script>
 
 </body>
