@@ -40,18 +40,7 @@ else $errors[] = "Database error: " . $conn->error;
 <head>
   <meta charset="utf-8">
   <title>Manage Players</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;padding:0;margin:0}
-    .main-content{margin-left:250px;padding:20px}
-    table{width:100%;border-collapse:collapse;margin-top:20px}
-    th, td{border:1px solid #ccc;padding:8px;text-align:left}
-    th{background:#f4f4f4}
-    .btn{padding:6px 12px;border:0;border-radius:4px;cursor:pointer}
-    .btn.delete{background:#b00020;color:#fff}
-    .btn.add{background:#1976d2;color:#fff;margin-bottom:10px}
-    .success{color:green;font-weight:bold;margin-bottom:10px}
-    .error{color:#b00020;font-weight:bold;margin-bottom:10px}
-  </style>
+  <link rel="stylesheet" href="managePlayers.css">
   <?php if($success): ?>
     <meta http-equiv="refresh" content="2;url=managePlayers.php">
   <?php endif; ?>
