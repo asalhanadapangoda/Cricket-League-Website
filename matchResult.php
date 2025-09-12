@@ -89,57 +89,8 @@ $matches = mysqli_query($conn, "SELECT rm.*,
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Results</title>
 <link rel="stylesheet" href="CSS_File/adminDashboard.css">
-<style>
-/* Match Results page specific CSS */
-form {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 15px;
-}
-form select, form input {
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    width: calc(50% - 10px);
-}
-form input[type="date"] { width: calc(50% - 10px); }
-.btn-insert { background-color: #27ae60; color: #fff; }
-.btn-insert:hover { background-color: #2ecc71; }
-.btn-delete { background-color: #e74c3c; color: #fff; }
-.btn-delete:hover { background-color: #c0392b; }
-.success-msg, .error-msg {
-    background: rgba(0,0,0,0.3);
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    text-align: center;
-    font-weight: 500;
-}
-.success-msg { color: #2ecc71; }
-.error-msg { color: #e74c3c; }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 25px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    overflow: hidden;
-}
-th, td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-th { background-color: rgba(0,0,0,0.3); }
-tr:nth-child(even) { background: rgba(255,255,255,0.05); }
-tr:hover { background: rgba(241, 196, 15, 0.2); }
-@media (max-width: 768px) { form select, form input { width: 100%; } }
-</style>
+<link rel="stylesheet" href="style.css">
+
 </head>
 <body>
     <!-- Sidebar Navigation -->
