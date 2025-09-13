@@ -31,11 +31,11 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
         </div>
         
         <div class="card" id="match-setup" style="display: none;">
-            <h2>Step 2: Match Setup</h2>
+            <h2 id="setup-title">Step 2: Match Setup</h2>
             <form id="setup-form">
                 <label>Who is Batting First?</label>
                 <select id="batting_team_id" name="batting_team_id">
-                    </select>
+                </select>
 
                 <input type="hidden" id="bowling_team_id" name="bowling_team_id">
 
@@ -116,7 +116,7 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
                 <label><input type="radio" name="batsman_out" id="out-non-striker" value=""> <span id="out-non-striker-name"></span></label>
             </div>
             
-            <label for="new_batsman_id">New Batsman:</label>
+            <label for="new_batsman_id" id="new_batsman_label">New Batsman:</label>
             <select id="new_batsman_id"></select>
 
             <button type="button" onclick="confirmWicket()">Confirm Wicket</button>
@@ -134,14 +134,28 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
         </div>
     </div>
 
+    <div id="innings-break-modal" class="modal">
+        <div class="modal-content">
+            <h3>Innings Over!</h3>
+            <p>Target to win: <strong id="target-display"></strong></p>
+            <button type="button" onclick="transitionToSecondInnings()">Start Second Innings</button>
+        </div>
+    </div>
+
 
 <script>
     let currentScore = { runs: 0, wickets: 0, balls: 0 };
     let teamPlayers = { batting: [], bowling: [] };
     let matchTeams = {};
+    let availableBatsmen = [];
+    let isSecondInnings = false;
 
     document.getElementById('match_id').addEventListener('change', (event) => {
         const matchId = event.target.value;
+        availableBatsmen = []; 
+        currentScore = { runs: 0, wickets: 0, balls: 0 };
+        isSecondInnings = false;
+        document.getElementById('setup-title').innerText = 'Step 2: Match Setup';
         if (!matchId) {
             document.getElementById('match-setup').style.display = 'none';
             return;
@@ -176,11 +190,16 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
         fetch(`/Cricket-League-Website/getPlayers.php?team_id=${teamId}`)
             .then(response => response.json())
             .then(players => {
-                teamPlayers[teamType] = players;
+                teamPlayers[teamType] = players.map(p => ({...p, player_id: parseInt(p.player_id, 10)}));
+                
+                if (teamType === 'batting') {
+                    availableBatsmen = [...teamPlayers.batting];
+                }
+
                 playerElementIds.forEach(elementId => {
                     const select = document.getElementById(elementId);
                     select.innerHTML = '<option value="">-- Select Player --</option>';
-                    players.forEach(player => {
+                    teamPlayers[teamType].forEach(player => {
                         select.innerHTML += `<option value="${player.player_id}">${player.first_name} ${player.last_name}</option>`;
                     });
                 });
@@ -193,7 +212,6 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
             return;
         }
         
-        document.getElementById('match-select-step').style.display = 'none';
         document.getElementById('match-setup').style.display = 'none';
         document.getElementById('scoring-area').style.display = 'block';
 
@@ -225,11 +243,13 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
         const data = new FormData(document.getElementById('setup-form'));
         if (!isSetup) {
             new FormData(document.getElementById('scoring-form')).forEach((val, key) => data.append(key, val));
+            data.set('is_wicket', document.getElementById('is_wicket').checked);
         }
         data.append('is_setup', isSetup);
 
         if (wicketData) {
-            const field = wicketData.out_id === data.get('striker_id') ? 'striker_id' : 'non_striker_id';
+            const outBatsmanIsStriker = wicketData.out_id === parseInt(data.get('striker_id'), 10);
+            const field = outBatsmanIsStriker ? 'striker_id' : 'non_striker_id';
             data.set(field, wicketData.new_id);
         }
 
@@ -237,18 +257,21 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
             method: 'POST',
             body: data
         })
-        .then(response => {
-            if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(score => {
             currentScore = score;
             const overs = Math.floor(score.balls / 6);
             const ball_in_over = score.balls % 6;
             document.getElementById('score-display').innerText = `${score.runs}/${score.wickets} (${overs}.${ball_in_over})`;
             
-            const isLegalDelivery = !['wide', 'noball'].includes(document.getElementById('extras_type').value);
+            if (score.innings_over && !isSecondInnings) {
+                document.getElementById('target-display').innerText = score.target;
+                document.getElementById('innings-break-modal').style.display = 'flex';
+                document.getElementById('scoring-form').style.display = 'none';
+                return;
+            }
 
+            const isLegalDelivery = !['wide', 'noball'].includes(document.getElementById('extras_type').value);
             if (!isSetup) {
                 if ([1, 3, 5].includes(parseInt(document.getElementById('runs_scored').value, 10))) {
                     swapStrikers();
@@ -257,56 +280,99 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
                     openNewBowlerModal();
                 }
             }
-            resetBallInputs();
+             if (!isSetup) resetBallInputs();
         })
-        .catch(error => {
-            console.error('Error fetching score:', error);
-            alert("An error occurred. Check the console for details.");
-        });
+        .catch(error => console.error('Error fetching score:', error));
     }
 
     function openWicketModal() {
-        const strikerId = document.getElementById('striker_id').value;
-        const nonStrikerId = document.getElementById('non_striker_id').value;
+        const strikerId = parseInt(document.getElementById('striker_id').value, 10);
+        const nonStrikerId = parseInt(document.getElementById('non_striker_id').value, 10);
+
         document.getElementById('out-striker').value = strikerId;
         document.getElementById('out-striker-name').innerText = document.getElementById('striker-name').innerText;
         document.getElementById('out-non-striker').value = nonStrikerId;
         document.getElementById('out-non-striker-name').innerText = document.getElementById('non-striker-name').innerText;
 
         const newBatsmanSelect = document.getElementById('new_batsman_id');
-        newBatsmanSelect.innerHTML = '<option value="">-- Select New Batsman --</option>';
-        teamPlayers.batting.forEach(player => {
-            if (player.player_id !== strikerId && player.player_id !== nonStrikerId) {
+        const newBatsmanLabel = document.getElementById('new_batsman_label');
+
+        if (currentScore.wickets >= 9) {
+            newBatsmanSelect.style.display = 'none';
+            newBatsmanLabel.style.display = 'none';
+            newBatsmanSelect.innerHTML = '';
+        } else {
+            newBatsmanSelect.style.display = 'block';
+            newBatsmanLabel.style.display = 'block';
+            newBatsmanSelect.innerHTML = '<option value="">-- Select New Batsman --</option>';
+            const playersForDropdown = availableBatsmen.filter(player => 
+                player.player_id !== strikerId && player.player_id !== nonStrikerId
+            );
+            playersForDropdown.forEach(player => {
                 newBatsmanSelect.innerHTML += `<option value="${player.player_id}">${player.first_name} ${player.last_name}</option>`;
-            }
-        });
+            });
+        }
+        
         document.getElementById('wicket-modal').style.display = 'flex';
     }
 
     function confirmWicket() {
-        const newBatsmanId = document.getElementById('new_batsman_id').value;
         const outBatsmanRadio = document.querySelector('input[name="batsman_out"]:checked');
-        if (!newBatsmanId || !outBatsmanRadio) {
-            alert('Please select the batsman who is out and the new batsman.');
+        if (!outBatsmanRadio) {
+            alert('Please select the batsman who is out.');
             return;
         }
-        const outBatsmanId = outBatsmanRadio.value;
-        const wicketData = { out_id: outBatsmanId, new_id: newBatsmanId };
-        
-        const newBatsmanName = document.getElementById('new_batsman_id').options[document.getElementById('new_batsman_id').selectedIndex].text;
-        if (outBatsmanId === document.getElementById('striker_id').value) {
-            document.getElementById('striker_id').value = newBatsmanId;
-            document.getElementById('striker-name').innerText = newBatsmanName;
-        } else {
-            document.getElementById('non_striker_id').value = newBatsmanId;
-            document.getElementById('non-striker-name').innerText = newBatsmanName;
+
+        let newBatsmanId = null;
+        if (currentScore.wickets < 9) {
+            newBatsmanId = document.getElementById('new_batsman_id').value;
+            if (!newBatsmanId) {
+                alert('Please select the new batsman.');
+                return;
+            }
         }
+
+        const outBatsmanId = parseInt(outBatsmanRadio.value, 10);
+        availableBatsmen = availableBatsmen.filter(player => player.player_id !== outBatsmanId);
+
+        const wicketData = { out_id: outBatsmanId, new_id: newBatsmanId ? parseInt(newBatsmanId, 10) : null };
+        
+        if (newBatsmanId) {
+            const newBatsmanName = document.getElementById('new_batsman_id').options[document.getElementById('new_batsman_id').selectedIndex].text;
+            if (outBatsmanId === parseInt(document.getElementById('striker_id').value, 10)) {
+                document.getElementById('striker_id').value = newBatsmanId;
+                document.getElementById('striker-name').innerText = newBatsmanName;
+            } else {
+                document.getElementById('non_striker_id').value = newBatsmanId;
+                document.getElementById('non-striker-name').innerText = newBatsmanName;
+            }
+        }
+        
         sendDataToServer(false, wicketData);
         closeModal('wicket-modal');
     }
+
+    function transitionToSecondInnings() {
+        closeModal('innings-break-modal');
+        
+        document.getElementById('scoring-area').style.display = 'none';
+        document.getElementById('scoring-form').style.display = 'block';
+        document.getElementById('match-setup').style.display = 'block';
+        document.getElementById('setup-title').innerText = 'Setup Second Innings';
+
+        document.getElementById('score-display').innerText = '0/0 (0.0)';
+        currentScore = { runs: 0, wickets: 0, balls: 0 };
+        isSecondInnings = true;
+        
+        const oldBowlingTeamId = document.getElementById('bowling_team_id').value;
+        const battingSelect = document.getElementById('batting_team_id');
+        
+        battingSelect.value = oldBowlingTeamId;
+        battingSelect.dispatchEvent(new Event('change'));
+    }
     
     function openNewBowlerModal() {
-        const currentBowlerId = document.getElementById('bowler_id').value;
+        const currentBowlerId = parseInt(document.getElementById('bowler_id').value, 10);
         const newBowlerSelect = document.getElementById('new_bowler_id');
         newBowlerSelect.innerHTML = '<option value="">-- Select New Bowler --</option>';
         teamPlayers.bowling.forEach(player => {
@@ -331,7 +397,9 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
 
     function closeModal(modalId) { 
         document.getElementById(modalId).style.display = 'none';
-        resetBallInputs();
+        if (modalId === 'wicket-modal' || modalId === 'new-bowler-modal') {
+             resetBallInputs();
+        }
     }
     
     function swapStrikers() {
@@ -353,18 +421,9 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
     }
 
     function endMatch() {
-        if (!confirm("Are you sure you want to end this scoring session? This cannot be undone.")) return;
-        document.getElementById('scoring-area').style.display = 'none';
-        document.getElementById('match-setup').style.display = 'none';
-        document.getElementById('match-select-step').style.display = 'block';
-
-        document.getElementById('match_id').value = '';
-        document.getElementById('setup-form').reset();
-        const hiddenMatchId = document.querySelector('#setup-form input[name="match_id"]');
-        if (hiddenMatchId) hiddenMatchId.remove();
-        
-        document.getElementById('scoring-form').reset();
-        document.getElementById('score-display').innerText = '0/0 (0.0)';
+        if (confirm("Are you sure you want to end this scoring session? This will reset everything.")) {
+            window.location.reload();
+        }
     }
 
 </script>
