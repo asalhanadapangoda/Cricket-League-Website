@@ -12,7 +12,7 @@
 
     <script>
         function fetchLiveScore() {
-            fetch('/Cricket-League-Website/get-live-score.php')
+            fetch('/Cricket-League-Website/getliveScore.php')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('live-score-container').innerHTML = data;
