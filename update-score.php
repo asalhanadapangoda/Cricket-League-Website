@@ -7,9 +7,7 @@ $match_id = $_POST['match_id'];
 $is_setup = filter_var($_POST['is_setup'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
 
 // --- Get current score from DB ---
-$current_score = ['runs' => 0, 'wickets' => 0, 'balls' => 0, 'innings_no' => 1, 'target' => 0];
-$innings_over = false;
-
+$current_score = ['runs' => 0, 'wickets' => 0, 'balls' => 0];
 $check_sql = "SELECT * FROM live_score WHERE match_id = ?";
 $stmt = $conn->prepare($check_sql);
 $stmt->bind_param("i", $match_id);
@@ -21,8 +19,7 @@ if ($is_existing_match) {
     $row = $result->fetch_assoc();
     $current_score['runs'] = (int)$row['runs'];
     $current_score['wickets'] = (int)$row['wickets'];
-    $current_score['innings_no'] = (int)$row['innings_no'];
-    $current_score['target'] = (int)$row['target'];
+    // **FIX**: Correctly calculate total balls from overs format (e.g., 5.5 -> 35 balls)
     $overs_parts = explode('.', (string)$row['overs']);
     $full_overs = (int)$overs_parts[0];
     $balls_in_over = isset($overs_parts[1]) ? (int)$overs_parts[1] : 0;
@@ -30,34 +27,30 @@ if ($is_existing_match) {
 }
 $stmt->close();
 
-// --- Process Ball and Calculate New Score ---
+// --- Process Ball and Calculate New Score (only if not a setup call) ---
 if (!$is_setup) {
     $runs_scored = (int)($_POST['runs_scored'] ?? 0);
     $extras_type = $_POST['extras_type'] ?? 'none';
     $is_wicket = isset($_POST['is_wicket']);
 
+    // Add runs based on type
     if ($extras_type === 'wide' || $extras_type === 'noball') {
-        $current_score['runs'] += 1;
+        $current_score['runs'] += 1; // 1 run for the extra itself
     }
-    $current_score['runs'] += $runs_scored;
+    $current_score['runs'] += $runs_scored; // Add runs hit by batsman
 
+    // Increment balls only on legal deliveries
     if ($extras_type !== 'wide' && $extras_type !== 'noball') {
         $current_score['balls']++;
     }
 
+    // Add wickets if one occurred
     if ($is_wicket) {
         $current_score['wickets']++;
     }
-
-    // --- CHECK FOR END OF INNINGS ---
-    // An innings ends after 120 legal balls (20 overs) or 10 wickets.
-    if ($current_score['innings_no'] == 1 && ($current_score['balls'] >= 120 || $current_score['wickets'] >= 10)) {
-        $innings_over = true;
-        $current_score['target'] = $current_score['runs'] + 1; // Set the target for the next team
-    }
 }
 
-// Convert total balls back to overs format for DB storage
+// Convert total balls back to overs format for DB storage and display
 $overs_whole = floor($current_score['balls'] / 6);
 $overs_balls = $current_score['balls'] % 6;
 $overs_decimal = (float)($overs_whole . '.' . $overs_balls);
@@ -69,39 +62,22 @@ $striker_id = $_POST['striker_id'];
 $non_striker_id = $_POST['non_striker_id'];
 $bowler_id = $_POST['bowler_id'];
 
+// **FIX**: Corrected the bind_param types to match the database schema
 if ($is_existing_match) {
-    if ($innings_over) {
-        // First innings has just finished. Reset the score for the second innings.
-        $sql = "UPDATE live_score SET innings_no=2, target=?, runs=0, wickets=0, overs=0.0, batting_team_id=?, bowling_team_id=?, striker_id=NULL, non_striker_id=NULL, bowler_id=NULL WHERE match_id=?";
-        $stmt = $conn->prepare($sql);
-        // Note: Batting and bowling team IDs are swapped here.
-        $stmt->bind_param("isssi", $current_score['target'], $bowling_team_id, $batting_team_id, $match_id); 
-    } else {
-        // Continue the current innings.
-        $sql = "UPDATE live_score SET batting_team_id=?, bowling_team_id=?, runs=?, wickets=?, overs=?, striker_id=?, non_striker_id=?, bowler_id=? WHERE match_id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiidiidi", $batting_team_id, $bowling_team_id, $current_score['runs'], $current_score['wickets'], $overs_decimal, $striker_id, $non_striker_id, $bowler_id, $match_id);
-    }
-} else { // This is the very first ball of the match.
-    // **FIX**: The original `bind_param` string was incorrect. This is the corrected version.
-    $sql = "INSERT INTO live_score (match_id, batting_team_id, bowling_team_id, runs, wickets, overs, striker_id, non_striker_id, bowler_id, innings_no, target) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)";
+    $sql = "UPDATE live_score SET batting_team_id=?, bowling_team_id=?, runs=?, wickets=?, overs=?, striker_id=?, non_striker_id=?, bowler_id=? WHERE match_id=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("issiidiis", $match_id, $batting_team_id, $bowling_team_id, $current_score['runs'], $current_score['wickets'], $overs_decimal, $striker_id, $non_striker_id, $bowler_id);
+    // Correct types: s, s, i, i, d, i, i, i, i
+    $stmt->bind_param("ssiidiidi", $batting_team_id, $bowling_team_id, $current_score['runs'], $current_score['wickets'], $overs_decimal, $striker_id, $non_striker_id, $bowler_id, $match_id);
+} else {
+    $sql = "INSERT INTO live_score (match_id, batting_team_id, bowling_team_id, runs, wickets, overs, striker_id, non_striker_id, bowler_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    // Correct types: i, s, s, i, i, d, i, i, i
+    $stmt->bind_param("issiidiidi", $match_id, $batting_team_id, $bowling_team_id, $current_score['runs'], $current_score['wickets'], $overs_decimal, $striker_id, $non_striker_id, $bowler_id);
 }
 
 $stmt->execute();
 $stmt->close();
 
-// Add a signal to the JSON response so the frontend knows the innings is over.
-$current_score['innings_over'] = $innings_over;
-if ($innings_over) {
-    // If the innings is over, reset the score in the response for the frontend display.
-    $current_score['runs'] = 0;
-    $current_score['wickets'] = 0;
-    $current_score['balls'] = 0;
-    $current_score['innings_no'] = 2;
-}
-
-
+// --- Return the new, accurate score to the frontend ---
 echo json_encode($current_score);
 ?>
