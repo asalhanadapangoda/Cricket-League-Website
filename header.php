@@ -11,11 +11,15 @@
     <!-- LPL Logo -->
     <div class="logo-container">
       <a href="homePage.php">
-       <img src="Pictures/lpl_logo.jpg" alt="Cricket Logo">
+        <img src="Pictures/lpl_logo.jpg" alt="Cricket Logo">
       </a>
     </div>
 
-    <!-- Navigation Bar we have to add navigation bar links -->
+    <!-- Hamburger Checkbox -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger">☰</label>
+
+    <!-- Navigation Bar -->
     <nav class="main-nav">
       <ul class="nav-list">
         <li><a href="homePage.php">HOME</a></li>
@@ -34,13 +38,10 @@
       </ul>
     </nav>
 
-    <!-- Buy Ticket Button in Navigation Bar -->
+    <!-- Buy Ticket Button -->
     <div class="cta">
       <a href="https://lk.bookmyshow.com/events/lanka-premier-league-2023/ET00005021" class="btn-ticket">Buy Ticket</a>
     </div>
   </header>
 </body>
 </html>
-
-
-

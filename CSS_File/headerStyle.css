@@ -1,3 +1,4 @@
+/* Reset */
 * { 
   margin: 0; 
   padding: 0; 
@@ -34,6 +35,7 @@ body {
   display: block;
 }
 
+/* Navigation */
 .main-nav {
   flex: 1;             
   text-align: center;  
@@ -54,6 +56,7 @@ body {
   border-radius: 4px;
 }
 
+/* Dropdown */
 .dropdown {
   position: relative;
 }
@@ -77,6 +80,7 @@ body {
   display: block;
 }
 
+/* Buy Ticket */
 .cta {
   flex: 0 0 auto; 
 }
@@ -90,4 +94,85 @@ body {
 }
 .btn-ticket:hover {
   background-color: #e63e00;
+}
+
+/* Hamburger menu setup */
+.menu-toggle {
+  display: none;
+}
+.hamburger {
+  display: none;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+  }
+
+  /* Hide nav by default */
+  .main-nav {
+    display: none;
+    width: 100%;
+    background: #091668;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+
+  .main-nav .nav-list {
+    flex-direction: column;
+    gap: 0;
+    text-align: left;
+    padding: 10px 0;
+  }
+
+  .main-nav .nav-list li {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .main-nav .nav-list a {
+    display: block;
+    padding: 12px 20px;
+  }
+
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+  }
+
+  /* Toggle menu when checked */
+  .menu-toggle:checked ~ .main-nav {
+    display: block;
+  }
+
+  /* Move Buy Ticket button below */
+  .cta {
+    display: none;
+    width: 100%;
+  }
+  .menu-toggle:checked ~ .cta {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* Dropdown inside mobile */
+  .dropdown-menu {
+    position: static;
+    background: #0b1c6f;
+    margin: 0;
+    border-radius: 0;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: none; /* disable hover */
+  }
+  .dropdown:focus-within .dropdown-menu {
+    display: block; /* open on click */
+  }
 }
