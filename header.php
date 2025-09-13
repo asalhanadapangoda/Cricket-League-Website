@@ -35,6 +35,7 @@
         </li>
         <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
         <li><a href="stats.php">STATS</a></li>
+        <li><a href="livescore.php">LIVE SCORE</a></li>
       </ul>
     </nav>
 
