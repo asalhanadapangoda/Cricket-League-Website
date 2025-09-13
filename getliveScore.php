@@ -1,7 +1,6 @@
 <?php
 require_once 'includes/db.php';
 
-// This query now fetches the absolute latest entry in the live_score table.
 $sql = "SELECT ls.*, 
         t1.team_name AS batting_team_name,
         t2.team_name AS bowling_team_name,
@@ -22,7 +21,6 @@ $result = mysqli_query($conn, $sql);
 if ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='score-card-live'>";
     echo "    <h2>{$row['batting_team_name']} vs {$row['bowling_team_name']}</h2>";
-    // Display target if it's the second innings
     if ($row['innings_no'] == 2 && $row['target'] > 0) {
         echo "    <div class='target' style='color: #f59e0b; font-size: 22px; margin-bottom: 15px;'>Target: {$row['target']}</div>";
     }
