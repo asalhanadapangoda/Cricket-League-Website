@@ -1,5 +1,15 @@
 <?php 
 include __DIR__ . '/db.php'; // DB connection
+
+// Fetch teams for the dropdown
+$teams_query = "SELECT team_id, team_name FROM team";
+$teams_result = $conn->query($teams_query);
+$teams = [];
+if ($teams_result->num_rows > 0) {
+    while($row = $teams_result->fetch_assoc()) {
+        $teams[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,14 +18,9 @@ include __DIR__ . '/db.php'; // DB connection
     <meta charset="UTF-8">
     <title>Manage Fixtures</title>
 
-    <!-- Correct path to CSS file -->
     <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/fixturesStyle.css">
 </head>
 <body>
-
-<?php 
-include __DIR__ . '/db.php'; // DB connection
-?>
 
 <div class="container">
     <h2 class="text-center">Manage Fixtures</h2>
@@ -37,7 +42,7 @@ include __DIR__ . '/db.php'; // DB connection
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM upcoming_match ORDER BY date ASC, time ASC";
+            $sql = "SELECT f.*, ht.team_name as home_team_name, vt.team_name as visit_team_name FROM upcoming_match f JOIN team ht ON f.home_team_id = ht.team_id JOIN team vt ON f.visit_team_id = vt.team_id ORDER BY date ASC, time ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -45,8 +50,8 @@ include __DIR__ . '/db.php'; // DB connection
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
                         <td>{$counter}</td> 
-                        <td>{$row['home_team_id']}</td>
-                        <td>{$row['visit_team_id']}</td>
+                        <td>{$row['home_team_name']}</td>
+                        <td>{$row['visit_team_name']}</td>
                         <td>{$row['date']}</td>
                         <td>{$row['time']}</td>
                         <td>
@@ -66,7 +71,6 @@ include __DIR__ . '/db.php'; // DB connection
 
 
 
-<!-- Add Fixture Modal -->
 <div id="addModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeAddModal()">&times;</span>
@@ -75,10 +79,20 @@ include __DIR__ . '/db.php'; // DB connection
         <form action="includes/fixturesAdd.php" method="POST">
 
             <label>Home Team</label>
-            <input type="text" name="team1" required>
+            <select name="team1" required>
+                <option value="">Select Home Team</option>
+                <?php foreach ($teams as $team): ?>
+                    <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <br><br>
             <label>Visiting Team</label>
-            <input type="text" name="team2" required>
+            <select name="team2" required>
+                <option value="">Select Visiting Team</option>
+                <?php foreach ($teams as $team): ?>
+                    <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <br><br>
             <label>Match Date</label>
             <input type="date" name="match_date" required>
@@ -91,7 +105,6 @@ include __DIR__ . '/db.php'; // DB connection
     </div>
 </div>
 
-<!-- Edit Fixture Modal -->
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
@@ -99,10 +112,20 @@ include __DIR__ . '/db.php'; // DB connection
         <form action="/Cricket-League-Website/includes/fixturesUpdate.php" method="POST">
             <input type="hidden" name="match_id" id="edit_id">
             <label>Home Team</label>
-            <input type="text" name="team1" id="edit_team1" required>
+            <select name="team1" id="edit_team1" required>
+                <option value="">Select Home Team</option>
+                <?php foreach ($teams as $team): ?>
+                    <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <br><br>
             <label>Visiting Team</label>
-            <input type="text" name="team2" id="edit_team2" required>
+            <select name="team2" id="edit_team2" required>
+                <option value="">Select Visiting Team</option>
+                <?php foreach ($teams as $team): ?>
+                    <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <br><br>
             <label>Match Date</label>
             <input type="date" name="match_date" id="edit_date" required>
@@ -122,10 +145,10 @@ function openAddModal() {
 function closeAddModal() {
     document.getElementById('addModal').style.display = 'none';
 }
-function openEditModal(id, home, visit, date, time) {
+function openEditModal(id, home_id, visit_id, date, time) {
     document.getElementById('edit_id').value = id;
-    document.getElementById('edit_team1').value = home;
-    document.getElementById('edit_team2').value = visit;
+    document.getElementById('edit_team1').value = home_id;
+    document.getElementById('edit_team2').value = visit_id;
     document.getElementById('edit_date').value = date;
     document.getElementById('edit_time').value = time;
     document.getElementById('editModal').style.display = 'block';
