@@ -66,7 +66,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                 include __DIR__ . '/includes/manage-player-performance.php';
                 break;
             case 'livescore':
-                include __DIR__ . '/includes/manage-live-score.php';
+                include __DIR__ . '/includes/manageliveScore.php';
                 break;
             default:
                 echo "<h2>Page not found</h2>";
