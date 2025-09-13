@@ -13,7 +13,7 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
 <head>
     <meta charset="UTF-8">
     <title>Match Setup & Live Scoring</title>
-    <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/manage-live-score.css">
+    <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/managelivescoreStyle.css">
 </head>
 <body>
     <div class="container">
