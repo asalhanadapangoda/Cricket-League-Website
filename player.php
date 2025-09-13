@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8">
   <title>Add Player - Admin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="player.css">
+  <link rel="stylesheet" href="CSS_File/player.css">
 
 </head>
 <body>
