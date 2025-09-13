@@ -95,7 +95,7 @@ $stmt->close();
 // Add a signal to the JSON response so the frontend knows the innings is over.
 $current_score['innings_over'] = $innings_over;
 if ($innings_over) {
-    // If the innings is over, reset the score in the response for the frontend display.
+
     $current_score['runs'] = 0;
     $current_score['wickets'] = 0;
     $current_score['balls'] = 0;
