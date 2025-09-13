@@ -233,7 +233,7 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
             data.set(field, wicketData.new_id);
         }
 
-        fetch('/Cricket-League-Website/update-score.php', {
+        fetch('/Cricket-League-Website/updateScore.php', {
             method: 'POST',
             body: data
         })
