@@ -147,7 +147,7 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
             return;
         }
 
-        fetch(`/Cricket-League-Website/get-match-teams.php?match_id=${matchId}`)
+        fetch(`/Cricket-League-Website/getmatchTeams.php?match_id=${matchId}`)
             .then(response => response.json())
             .then(data => {
                 matchTeams = data;
