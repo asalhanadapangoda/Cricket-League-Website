@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto+Mono&display=swap');
+
+body {
+    background-color: #0f172a; 
+}
+
+#live-score-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.score-card-live {
+    width: 100%;
+    max-width: 800px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #f8fafc;
+    border-radius: 16px;
+    padding: 30px 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid #334155;
+    text-align: center;
+}
+
+.score-card-live h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #cbd5e1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.main-score {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 48px; 
+    font-weight: 700;
+    margin: 20px 0;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.main-score strong {
+    color: #f59e0b; 
+    letter-spacing: 2px;
+}
+
+.player-details {
+    margin-top: 30px;
+    border-top: 1px solid #334155;
+    padding-top: 30px;
+    font-size: 20px;
+    color: #e2e8f0;
+}
+
+.player-details p {
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.player-details strong {
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.player-details strong::after {
+    content: '*';
+    color: #f59e0b;
+    font-size: 20px;
+    vertical-align: super;
+    margin-left: 4px;
+}
+
+.no-live-match {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    color: #94a3b8;
+    text-align: center;
+    padding: 40px;
+}
