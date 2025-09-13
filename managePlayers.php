@@ -1,8 +1,6 @@
 <?php
-// managePlayers.php
 session_start();
 
-// Access control
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: adminLogin.php");
     exit;
@@ -25,22 +23,42 @@ if (isset($_GET['delete_id'])) {
     } else $errors[] = "Invalid player ID.";
 }
 
-// Fetch all players
+// Handle search
+$search = '';
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
+}
+
+// Fetch players
 $players = [];
-$sql = "SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
-        FROM player p 
-        LEFT JOIN teams t ON p.team_id = t.team_id
-        ORDER BY p.player_id ASC";
-$res = $conn->query($sql);
-if ($res) while ($row = $res->fetch_assoc()) $players[] = $row;
-else $errors[] = "Database error: " . $conn->error;
+if ($search) {
+    $stmt = $conn->prepare("SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
+                            FROM player p 
+                            LEFT JOIN team t ON p.team_id = t.team_id
+                            WHERE p.first_name LIKE ? OR p.last_name LIKE ?
+                            ORDER BY p.player_id ASC");
+    $like = "%$search%";
+    $stmt->bind_param("ss", $like, $like);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) $players[] = $row;
+    $stmt->close();
+} else {
+    $sql = "SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
+            FROM player p 
+            LEFT JOIN team t ON p.team_id = t.team_id
+            ORDER BY p.player_id ASC";
+    $res = $conn->query($sql);
+    if ($res) while ($row = $res->fetch_assoc()) $players[] = $row;
+    else $errors[] = "Database error: " . $conn->error;
+}
 ?>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Manage Players</title>
-  <link rel="stylesheet" href="managePlayers.css">
+  <link rel="stylesheet" href="CSS_File/managePlayers.css">
   <?php if($success): ?>
     <meta http-equiv="refresh" content="2;url=managePlayers.php">
   <?php endif; ?>
@@ -49,12 +67,23 @@ else $errors[] = "Database error: " . $conn->error;
   <?php include 'adminDashboardNav.php'; ?>
 
   <div class="main-content">
-    <h2>Manage Players</h2>
+    <div class="header-row">
+        <!-- Search form -->
+        <form method="get" class="search-form">
+            <input type="text" name="search" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn search-btn">Search</button>
+        </form>
 
-    <button class="btn add" onclick="location.href='player.php'">Add New Player</button>
+        <button class="btn add" onclick="location.href='player.php'">Add New Player</button>
+    </div>
 
-    <?php if ($success): ?><div class="success"><?php echo htmlspecialchars($success); ?></div><?php endif; ?>
-    <?php if (!empty($errors)): ?><div class="error"><?php echo implode('<br>', array_map('htmlspecialchars',$errors)); ?></div><?php endif; ?>
+    <?php if ($success): ?>
+      <div class="success"><?php echo htmlspecialchars($success); ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($errors)): ?>
+      <div class="error"><?php echo implode('<br>', array_map('htmlspecialchars',$errors)); ?></div>
+    <?php endif; ?>
 
     <table>
       <thead>

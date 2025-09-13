@@ -21,7 +21,7 @@ $old = [
 
 // Fetch teams for dropdown
 $teams = [];
-$teamRes = $conn->query("SELECT team_id, team_name FROM teams ORDER BY team_name");
+$teamRes = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name");
 while ($r = $teamRes->fetch_assoc()) $teams[] = $r;
 
 // Handle form submit
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ensure team exists
     if ($old['team_id'] !== '') {
-        $stmt = $conn->prepare("SELECT team_id FROM teams WHERE team_id = ?");
+        $stmt = $conn->prepare("SELECT team_id FROM team WHERE team_id = ?");
         $stmt->bind_param("s", $old['team_id']);
         $stmt->execute();
         $res = $stmt->get_result();
