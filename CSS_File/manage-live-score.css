@@ -78,7 +78,6 @@ button:hover {
     box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
 }
 
-/* Scoring Area */
 .scoring-area .live-score-display {
     background-color: #1a237e;
     color: white;
@@ -177,7 +176,6 @@ button:hover {
     box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
 }
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
