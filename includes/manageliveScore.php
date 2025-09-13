@@ -173,7 +173,7 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
     function fetchPlayers(teamId, playerElementIds, teamType) {
         if (!teamId) return;
 
-        fetch(`/Cricket-League-Website/get-players.php?team_id=${teamId}`)
+        fetch(`/Cricket-League-Website/getPlayers.php?team_id=${teamId}`)
             .then(response => response.json())
             .then(players => {
                 teamPlayers[teamType] = players;
