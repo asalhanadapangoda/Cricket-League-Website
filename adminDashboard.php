@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Prevent unauthorized access
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -54,7 +56,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                 include __DIR__ . '/includes/coaches.php';
                 break;
             case 'players':
-                include __DIR__ . 'managePlayers.php';
+                include __DIR__ . '../managePlayers.php';
                 break;
             case 'fixtures':
                 include __DIR__ . '/includes/fixtures.php';
