@@ -20,10 +20,8 @@
             .catch(error => console.error('Error fetching live score:', error));
         }
 
-        // Fetch score every 5 seconds
         setInterval(fetchLiveScore, 5000);
 
-        // Initial fetch
         fetchLiveScore();
     </script>
 </body>
