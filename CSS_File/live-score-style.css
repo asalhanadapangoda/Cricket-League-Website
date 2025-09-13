@@ -4,7 +4,6 @@ body {
     background-color: #0f172a; 
 }
 
-/* This container helps center the scorecard on the page */
 #live-score-container {
     display: flex;
     justify-content: center;
@@ -12,7 +11,6 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* The main scorecard card */
 .score-card-live {
     width: 100%;
     max-width: 800px;
@@ -25,7 +23,6 @@ body {
     text-align: center;
 }
 
-/* "Team A vs Team B" heading */
 .score-card-live h2 {
     margin-top: 0;
     font-size: 24px;
@@ -36,23 +33,20 @@ body {
     margin-bottom: 25px;
 }
 
-/* The main score display, e.g., "Team Name: 120/2 (15.3)" */
 .main-score {
     font-family: 'Roboto Mono', monospace;
-    font-size: 48px; /* Slightly adjusted for better fit */
+    font-size: 48px; 
     font-weight: 700;
     margin: 20px 0;
     color: #ffffff;
     line-height: 1.2;
 }
 
-/* The score itself, e.g., "120/2" */
 .main-score strong {
-    color: #f59e0b; /* Amber color for the score */
+    color: #f59e0b; 
     letter-spacing: 2px;
 }
 
-/* The player details section below the score */
 .player-details {
     margin-top: 30px;
     border-top: 1px solid #334155;
@@ -70,13 +64,11 @@ body {
     background-color: rgba(255, 255, 255, 0.03);
 }
 
-/* The striker's name */
 .player-details strong {
     font-weight: 700;
     color: #f8fafc;
 }
 
-/* The asterisk (*) next to the striker's name */
 .player-details strong::after {
     content: '*';
     color: #f59e0b;
@@ -85,7 +77,6 @@ body {
     margin-left: 4px;
 }
 
-/* Message shown when no match is live */
 .no-live-match {
     font-family: 'Montserrat', sans-serif;
     font-size: 22px;
