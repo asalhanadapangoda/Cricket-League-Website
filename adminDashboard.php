@@ -60,7 +60,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                 include __DIR__ . '/includes/fixtures.php';
                 break;
             case 'results':
-                include __DIR__ . '/includes/manage-results.php';
+                include __DIR__ . '../matchResult.php';
                 break;
             case 'performance':
                 include __DIR__ . '/includes/manage-player-performance.php';
