@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: space-between;  
   align-items: center;
-  background: #091668;
+  background: #001771;
   padding: 12px 40px;
   position: fixed;   /* lock navbar */
   top: 0;
