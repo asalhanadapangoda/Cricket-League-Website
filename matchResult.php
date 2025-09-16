@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once 'includes/db.php';
 
 $errors = [];
@@ -21,8 +25,8 @@ if (isset($_POST['insert_match'])) {
     }
 
     if (empty($errors)) {
-        $home_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM teams WHERE team_id='$home_team_id'"))['team_name'];
-        $visit_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM teams WHERE team_id='$visit_team_id'"))['team_name'];
+        $home_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$home_team_id'"))['team_name'];
+        $visit_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$visit_team_id'"))['team_name'];
 
         if ($home_runs > $visit_runs) {
             $final_result = "$home_team_name won by " . ($home_runs - $visit_runs) . " runs";
@@ -53,7 +57,7 @@ if (isset($_POST['insert_match'])) {
 
         if ($stmt->execute()) {
             $stmt->close();
-            $_SESSION['success_msg'] = "✅ Match result inserted successfully!";
+            $_SESSION['success_msg'] = "Match result inserted successfully!";
             header("Location: matchResult.php");
             exit;
         } else {
@@ -66,7 +70,7 @@ if (isset($_POST['insert_match'])) {
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
     mysqli_query($conn, "DELETE FROM recent_match WHERE match_id = '$delete_id'");
-    $_SESSION['success_msg'] = "✅ Match result deleted successfully!";
+    $_SESSION['success_msg'] = "Match result deleted successfully!";
     header("Location: matchResult.php");
     exit;
 }
@@ -87,9 +91,8 @@ $matches = mysqli_query($conn, "SELECT rm.*,
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Results</title>
-<link rel="stylesheet" href="CSS_File/adminDashboard.css">
+<link rel="stylesheet" href="CSS_File/matchResult.css">
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
     <!-- Sidebar Navigation -->
@@ -97,11 +100,6 @@ $matches = mysqli_query($conn, "SELECT rm.*,
 
     <!-- Body content -->
     <div class="main-content">
-        <div class="header">
-            <div class="welcome">Welcome, <?php echo  $_SESSION['admin_name'] ?? 'Admin'; ?>!</div>
-            <button class="logout-btn" onclick="location.href='logout.php'">Logout</button>
-        </div>
-
         <h1>Match Results Dashboard</h1>
 
         <!-- Display Messages -->
@@ -126,7 +124,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
                 <option value="">Select Home Team</option>
                 <?php
-                $teams = mysqli_query($conn, "SELECT * FROM teams");
+                $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
                     echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
                 }
@@ -136,7 +134,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             <select name="visit_team_id" id="visit_team" required>
                 <option value="">Select Visiting Team</option>
                 <?php
-                $teams = mysqli_query($conn, "SELECT * FROM teams");
+                $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
                     echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
                 }
