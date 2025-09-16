@@ -5,16 +5,6 @@
 </head>
 <body>
    <footer>
-    <!-- OUR SPONSORS -->
-         <div class="sponsors">
-      <h3>OUR SPONSORS</h3>
-      <div class="sponsor-logos">
-        <img src="Pictures/IPG.jpg" alt="ipg">
-        <img src="Pictures/RTA-Sports.png" alt="RTA Sport">
-        <img src="Pictures/skyf.png" alt="Skyfair">
-        <img src="Pictures/1zBat.png" alt="1XBET">
-      </div>
-    </div>
 
     <!-- BROUGHT TO YOU BY -->
 
