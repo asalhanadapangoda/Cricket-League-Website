@@ -4,7 +4,7 @@
     $sql_1 = "SELECT 
             p.first_name,
             p.last_name,
-            p.role AS role
+            p.type AS role
           FROM player p
           JOIN player_performance pp ON p.player_id = pp.player_id
           WHERE p.team_id = 'T04'";
