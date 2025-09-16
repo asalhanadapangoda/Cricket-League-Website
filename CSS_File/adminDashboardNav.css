@@ -67,3 +67,25 @@ body {
   color: #fff;
   border-left: 4px solid #00bcd4;
 }
+
+/* Logout button at the bottom */
+#logout {
+    position: absolute;
+    bottom: 20px; /* distance from the bottom */
+    width: 100%; /* make it full width */
+}
+
+#logout a {
+    display: block;
+    background-color: #e84118;
+    color: #fff;
+    text-align: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+#logout a:hover {
+    background-color: #c23616;
+}

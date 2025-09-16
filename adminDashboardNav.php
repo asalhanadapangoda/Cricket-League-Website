@@ -21,6 +21,7 @@
             <li><a href="adminDashboard.php?page=fixtures">Fixtures</a></li>
             <li><a href="adminDashboard.php?page=results">Match Results</a></li>
             <li><a href="adminDashboard.php?page=livescore">Update Live Score</a></li>
+            <li id="logout"><a href="homePage.php">Logout</a></li>
         </ul>
     </div>
 </body>
