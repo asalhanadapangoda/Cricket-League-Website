@@ -15,9 +15,7 @@
       </a>
     </div>
 
-    <!-- Hamburger Checkbox -->
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="hamburger">☰</label>
+    
 
     <!-- Navigation Bar -->
     <nav class="main-nav">

@@ -119,7 +119,7 @@ body {
   .main-nav {
     display: none;
     width: 100%;
-    background: #091668;
+    background: #001771;
     position: absolute;
     top: 100%;
     left: 0;
@@ -174,16 +174,5 @@ body {
   }
   .dropdown:focus-within .dropdown-menu {
     display: block; /* open on click */
-  }
-
-  /* Change ☰ to ✖ when menu is active */
-  .menu-toggle:checked + .hamburger::before {
-    content: "✖";
-    font-size: 28px;
-  }
-
-  /* Optional smooth dropdown animation */
-  .main-nav, .cta {
-    transition: all 0.3s ease;
   }
 }
