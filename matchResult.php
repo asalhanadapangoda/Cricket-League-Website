@@ -122,7 +122,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
         <!-- Insert Form -->
         <form method="POST">
             <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
-                <option value="">Select Home Team</option>
+                <option value="">Select Team 1</option>
                 <?php
                 $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
@@ -132,7 +132,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             </select>
 
             <select name="visit_team_id" id="visit_team" required>
-                <option value="">Select Visiting Team</option>
+                <option value="">Select Team 2</option>
                 <?php
                 $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
@@ -141,13 +141,13 @@ $matches = mysqli_query($conn, "SELECT rm.*,
                 ?>
             </select>
 
-            <input type="number" name="home_team_runs" placeholder="Home Runs" required>
-            <input type="number" name="home_team_wickets" placeholder="Home Wickets" required>
-            <input type="number" step="0.1" name="home_team_overs" placeholder="Home Overs" required>
+            <input type="number" name="home_team_runs" placeholder="Team 1 Runs" required>
+            <input type="number" name="home_team_wickets" placeholder="Team 1 Wickets" required>
+            <input type="number" step="0.1" name="home_team_overs" placeholder="Team 1 Overs" required>
 
-            <input type="number" name="visit_team_runs" placeholder="Visiting Runs" required>
-            <input type="number" name="visit_team_wickets" placeholder="Visiting Wickets" required>
-            <input type="number" step="0.1" name="visit_team_overs" placeholder="Visiting Overs" required>
+            <input type="number" name="visit_team_runs" placeholder="Team 2 Runs" required>
+            <input type="number" name="visit_team_wickets" placeholder="Team 2 Wickets" required>
+            <input type="number" step="0.1" name="visit_team_overs" placeholder="Team 2 Overs" required>
 
             <input type="date" name="match_date" required>
             <button type="submit" name="insert_match" class="btn btn-insert">Insert Match</button>

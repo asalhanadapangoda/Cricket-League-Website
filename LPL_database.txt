@@ -104,6 +104,27 @@ CREATE TABLE coach (
     FOREIGN KEY (team_id) REFERENCES team(team_id)
 );
 
+CREATE TABLE live_score (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    match_id INT NOT NULL,
+    batting_team_id VARCHAR(10),
+    bowling_team_id VARCHAR(10),
+    runs INT DEFAULT 0,
+    wickets INT DEFAULT 0,
+    overs DECIMAL(4,1) DEFAULT 0.0,
+    striker_id INT,
+    non_striker_id INT,
+    bowler_id INT,
+    innings_no INT NOT NULL,
+    target INT DEFAULT 0,
+    FOREIGN KEY (match_id) REFERENCES upcoming_match(match_id) ON DELETE CASCADE,
+    FOREIGN KEY (batting_team_id) REFERENCES team(team_id) ON DELETE SET NULL,
+    FOREIGN KEY (bowling_team_id) REFERENCES team(team_id) ON DELETE SET NULL,
+    FOREIGN KEY (striker_id) REFERENCES player(player_id) ON DELETE SET NULL,
+    FOREIGN KEY (non_striker_id) REFERENCES player(player_id) ON DELETE SET NULL,
+    FOREIGN KEY (bowler_id) REFERENCES player(player_id) ON DELETE SET NULL
+);
+
 -- -----------------------------------------------------
 -- Insert Sample Data
 -- -----------------------------------------------------
