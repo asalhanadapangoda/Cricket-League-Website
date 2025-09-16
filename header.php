@@ -24,7 +24,7 @@
       <ul class="nav-list">
         <li><a href="homePage.php">HOME</a></li>
         <li class="dropdown">
-          <a href="teamPage.php">TEAMS ▾</a>
+          <a href="">TEAMS ▾</a>
           <ul class="dropdown-menu">
             <li><a href="teamKandy.php">B-Love Kandy</a></li>
             <li><a href="teamDambulla.php">Dambulla Aura</a></li>
