@@ -67,7 +67,7 @@ select {
 
 /* Buttons */
 button, .back-btn {
-    background: #ffeb3b;
+    background: #002347;
     border: none;
     color: #0d5c2d;
     padding: 10px 16px;
@@ -82,7 +82,7 @@ button, .back-btn {
 }
 
 button:hover, .back-btn:hover {
-    background: #fdd835;
+    background: #002347;
     transform: scale(1.05);
 }
 

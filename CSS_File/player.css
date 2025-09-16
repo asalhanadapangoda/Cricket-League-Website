@@ -1,14 +1,17 @@
-bbody {
+/* General Body Styles */
+body {
   font-family: Arial, Helvetica, sans-serif;
   padding: 0;
   margin: 0;
 }
 
+/* Form */
 form {
   max-width: 720px;
   margin: auto;
 }
 
+/* Error and Success Messages */
 .error {
   color: #b00020;
   margin-bottom: 10px;
@@ -20,6 +23,7 @@ form {
   font-weight: bold;
 }
 
+/* Labels and Inputs */
 label {
   display: block;
   margin-top: 10px;
@@ -32,42 +36,42 @@ select {
   margin-top: 4px;
 }
 
-/* Remove underline from buttons and links styled as buttons */
-button, button a, .btn, .btn a, a.btn {
-    text-decoration: none !important;
-    color: inherit;
-    display: inline-block;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-/* Primary button */
-.btn {
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 16px;
-    margin-top: 12px;
-    transition: background 0.3s ease;
-}
-
-.btn:hover {
-    background: #115293;
-}
-
-/* Secondary button */
-.btn.secondary {
-    background: #6c757d;
-    color: #fff;
-}
-
-.btn.secondary:hover {
-    background: #5a6268;
-}
-
 /* Main Content */
 .main-content {
   margin-left: 250px; /* Adjust margin if sidebar width changes */
   padding: 20px;
+}
+
+/* ---------------- Button Styles ---------------- */
+
+/* Buttons and links styled as buttons */
+button, a.btn {
+    display: inline-block;
+    text-decoration: none !important; /* remove underline */
+    color: #fff;                       /* button text color */
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+/* Primary button */
+button.btn, a.btn.primary {
+    background-color: #002347;
+}
+
+button.btn:hover, a.btn.primary:hover {
+    background-color: #0062a3; /* lighter blue on hover */
+}
+
+/* Secondary button */
+button.btn.secondary, a.btn.secondary {
+    background-color: #6c757d;
+}
+
+button.btn.secondary:hover, a.btn.secondary:hover {
+    background-color: #5a6268;
 }
