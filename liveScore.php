@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live Score</title>
+    <title>Cricket Website</title>
     <link rel="stylesheet" href="CSS_File/livescoreStyle.css">
 </head>
 <body>

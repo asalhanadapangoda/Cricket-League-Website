@@ -1,4 +1,4 @@
-<?php
+<?php 
 // player.php
 session_start();
 
@@ -11,13 +11,19 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once 'includes/db.php';
 
 $errors = [];
-$success = ""; // for success message
 $old = [
     'first_name' => '',
     'last_name'  => '',
     'type'       => 'Batsman',
     'team_id'    => ''
 ];
+
+// ✅ Show success message once (after redirect)
+$success = "";
+if (isset($_SESSION['success_msg'])) {
+    $success = $_SESSION['success_msg'];
+    unset($_SESSION['success_msg']);
+}
 
 // Fetch teams for dropdown
 $teams = [];
@@ -58,29 +64,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // insert if no errors
     if (empty($errors)) {
         // 1️⃣ Insert into player table
-        $sql = "INSERT INTO player (first_name, last_name, team_id) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO player (first_name, last_name, type, team_id) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss",
+        $stmt->bind_param("ssss",
             $old['first_name'],
             $old['last_name'],
+            $old['type'],
             $old['team_id']
         );
 
         if ($stmt->execute()) {
-            $player_id = $conn->insert_id; // get the new player's ID
+            $player_id = $conn->insert_id;
             $stmt->close();
 
             // 2️⃣ Insert into player_performance
-            $sql2 = "INSERT INTO player_performance (player_id, type, number_of_match, runs, wickets) VALUES (?, ?, 0, 0, 0)";
+            $sql2 = "INSERT INTO player_performance (player_id, number_of_match, runs, wickets) VALUES (?, 0, 0, 0)";
             $stmt2 = $conn->prepare($sql2);
-            $stmt2->bind_param("is", $player_id, $old['type']);
+            $stmt2->bind_param("i", $player_id);
+
             if ($stmt2->execute()) {
-                $success = "Player added successfully.";
-                $old = ['first_name'=>'','last_name'=>'','type'=>'Batsman','team_id'=>''];
+                $stmt2->close();
+
+                // ✅ Redirect after success to prevent duplicate submissions
+                $_SESSION['success_msg'] = "Player added successfully.";
+                header("Location: player.php");
+                exit;
             } else {
                 $errors[] = "Database error (performance): " . $stmt2->error;
+                $stmt2->close();
             }
-            $stmt2->close();
         } else {
             $errors[] = "Database error (player): " . $stmt->error;
             $stmt->close();
@@ -95,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Add Player - Admin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="CSS_File/player.css">
-
 </head>
 <body>
   <!-- Sidebar Navigation -->
