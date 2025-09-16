@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'includes/db.php';
 
 $errors = [];
@@ -77,8 +76,8 @@ $matches = mysqli_query($conn, "SELECT rm.*,
     t1.team_name AS home_team_name, 
     t2.team_name AS visit_team_name 
     FROM recent_match rm
-    JOIN teams t1 ON rm.home_team_id = t1.team_id
-    JOIN teams t2 ON rm.visit_team_id = t2.team_id
+    JOIN team t1 ON rm.home_team_id = t1.team_id
+    JOIN team t2 ON rm.visit_team_id = t2.team_id
     ORDER BY rm.date DESC");
 ?>
 
