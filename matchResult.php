@@ -62,7 +62,7 @@ if (isset($_POST['insert_match'])) {
     $stmt->execute();
     $stmt->close();
 
-    echo "<script>alert('Match added successfully!'); window.location.href='add_match.php';</script>";
+    echo "<script>alert('Match added successfully!'); window.location.href='matchResult.css';</script>";
     exit;
 }
 ?>
