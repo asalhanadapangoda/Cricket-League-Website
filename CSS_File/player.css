@@ -1,77 +1,56 @@
-/* General Body Styles */
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 0;
-  margin: 0;
-}
-
-/* Form */
-form {
-  max-width: 720px;
-  margin: auto;
-}
-
-/* Error and Success Messages */
-.error {
-  color: #b00020;
-  margin-bottom: 10px;
-}
-
-.success {
-  color: green;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-/* Labels and Inputs */
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-input[type="text"],
-select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-}
-
-/* Main Content */
-.main-content {
-  margin-left: 250px; /* Adjust margin if sidebar width changes */
-  padding: 20px;
-}
-
-/* ---------------- Button Styles ---------------- */
-
-/* Buttons and links styled as buttons */
-button, a.btn {
-    display: inline-block;
-    text-decoration: none !important; /* remove underline */
-    color: #fff;                       /* button text color */
-    cursor: pointer;
-    font-family: inherit;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 16px;
-    font-weight: 600;
-    transition: background 0.3s ease;
-}
-
-/* Primary button */
-button.btn, a.btn.primary {
-    background-color: #002347;
-}
-
-button.btn:hover, a.btn.primary:hover {
-    background-color: #0062a3; /* lighter blue on hover */
-}
-
-/* Secondary button */
-button.btn.secondary, a.btn.secondary {
-    background-color: #6c757d;
-}
-
-button.btn.secondary:hover, a.btn.secondary:hover {
-    background-color: #5a6268;
-}
+     body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f6fa;
+            padding: 40px;
+        }
+        h2 {
+            text-align: center;
+            color: #1e3d73;
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-left: 600px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-group button {
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-add {
+            background-color: #1e3d73;
+            color: white;
+            border: none;
+        }
+        .btn-add:hover {
+            background-color: #16325a;
+        }
+        .btn-cancel {
+            background-color: gray;
+            color: white;
+            border: none;
+        }
+        .btn-cancel:hover {
+            background-color: #555;
+        }
