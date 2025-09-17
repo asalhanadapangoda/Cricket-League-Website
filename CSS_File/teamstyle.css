@@ -1,5 +1,5 @@
 body.colombo {
-    background: #f4f4f9;
+    background: #fa88fe;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 100px 0px 0px;
@@ -7,7 +7,7 @@ body.colombo {
 }
 
 body.dambulla {
-    background: #f4f4f9;
+    background: #4f47f1;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 100px 0px 0px;
@@ -15,7 +15,7 @@ body.dambulla {
 }
 
 body.galle {
-    background: #f4f4f9;
+    background: #dbde3e;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 100px 0px 0px;
@@ -23,7 +23,7 @@ body.galle {
 }
 
 body.jaffna {
-    background: #f4f4f9;
+    background: #36227d;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 100px 0px 0px;
@@ -31,7 +31,7 @@ body.jaffna {
 }
 
 body.kandy {
-    background: #f4f4f9;
+    background: #ed5384;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 100px 0px 0px;
@@ -52,7 +52,7 @@ body.kandy {
     font-size: 2rem;            
     font-weight: bold;           
     margin: 30px 0;            
-    color: #ffffff;            
+    color: #1a085d;            
     letter-spacing: 2px;       
     text-transform: uppercase;  
 }
