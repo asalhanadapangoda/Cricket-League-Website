@@ -1,5 +1,8 @@
 <?php
-session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: adminLogin.php");
@@ -49,9 +52,9 @@ $result = $stmt->get_result();
 
 <?php include 'adminDashboardNav.php'; ?>
 
-<div class="container mt-4">
+<div class="container">
 
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex">
         <form class="form-inline" method="GET" action="">
             <input type="text" name="search" class="form-control mr-2" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
             <button type="submit" class="btn btn-primary">Search</button>
