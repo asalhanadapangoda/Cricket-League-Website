@@ -3,239 +3,188 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: adminLogin.php");
-    exit;
-}
-
 require_once 'includes/db.php';
 
-$errors = [];
-$success_msg = "";
+// -------------------- Delete Match --------------------
+if (isset($_POST['delete']) && isset($_POST['match_id'])) {
+    $match_id = (int)$_POST['match_id'];
+    $conn->query("DELETE FROM recent_match WHERE match_id = $match_id");
+    echo "<script>alert('Match deleted successfully!'); window.location.href='add_match.php';</script>";
+    exit;
+}
 
 // -------------------- Insert Match --------------------
 if (isset($_POST['insert_match'])) {
     $home_team_id = $_POST['home_team_id'];
     $visit_team_id = $_POST['visit_team_id'];
-    $home_runs = $_POST['home_team_runs'];
-    $home_wickets = $_POST['home_team_wickets'];
+    $home_runs = (int)$_POST['home_team_runs'];
+    $home_wickets = (int)$_POST['home_team_wickets'];
     $home_overs = $_POST['home_team_overs'];
-    $visit_runs = $_POST['visit_team_runs'];
-    $visit_wickets = $_POST['visit_team_wickets'];
+    $visit_runs = (int)$_POST['visit_team_runs'];
+    $visit_wickets = (int)$_POST['visit_team_wickets'];
     $visit_overs = $_POST['visit_team_overs'];
-    $match_date = $_POST['match_date'];
+    $date = $_POST['date'];
 
-    if ($home_team_id == $visit_team_id) {
-        $errors[] = "Home and Visiting teams cannot be the same.";
-    }
+    // Get team names
+    $home_team_name = $conn->query("SELECT team_name FROM team WHERE team_id='$home_team_id'")->fetch_assoc()['team_name'];
+    $visit_team_name = $conn->query("SELECT team_name FROM team WHERE team_id='$visit_team_id'")->fetch_assoc()['team_name'];
 
-    if (empty($errors)) {
-        $home_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$home_team_id'"))['team_name'];
-        $visit_team_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT team_name FROM team WHERE team_id='$visit_team_id'"))['team_name'];
-
-        if ($home_runs > $visit_runs) {
-            $final_result = "$home_team_name won by " . ($home_runs - $visit_runs) . " runs";
-        } elseif ($visit_runs > $home_runs) {
-            $wickets_remaining = 10 - $visit_wickets;
-            $final_result = "$visit_team_name won by $wickets_remaining wickets";
-        } else {
-            $final_result = "Match tied";
-        }
-
-        $stmt = $conn->prepare("INSERT INTO recent_match 
-            (home_team_id, visit_team_id, home_team_runs, home_team_wickets, home_team_overs,
-             visit_team_runs, visit_team_wickets, visit_team_overs, final_result, date)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param(
-            "ssiiddiiss",
-            $home_team_id,
-            $visit_team_id,
-            $home_runs,
-            $home_wickets,
-            $home_overs,
-            $visit_runs,
-            $visit_wickets,
-            $visit_overs,
-            $final_result,
-            $match_date
-        );
-
-        if ($stmt->execute()) {
-            $stmt->close();
-            $_SESSION['success_msg'] = "Match result inserted successfully!";
-            header("Location: matchResult.php");
-            exit;
-        } else {
-            $errors[] = "Error inserting match result: " . $stmt->error;
-        }
-    }
-}
-
-// -------------------- Delete Match --------------------
-if (isset($_GET['delete_id'])) {
-    $delete_id = intval($_GET['delete_id']);
-
-    if ($delete_id > 0) {
-        $delete_query = "DELETE FROM recent_match WHERE match_id = $delete_id";
-        if (mysqli_query($conn, $delete_query)) {
-            $_SESSION['success_msg'] = "Match result deleted successfully!";
-        } else {
-            $_SESSION['success_msg'] = "Error deleting match: " . mysqli_error($conn);
-        }
+    // Auto-generate final result using standard cricket rules
+    if ($home_runs > $visit_runs) {
+        $run_diff = $home_runs - $visit_runs;
+        $final_result = "$home_team_name won by $run_diff runs";
+    } elseif ($visit_runs > $home_runs) {
+        $wickets_remaining = 10 - $visit_wickets;
+        $final_result = "$visit_team_name won by $wickets_remaining wickets";
     } else {
-        $_SESSION['success_msg'] = "Invalid match ID.";
+        $final_result = "Match tied";
     }
 
-    header("Location: matchResult.php");
+    // Insert
+    $stmt = $conn->prepare("INSERT INTO recent_match 
+        (home_team_id, visit_team_id, home_team_runs, home_team_wickets, home_team_overs, 
+        visit_team_runs, visit_team_wickets, visit_team_overs, final_result, date) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    $stmt->bind_param("ssiidiisss",
+        $home_team_id, 
+        $visit_team_id,
+        $home_runs, 
+        $home_wickets, 
+        $home_overs, 
+        $visit_runs, 
+        $visit_wickets, 
+        $visit_overs, 
+        $final_result, 
+        $date
+    );
+
+    $stmt->execute();
+    $stmt->close();
+
+    echo "<script>alert('Match added successfully!'); window.location.href='add_match.php';</script>";
     exit;
 }
-
-// -------------------- Fetch Matches --------------------
-$matches = mysqli_query($conn, "SELECT rm.*, 
-    t1.team_name AS home_team_name, 
-    t2.team_name AS visit_team_name 
-    FROM recent_match rm
-    JOIN team t1 ON rm.home_team_id = t1.team_id
-    JOIN team t2 ON rm.visit_team_id = t2.team_id
-    ORDER BY rm.date DESC");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Match Results</title>
-<link rel="stylesheet" href="CSS_File/matchResult.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="CSS_File/matchResult.css">
+ 
+    <script>
+        function openModal() { document.getElementById("modal").style.display = "block"; }
+        function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+        // Prevent selecting the same team
+        function updateVisitOptions() {
+            let homeTeam = document.querySelector("select[name='home_team_id']").value;
+            let visitSelect = document.querySelector("select[name='visit_team_id']");
+            for (let opt of visitSelect.options) {
+                opt.disabled = (opt.value && opt.value === homeTeam);
+            }
+        }
+        function updateHomeOptions() {
+            let visitTeam = document.querySelector("select[name='visit_team_id']").value;
+            let homeSelect = document.querySelector("select[name='home_team_id']");
+            for (let opt of homeSelect.options) {
+                opt.disabled = (opt.value && opt.value === visitTeam);
+            }
+        }
+    </script>
 </head>
 <body>
-<div class="container">
-    <?php include 'adminDashboardNav.php'; ?>
 
-    <div class="main-content">
-        <h1>Match Results Dashboard</h1>
-        <!-- Display Messages -->
-        <div class="messages">
-        <?php 
-        if (!empty($errors)) { 
-            foreach ($errors as $err) { echo "<div class='error-msg'>$err</div>"; } 
-        } 
-        if (!empty($_SESSION['success_msg'])) { 
-            echo "<div class='success-msg'>".$_SESSION['success_msg']."</div>"; 
-            unset($_SESSION['success_msg']); 
-        } 
-        ?>
-        </div>
+<h2>Recent Matches</h2>
 
-        <!-- Add Match Button -->
-        <button class="btn-add" id="openModal">Add Recent Match</button>
+<button class="add-btn" onclick="openModal()">Add Match Result</button>
 
-        <!-- Modal Form -->
-        <div id="matchModal" class="modal">
-            <div class="modal-content">
-                <form method="POST" class="match-form">
-                    <div class="team-selection">
-                        <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
-                            <option value="">Select Home Team</option>
-                            <?php
-                            $teams = mysqli_query($conn, "SELECT * FROM team");
-                            while ($team = mysqli_fetch_assoc($teams)) {
-                                echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
-                            }
-                            ?>
-                        </select>
+<!-- Modal Form -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span style="float:right; cursor:pointer;" onclick="closeModal()">❌</span>
+        <h3>Add Match</h3>
+        <form method="POST">
+            <label>Home Team:</label><br>
+            <select name="home_team_id" required onchange="updateVisitOptions()">
+                <option value="">-- Select --</option>
+                <?php
+                $teams = $conn->query("SELECT * FROM team");
+                while ($t = $teams->fetch_assoc()) {
+                    $selected = (isset($_POST['home_team_id']) && $_POST['home_team_id'] == $t['team_id']) ? "selected" : "";
+                    echo "<option value='{$t['team_id']}' $selected>{$t['team_name']}</option>";
+                }
+                ?>
+            </select><br><br>
 
-                        <select name="visit_team_id" id="visit_team" required>
-                            <option value="">Select Visiting Team</option>
-                            <?php
-                            $teams = mysqli_query($conn, "SELECT * FROM team");
-                            while ($team = mysqli_fetch_assoc($teams)) {
-                                echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+            <label>Visit Team:</label><br>
+            <select name="visit_team_id" required onchange="updateHomeOptions()">
+                <option value="">-- Select --</option>
+                <?php
+                $teams2 = $conn->query("SELECT * FROM team");
+                while ($t2 = $teams2->fetch_assoc()) {
+                    $selected = (isset($_POST['visit_team_id']) && $_POST['visit_team_id'] == $t2['team_id']) ? "selected" : "";
+                    echo "<option value='{$t2['team_id']}' $selected>{$t2['team_name']}</option>";
+                }
+                ?>
+            </select><br><br>
 
-                    <div class="score-inputs">
-                        <input type="number" name="home_team_runs" placeholder="Team 1 Runs" required>
-                        <input type="number" name="home_team_wickets" placeholder="Team 1 Wickets" required>
-                        <input type="number" step="0.1" name="home_team_overs" placeholder="Team 1 Overs" required>
+            <label>Home Runs:</label><br>
+            <input type="number" name="home_team_runs" required value="<?= htmlspecialchars($_POST['home_team_runs'] ?? '') ?>"><br><br>
+            <label>Home Wickets:</label><br>
+            <input type="number" name="home_team_wickets" required value="<?= htmlspecialchars($_POST['home_team_wickets'] ?? '') ?>"><br><br>
+            <label>Home Overs:</label><br>
+            <input type="text" name="home_team_overs" required value="<?= htmlspecialchars($_POST['home_team_overs'] ?? '') ?>"><br><br>
 
-                        <input type="number" name="visit_team_runs" placeholder="Team 2 Runs" required>
-                        <input type="number" name="visit_team_wickets" placeholder="Team 2 Wickets" required>
-                        <input type="number" step="0.1" name="visit_team_overs" placeholder="Team 2 Overs" required>
-                    </div>
+            <label>Visit Runs:</label><br>
+            <input type="number" name="visit_team_runs" required value="<?= htmlspecialchars($_POST['visit_team_runs'] ?? '') ?>"><br><br>
+            <label>Visit Wickets:</label><br>
+            <input type="number" name="visit_team_wickets" required value="<?= htmlspecialchars($_POST['visit_team_wickets'] ?? '') ?>"><br><br>
+            <label>Visit Overs:</label><br>
+            <input type="text" name="visit_team_overs" required value="<?= htmlspecialchars($_POST['visit_team_overs'] ?? '') ?>"><br><br>
 
-                    <input type="date" name="match_date" required>
+            <label>Date:</label><br>
+            <input type="date" name="date" required value="<?= htmlspecialchars($_POST['date'] ?? '') ?>"><br><br>
 
-                    <!-- Buttons -->
-                    <button type="submit" name="insert_match" class="btn-insert">Submit Match</button>
-                    <button type="button" class="btn-close" onclick="modal.style.display='none'">Close</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Home Team</th>
-                    <th>Visiting Team</th>
-                    <th>Home Runs</th>
-                    <th>Home Wickets</th>
-                    <th>Home Overs</th>
-                    <th>Visiting Runs</th>
-                    <th>Visiting Wickets</th>
-                    <th>Visiting Overs</th>
-                    <th>Final Result</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($match = mysqli_fetch_assoc($matches)) { ?>
-                    <tr>
-                        <td><?php echo $match['home_team_name']; ?></td>
-                        <td><?php echo $match['visit_team_name']; ?></td>
-                        <td><?php echo $match['home_team_runs']; ?></td>
-                        <td><?php echo $match['home_team_wickets']; ?></td>
-                        <td><?php echo $match['home_team_overs']; ?></td>
-                        <td><?php echo $match['visit_team_runs']; ?></td>
-                        <td><?php echo $match['visit_team_wickets']; ?></td>
-                        <td><?php echo $match['visit_team_overs']; ?></td>
-                        <td><?php echo $match['final_result']; ?></td>
-                        <td><?php echo $match['date']; ?></td>
-                        <td>
-                            <a href="matchResult.php?delete_id=<?php echo $match['match_id']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this match?')">Delete</a>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-        </div>
+            <button type="submit" name="insert_match">Save</button>
+        </form>
     </div>
 </div>
 
-<script>
-const modal = document.getElementById("matchModal");
-const openBtn = document.getElementById("openModal");
+<!-- Matches Table -->
+<table>
+    <tr>
+        <th>Home Team</th>
+        <th>Visit Team</th>
+        <th>Result</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+    <?php
+    $matches = $conn->query("SELECT m.*, 
+                h.team_name AS home_name, 
+                v.team_name AS visit_name
+                FROM recent_match m
+                JOIN team h ON m.home_team_id=h.team_id
+                JOIN team v ON m.visit_team_id=v.team_id
+                ORDER BY m.date DESC");
 
-openBtn.onclick = () => { modal.style.display = "block"; }
-window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
-
-function updateVisitTeams() {
-    const homeSelect = document.getElementById('home_team');
-    const visitSelect = document.getElementById('visit_team');
-    const selectedHome = homeSelect.value;
-
-    for (let i = 0; i < visitSelect.options.length; i++) {
-        visitSelect.options[i].disabled = visitSelect.options[i].value === selectedHome;
+    while ($row = $matches->fetch_assoc()) {
+        echo "<tr>
+            <td>{$row['home_name']} ({$row['home_team_runs']}/{$row['home_team_wickets']} in {$row['home_team_overs']} ov)</td>
+            <td>{$row['visit_name']} ({$row['visit_team_runs']}/{$row['visit_team_wickets']} in {$row['visit_team_overs']} ov)</td>
+            <td>{$row['final_result']}</td>
+            <td>{$row['date']}</td>
+            <td>
+                <form method='POST' onsubmit=\"return confirm('Delete this match?');\">
+                    <input type='hidden' name='match_id' value='{$row['match_id']}'>
+                    <button type='submit' name='delete'>Delete</button>
+                </form>
+            </td>
+        </tr>";
     }
+    ?>
+</table>
 
-    if (visitSelect.value === selectedHome) {
-        visitSelect.value = "";
-    }
-}
-</script>
 </body>
 </html>
