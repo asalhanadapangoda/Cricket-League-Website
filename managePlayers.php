@@ -1,119 +1,88 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: adminLogin.php");
     exit;
 }
 
-require_once 'includes/db.php';
+require_once 'includes/db.php'; // Your database connection
 
-$success = "";
-$errors = [];
+// Delete player
+if (isset($_POST['delete'])) {
+    $delete_id = intval($_POST['player_id']); // Ensure it's an integer
+    $stmt = $conn->prepare("DELETE FROM player WHERE player_id = ?");
+    $stmt->bind_param("i", $delete_id);
 
-// Handle delete request safely
-if (isset($_GET['delete_id'])) {
-    $delete_id = (int)$_GET['delete_id'];
-    if ($delete_id > 0) {
-        $stmt = $conn->prepare("DELETE FROM player WHERE player_id = ?");
-        $stmt->bind_param("i", $delete_id);
-        if ($stmt->execute()) $success = "Player deleted successfully.";
-        else $errors[] = "Database error: " . $stmt->error;
+    if ($stmt->execute()) {
         $stmt->close();
-    } else $errors[] = "Invalid player ID.";
+        $success_msg = "Player deleted successfully!";
+    } else {
+        $error_msg = "Error deleting player: " . $stmt->error;
+    }
 }
 
-// Handle search
-$search = '';
+// Search players
+$search = "";
 if (isset($_GET['search'])) {
-    $search = trim($_GET['search']);
+    $search = $_GET['search'];
 }
 
-// Fetch players
-$players = [];
-if ($search) {
-    $stmt = $conn->prepare("SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
-                            FROM player p 
-                            LEFT JOIN team t ON p.team_id = t.team_id
-                            WHERE p.first_name LIKE ? OR p.last_name LIKE ?
-                            ORDER BY p.player_id ASC");
-    $like = "%$search%";
-    $stmt->bind_param("ss", $like, $like);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    while ($row = $res->fetch_assoc()) $players[] = $row;
-    $stmt->close();
-} else {
-    $sql = "SELECT p.player_id, CONCAT(p.first_name, ' ', p.last_name) AS full_name, t.team_name 
-            FROM player p 
-            LEFT JOIN team t ON p.team_id = t.team_id
-            ORDER BY p.player_id ASC";
-    $res = $conn->query($sql);
-    if ($res) while ($row = $res->fetch_assoc()) $players[] = $row;
-    else $errors[] = "Database error: " . $conn->error;
-}
+$query = "SELECT p.player_id, p.first_name, p.last_name, t.team_name
+          FROM player p
+          LEFT JOIN team t ON p.team_id = t.team_id
+          WHERE CONCAT(p.first_name, ' ', p.last_name) LIKE ?";
+$stmt = $conn->prepare($query);
+$like_search = "%$search%";
+$stmt->bind_param("s", $like_search);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Manage Players</title>
-  <link rel="stylesheet" href="CSS_File/managePlayers.css">
-  <?php if($success): ?>
-    <meta http-equiv="refresh" content="2;url=managePlayers.php">
-  <?php endif; ?>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="CSS_File/managePlayers.css">
 </head>
 <body>
-  <?php include 'adminDashboardNav.php'; ?>
 
-  <div class="main-content">
-    <div class="header-row">
-        <!-- Search form -->
-        <form method="get" class="search-form">
-            <input type="text" name="search" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
-            <button type="submit" class="btn search-btn">Search</button>
+<?php include 'adminDashboardNav.php'; ?>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between mb-3">
+        <form class="form-inline" method="GET" action="">
+            <input type="text" name="search" class="form-control mr-2" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
-
-        <button class="btn add" onclick="location.href='player.php'">Add New Player</button>
+        <a href="player.php" class="btn btn-success">Add New Player</a>
     </div>
 
-    <?php if ($success): ?>
-      <div class="success"><?php echo htmlspecialchars($success); ?></div>
-    <?php endif; ?>
-
-    <?php if (!empty($errors)): ?>
-      <div class="error"><?php echo implode('<br>', array_map('htmlspecialchars',$errors)); ?></div>
-    <?php endif; ?>
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Team</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (empty($players)): ?>
-          <tr><td colspan="4">No players found.</td></tr>
-        <?php else: ?>
-          <?php foreach ($players as $p): ?>
-            <tr>
-              <td><?php echo htmlspecialchars($p['player_id']); ?></td>
-              <td><?php echo htmlspecialchars($p['full_name']); ?></td>
-              <td><?php echo htmlspecialchars($p['team_name']); ?></td>
-              <td>
-                <a class="btn delete" href="managePlayers.php?delete_id=<?php echo $p['player_id']; ?>"
-                   onclick="return confirm('Are you sure you want to delete this player?');">Delete</a>
-              </td>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-primary">
+            <tr class="bg-primary text-white">
+                <th>Name</th>
+                <th>Team</th>
+                <th>Action</th>
             </tr>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </tbody>
+        </thead>
+        <tbody>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                <td><?php echo $row['team_name']; ?></td>
+                <td>
+                    <form method="POST" onsubmit="return confirm('Are you sure you want to delete this player?');">
+                            <input type="hidden" name="player_id" value="<?php echo $row['player_id']; ?>">
+                            <button type="submit" name="delete" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+        </tbody>
     </table>
-  </div>
+
+</div>
 </body>
 </html>

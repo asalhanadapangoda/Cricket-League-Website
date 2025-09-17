@@ -1,188 +1,117 @@
-/* Base styling */
+/* ---------------- Body & Container ---------------- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
     margin: 0;
     padding: 0;
-    background: #f0f2f5;
-    color: #333;
 }
 
-.main-content {
-    margin-left: 250px; /* sidebar offset */
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Header row with search and add button */
-.header-row {
-    width: 80%;
+/* ---------------- Form & Add Button Container ---------------- */
+.d-flex {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Search left, button right */
     align-items: center;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
-/* Page title */
-.header-row h2 {
-    margin: 0;
-    font-size: 28px;
-    color: #1976d2;
-}
-
-/* Search form */
-.search-form {
+.form-inline {
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
 }
 
-.search-form input[type="text"] {
-    padding: 8px 12px;
-    border-radius: 6px;
+a.btn-success {
+    margin-left: auto; /* Pushes Add New Player button to the right */
+}
+
+/* ---------------- Form Controls & Buttons ---------------- */
+.form-control {
+    padding: 6px 12px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    outline: none;
-    transition: border 0.2s;
-    font-size: 16px;
+    width: 250px;
+    font-size: 14px;
 }
 
-.search-form input[type="text"]:focus {
-    border-color: #1976d2;
-    box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
-}
-
-.search-form .search-btn {
-    padding: 8px 16px;
-    background: #1976d2;
-    color: #fff;
+.btn {
+    padding: 7px 17px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: 500;
-    transition: background 0.2s;
-}
-
-.search-form .search-btn:hover {
-    background: #1565c0;
-}
-
-/* Add button */
-.btn.add {
-    background: #4caf50;
+    text-decoration: none;
     color: #fff;
-    border-radius: 6px;
-    padding: 8px 18px;
-    font-weight: 500;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
+    font-size: 14px;
 }
 
-.btn.add:hover {
-    background: #388e3c;
+.btn-primary {
+    background-color: #007bff;
 }
 
-/* Table styling */
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #1e7e34;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #a71d2a;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+/* ---------------- Table Styles ---------------- */
 table {
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
     margin-top: 10px;
+    font-size: 14px;
 }
 
-th, td {
+table thead tr {
+    background-color: #007bff;
+    color: #fff;
+}
+
+table th, table td {
     padding: 12px 15px;
     text-align: left;
+    border: 1px solid #dee2e6;
 }
 
-th {
-    background: #1976d2;
-    color: #fff;
-    font-weight: 600;
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
-td {
-    border-bottom: 1px solid #eee;
+table tbody tr:hover {
+    background-color: #e9ecef;
 }
 
-table tr:hover {
-    background: #f1f5f9;
-}
-
-/* Delete button */
-.btn.delete {
-    background: #e53935;
-    color: #fff;
-    border-radius: 6px;
-    padding: 6px 14px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btn.delete:hover {
-    background: #c62828;
-}
-
-/* Success and error messages */
-.success {
-    width: 80%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid #4caf50;
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.error {
-    width: 80%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid #e53935;
-    background: #ffebee;
-    color: #b71c1c;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .main-content {
-        margin-left: 0;
-        padding: 20px 15px;
-    }
-
-    .header-row, table {
-        width: 100%;
-    }
-
-    .search-form {
-        flex: 1;
-    }
-}
-
-@media (max-width: 768px) {
-    .header-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .search-form input[type="text"] {
-        flex: 1;
-    }
-
-    .btn.add {
-        align-self: flex-end;
-    }
-
-    table {
-        font-size: 14px;
-    }
+/* Center text in Action column */
+table td:last-child {
+    text-align: center;
 }
 
