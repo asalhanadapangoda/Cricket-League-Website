@@ -1,10 +1,5 @@
 <?php
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: adminLogin.php");
-    exit;
-}
-
 session_start();
 
 // Prevent unauthorized access
@@ -69,7 +64,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
                 include __DIR__ . '../matchResult.php';
                 break;
             case 'performance':
-                include __DIR__ . '/includes/manage-player-performance.php';
+                include __DIR__ . '../addPlayerPreformance.php';
                 break;
             case 'livescore':
                 include __DIR__ . '/includes/manageliveScore.php';

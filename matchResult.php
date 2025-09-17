@@ -13,7 +13,7 @@ require_once 'includes/db.php';
 $errors = [];
 $success_msg = "";
 
-// Insert match result
+// -------------------- Insert Match --------------------
 if (isset($_POST['insert_match'])) {
     $home_team_id = $_POST['home_team_id'];
     $visit_team_id = $_POST['visit_team_id'];
@@ -71,16 +71,26 @@ if (isset($_POST['insert_match'])) {
     }
 }
 
-// Delete match result
+// -------------------- Delete Match --------------------
 if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
-    mysqli_query($conn, "DELETE FROM recent_match WHERE match_id = '$delete_id'");
-    $_SESSION['success_msg'] = "Match result deleted successfully!";
+    $delete_id = intval($_GET['delete_id']); // sanitize input
+
+    if ($delete_id > 0) {
+        $delete_query = "DELETE FROM recent_match WHERE match_id = $delete_id";
+        if (mysqli_query($conn, $delete_query)) {
+            $_SESSION['success_msg'] = "Match result deleted successfully!";
+        } else {
+            $_SESSION['success_msg'] = "Error deleting match: " . mysqli_error($conn);
+        }
+    } else {
+        $_SESSION['success_msg'] = "Invalid match ID.";
+    }
+
     header("Location: matchResult.php");
     exit;
 }
 
-// Fetch all matches
+// -------------------- Fetch Matches --------------------
 $matches = mysqli_query($conn, "SELECT rm.*, 
     t1.team_name AS home_team_name, 
     t2.team_name AS visit_team_name 
@@ -98,12 +108,24 @@ $matches = mysqli_query($conn, "SELECT rm.*,
 <title>Match Results</title>
 <link rel="stylesheet" href="CSS_File/matchResult.css">
 <link rel="stylesheet" href="style.css">
+<style>
+/* Quick inline CSS fixes */
+.main-content { margin-left: 250px; padding: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+table, th, td { border: 1px solid #ccc; }
+th, td { padding: 8px; text-align: center; }
+.error-msg { color: red; margin: 10px 0; }
+.success-msg { color: green; margin: 10px 0; }
+.btn-delete { background-color: #e74c3c; color: #fff; padding: 5px 10px; text-decoration: none; border-radius: 5px; }
+.btn-delete:hover { background-color: #c0392b; }
+.btn-insert { padding: 8px 15px; background-color: #3498db; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+.btn-insert:hover { background-color: #2980b9; }
+</style>
 </head>
 <body>
     <!-- Sidebar Navigation -->
     <?php include 'adminDashboardNav.php'; ?>
 
-    <!-- Body content -->
     <div class="main-content">
         <h1>Match Results Dashboard</h1>
 
@@ -115,19 +137,13 @@ $matches = mysqli_query($conn, "SELECT rm.*,
         if (!empty($_SESSION['success_msg'])) { 
             echo "<div class='success-msg'>".$_SESSION['success_msg']."</div>"; 
             unset($_SESSION['success_msg']); 
-        ?> 
-            <script>
-                // Auto refresh page after 2 seconds
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            </script>
-        <?php } ?>
+        } 
+        ?>
 
         <!-- Insert Form -->
         <form method="POST">
             <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
-                <option value="">Select Team 1</option>
+                <option value="">Select Home Team</option>
                 <?php
                 $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
@@ -137,7 +153,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             </select>
 
             <select name="visit_team_id" id="visit_team" required>
-                <option value="">Select Team 2</option>
+                <option value="">Select Visiting Team</option>
                 <?php
                 $teams = mysqli_query($conn, "SELECT * FROM team");
                 while ($team = mysqli_fetch_assoc($teams)) {
@@ -155,15 +171,14 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             <input type="number" step="0.1" name="visit_team_overs" placeholder="Team 2 Overs" required>
 
             <input type="date" name="match_date" required>
-            <button type="submit" name="insert_match" class="btn btn-insert">Insert Match</button>
+            <button type="submit" name="insert_match" class="btn-insert">Insert Match</button>
         </form>
 
-        <!-- Show all matches -->
+        <!-- Match Table -->
         <h2>All Match Results</h2>
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Home Team</th>
                     <th>Visiting Team</th>
                     <th>Home Runs</th>
@@ -180,7 +195,6 @@ $matches = mysqli_query($conn, "SELECT rm.*,
             <tbody>
                 <?php while ($match = mysqli_fetch_assoc($matches)) { ?>
                     <tr>
-                        <td><?php echo $match['match_id']; ?></td>
                         <td><?php echo $match['home_team_name']; ?></td>
                         <td><?php echo $match['visit_team_name']; ?></td>
                         <td><?php echo $match['home_team_runs']; ?></td>
@@ -192,7 +206,7 @@ $matches = mysqli_query($conn, "SELECT rm.*,
                         <td><?php echo $match['final_result']; ?></td>
                         <td><?php echo $match['date']; ?></td>
                         <td>
-                            <a href="?delete_id=<?php echo $match['match_id']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this match?')">Delete</a>
+                            <a href="matchResult.php?delete_id=<?php echo $match['match_id']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this match?')">Delete</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -215,6 +229,5 @@ function updateVisitTeams() {
     }
 }
 </script>
-
 </body>
 </html>
