@@ -9,7 +9,7 @@ require_once 'includes/db.php';
 if (isset($_POST['delete']) && isset($_POST['match_id'])) {
     $match_id = (int)$_POST['match_id'];
     $conn->query("DELETE FROM recent_match WHERE match_id = $match_id");
-    echo "<script>alert('Match deleted successfully!'); window.location.href='add_match.php';</script>";
+    echo "<script>alert('Match deleted successfully!'); window.location.href='matchResult.css';</script>";
     exit;
 }
 
