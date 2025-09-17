@@ -73,7 +73,7 @@ if (isset($_POST['insert_match'])) {
 
 // -------------------- Delete Match --------------------
 if (isset($_GET['delete_id'])) {
-    $delete_id = intval($_GET['delete_id']); // sanitize input
+    $delete_id = intval($_GET['delete_id']);
 
     if ($delete_id > 0) {
         $delete_query = "DELETE FROM recent_match WHERE match_id = $delete_id";
@@ -107,29 +107,15 @@ $matches = mysqli_query($conn, "SELECT rm.*,
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Results</title>
 <link rel="stylesheet" href="CSS_File/matchResult.css">
-<link rel="stylesheet" href="style.css">
-<style>
-/* Quick inline CSS fixes */
-.main-content { margin-left: 250px; padding: 20px; }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-table, th, td { border: 1px solid #ccc; }
-th, td { padding: 8px; text-align: center; }
-.error-msg { color: red; margin: 10px 0; }
-.success-msg { color: green; margin: 10px 0; }
-.btn-delete { background-color: #e74c3c; color: #fff; padding: 5px 10px; text-decoration: none; border-radius: 5px; }
-.btn-delete:hover { background-color: #c0392b; }
-.btn-insert { padding: 8px 15px; background-color: #3498db; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-.btn-insert:hover { background-color: #2980b9; }
-</style>
 </head>
 <body>
-    <!-- Sidebar Navigation -->
+<div class="container">
     <?php include 'adminDashboardNav.php'; ?>
 
     <div class="main-content">
         <h1>Match Results Dashboard</h1>
-
         <!-- Display Messages -->
+        <div class="messages">
         <?php 
         if (!empty($errors)) { 
             foreach ($errors as $err) { echo "<div class='error-msg'>$err</div>"; } 
@@ -139,43 +125,57 @@ th, td { padding: 8px; text-align: center; }
             unset($_SESSION['success_msg']); 
         } 
         ?>
+        </div>
 
-        <!-- Insert Form -->
-        <form method="POST">
-            <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
-                <option value="">Select Home Team</option>
-                <?php
-                $teams = mysqli_query($conn, "SELECT * FROM team");
-                while ($team = mysqli_fetch_assoc($teams)) {
-                    echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
-                }
-                ?>
-            </select>
+        <!-- Add Match Button -->
+        <button class="btn-add" id="openModal">Add Recent Match</button>
 
-            <select name="visit_team_id" id="visit_team" required>
-                <option value="">Select Visiting Team</option>
-                <?php
-                $teams = mysqli_query($conn, "SELECT * FROM team");
-                while ($team = mysqli_fetch_assoc($teams)) {
-                    echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
-                }
-                ?>
-            </select>
+        <!-- Modal Form -->
+        <div id="matchModal" class="modal">
+            <div class="modal-content">
+                <form method="POST" class="match-form">
+                    <div class="team-selection">
+                        <select name="home_team_id" id="home_team" required onchange="updateVisitTeams()">
+                            <option value="">Select Home Team</option>
+                            <?php
+                            $teams = mysqli_query($conn, "SELECT * FROM team");
+                            while ($team = mysqli_fetch_assoc($teams)) {
+                                echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
+                            }
+                            ?>
+                        </select>
 
-            <input type="number" name="home_team_runs" placeholder="Team 1 Runs" required>
-            <input type="number" name="home_team_wickets" placeholder="Team 1 Wickets" required>
-            <input type="number" step="0.1" name="home_team_overs" placeholder="Team 1 Overs" required>
+                        <select name="visit_team_id" id="visit_team" required>
+                            <option value="">Select Visiting Team</option>
+                            <?php
+                            $teams = mysqli_query($conn, "SELECT * FROM team");
+                            while ($team = mysqli_fetch_assoc($teams)) {
+                                echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-            <input type="number" name="visit_team_runs" placeholder="Team 2 Runs" required>
-            <input type="number" name="visit_team_wickets" placeholder="Team 2 Wickets" required>
-            <input type="number" step="0.1" name="visit_team_overs" placeholder="Team 2 Overs" required>
+                    <div class="score-inputs">
+                        <input type="number" name="home_team_runs" placeholder="Team 1 Runs" required>
+                        <input type="number" name="home_team_wickets" placeholder="Team 1 Wickets" required>
+                        <input type="number" step="0.1" name="home_team_overs" placeholder="Team 1 Overs" required>
 
-            <input type="date" name="match_date" required>
-            <button type="submit" name="insert_match" class="btn-insert">Insert Match</button>
-        </form>
+                        <input type="number" name="visit_team_runs" placeholder="Team 2 Runs" required>
+                        <input type="number" name="visit_team_wickets" placeholder="Team 2 Wickets" required>
+                        <input type="number" step="0.1" name="visit_team_overs" placeholder="Team 2 Overs" required>
+                    </div>
 
-        <!-- Match Table -->
-        <h2>All Match Results</h2>
+                    <input type="date" name="match_date" required>
+
+                    <!-- Buttons -->
+                    <button type="submit" name="insert_match" class="btn-insert">Submit Match</button>
+                    <button type="button" class="btn-close" onclick="modal.style.display='none'">Close</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-container">
         <table>
             <thead>
                 <tr>
@@ -212,9 +212,17 @@ th, td { padding: 8px; text-align: center; }
                 <?php } ?>
             </tbody>
         </table>
+        </div>
     </div>
+</div>
 
 <script>
+const modal = document.getElementById("matchModal");
+const openBtn = document.getElementById("openModal");
+
+openBtn.onclick = () => { modal.style.display = "block"; }
+window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
+
 function updateVisitTeams() {
     const homeSelect = document.getElementById('home_team');
     const visitSelect = document.getElementById('visit_team');
