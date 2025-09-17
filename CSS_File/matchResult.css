@@ -15,22 +15,23 @@ h2 {
     color: #2c3e50;
 }
 
-/* Add Match Button */
+
+
 .add-btn {
-    display: inline-block;
-    float: right;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background: #0a0659;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+     display: inline-block;
+     float: right;
+     margin-bottom: 20px;
+     padding: 10px 20px;
+     background: #0f0967;
+     color: white;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
     font-size: 16px;
-}
+     }
 .add-btn:hover {
-    background: #1138a1;
-}
+     background: #0d278d;
+    }
 
 /* Modal */
 .modal {
@@ -121,3 +122,20 @@ table form button {
 table form button:hover {
     background: #c0392b;
 }
+ 
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            font-weight: bold;
+        }
+        #notification.error { 
+            background: #e74c3c; 
+        }

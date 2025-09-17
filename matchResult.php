@@ -3,14 +3,20 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: adminLogin.php");
+    exit;
+}
+
 require_once 'includes/db.php';
+
+$notification = ""; // Notification message
 
 // -------------------- Delete Match --------------------
 if (isset($_POST['delete']) && isset($_POST['match_id'])) {
     $match_id = (int)$_POST['match_id'];
     $conn->query("DELETE FROM recent_match WHERE match_id = $match_id");
-    echo "<script>alert('Match deleted successfully!'); window.location.href='matchResult.css';</script>";
-    exit;
+    $notification = "Match deleted successfully!";
 }
 
 // -------------------- Insert Match --------------------
@@ -25,11 +31,9 @@ if (isset($_POST['insert_match'])) {
     $visit_overs = $_POST['visit_team_overs'];
     $date = $_POST['date'];
 
-    // Get team names
     $home_team_name = $conn->query("SELECT team_name FROM team WHERE team_id='$home_team_id'")->fetch_assoc()['team_name'];
     $visit_team_name = $conn->query("SELECT team_name FROM team WHERE team_id='$visit_team_id'")->fetch_assoc()['team_name'];
 
-    // Auto-generate final result using standard cricket rules
     if ($home_runs > $visit_runs) {
         $run_diff = $home_runs - $visit_runs;
         $final_result = "$home_team_name won by $run_diff runs";
@@ -40,12 +44,10 @@ if (isset($_POST['insert_match'])) {
         $final_result = "Match tied";
     }
 
-    // Insert
     $stmt = $conn->prepare("INSERT INTO recent_match 
         (home_team_id, visit_team_id, home_team_runs, home_team_wickets, home_team_overs, 
         visit_team_runs, visit_team_wickets, visit_team_overs, final_result, date) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
     $stmt->bind_param("ssiidiisss",
         $home_team_id, 
         $visit_team_id,
@@ -58,12 +60,10 @@ if (isset($_POST['insert_match'])) {
         $final_result, 
         $date
     );
-
     $stmt->execute();
     $stmt->close();
 
-    echo "<script>alert('Match added successfully!'); window.location.href='matchResult.css';</script>";
-    exit;
+    $notification = "Match added successfully!";
 }
 ?>
 <!DOCTYPE html>
@@ -71,7 +71,6 @@ if (isset($_POST['insert_match'])) {
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="CSS_File/matchResult.css">
- 
     <script>
         function openModal() { document.getElementById("modal").style.display = "block"; }
         function closeModal() { document.getElementById("modal").style.display = "none"; }
@@ -91,9 +90,27 @@ if (isset($_POST['insert_match'])) {
                 opt.disabled = (opt.value && opt.value === visitTeam);
             }
         }
+
+        // Show top-right notification
+        function showNotification(message) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.style.display = 'block';
+            setTimeout(() => { notif.style.display = 'none'; }, 3000);
+        }
+
+        // Show PHP notification if exists
+        <?php if($notification): ?>
+            window.onload = function() {
+                showNotification("<?= $notification ?>");
+                closeModal(); // Close modal automatically if open
+            };
+        <?php endif; ?>
     </script>
 </head>
 <body>
+
+<div id="notification"></div>
 
 <h2>Recent Matches</h2>
 
@@ -107,7 +124,7 @@ if (isset($_POST['insert_match'])) {
         <form method="POST">
             <label>Home Team:</label><br>
             <select name="home_team_id" required onchange="updateVisitOptions()">
-                <option value="">-- Select --</option>
+                <option value="">Select</option>
                 <?php
                 $teams = $conn->query("SELECT * FROM team");
                 while ($t = $teams->fetch_assoc()) {
@@ -119,7 +136,7 @@ if (isset($_POST['insert_match'])) {
 
             <label>Visit Team:</label><br>
             <select name="visit_team_id" required onchange="updateHomeOptions()">
-                <option value="">-- Select --</option>
+                <option value="">Select</option>
                 <?php
                 $teams2 = $conn->query("SELECT * FROM team");
                 while ($t2 = $teams2->fetch_assoc()) {
