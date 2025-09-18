@@ -26,7 +26,7 @@ include __DIR__ . '/db.php';
         
                 <th>Name</th>
                 <th>Role</th>
-                <th>Team ID</th>
+                <th>Team Name</th>
                 <th>Actions</th>
             </tr>
         </thead>
