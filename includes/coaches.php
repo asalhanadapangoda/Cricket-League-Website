@@ -39,7 +39,7 @@ include __DIR__ . '/db.php';
                 while($row = $result->fetch_assoc()) {
                     $fullName = $row['first_name'] . ' ' . $row['last_name']; // combine names
                     echo "<tr>
-                        <td>{$counter}</td>
+                     
                         <td>{$fullName}</td>
                         <td>{$row['role']}</td>
                         <td>{$row['team_id']}</td>
