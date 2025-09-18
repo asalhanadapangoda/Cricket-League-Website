@@ -67,9 +67,9 @@ select {
 
 /* Buttons */
 button, .back-btn {
-    background: #002347;
+    background: #003558;
     border: none;
-    color: #0d5c2d;
+    color: #ffffff;
     padding: 10px 16px;
     margin-top: 10px;
     border-radius: 8px;
@@ -82,7 +82,7 @@ button, .back-btn {
 }
 
 button:hover, .back-btn:hover {
-    background: #002347;
+    background: #0062a3;
     transform: scale(1.05);
 }
 
