@@ -88,8 +88,19 @@ include __DIR__ . '/db.php';
             </select>
             <br><br>
 
-            <label>Team ID</label>
-            <input type="text" name="team_id" required>
+            <label>Team</label>
+            <select name="team_id" required>
+
+                <option value="">Select Team</option>
+
+                <?php
+                $teams = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name ASC");
+                while ($team = $teams->fetch_assoc()) {
+                    echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
+                }
+                ?>
+                
+            </select>
             <br><br>
 
             <button type="submit" class="btn-submit">Add Coach</button>
