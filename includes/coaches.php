@@ -36,7 +36,7 @@ include __DIR__ . '/db.php';
             FROM coach c
             JOIN team t ON c.team_id = t.team_id
             ORDER BY c.coach_id ASC";
-            
+
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $counter = 1;
@@ -46,7 +46,7 @@ include __DIR__ . '/db.php';
                      
                         <td>{$fullName}</td>
                         <td>{$row['role']}</td>
-                        <td>{$row['team_id']}</td>
+                        <td>{$row['team_name']}</td>
                         <td>
                             <a href='/Cricket-League-Website/includes/coachesDelete.php?id={$row['coach_id']}' 
                                class='btn-delete' 
