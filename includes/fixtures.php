@@ -32,7 +32,7 @@ if ($teams_result->num_rows > 0) {
     <table class="fixtures-table">
         <thead>
             <tr>
-                <th>ID</th>
+                
                 <th>Home Team</th>
                 <th>Visiting Team</th>
                 <th>Match Date</th>
