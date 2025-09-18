@@ -32,7 +32,11 @@ include __DIR__ . '/db.php';
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM coach ORDER BY coach_id ASC";
+            $sql = "SELECT c.coach_id, c.first_name, c.last_name, c.role, t.team_name 
+            FROM coach c
+            JOIN team t ON c.team_id = t.team_id
+            ORDER BY c.coach_id ASC";
+            
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $counter = 1;
