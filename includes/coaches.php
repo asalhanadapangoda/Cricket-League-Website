@@ -23,26 +23,30 @@ include __DIR__ . '/db.php';
     <table class="coaches-table">
         <thead>
             <tr>
-                <th>ID</th>
+        
                 <th>Name</th>
                 <th>Role</th>
-                <th>Team ID</th>
+                <th>Team Name</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM coach ORDER BY coach_id ASC";
+            $sql = "SELECT c.coach_id, c.first_name, c.last_name, c.role, t.team_name 
+            FROM coach c
+            JOIN team t ON c.team_id = t.team_id
+            ORDER BY c.coach_id ASC";
+
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $counter = 1;
                 while($row = $result->fetch_assoc()) {
                     $fullName = $row['first_name'] . ' ' . $row['last_name']; // combine names
                     echo "<tr>
-                        <td>{$counter}</td>
+                     
                         <td>{$fullName}</td>
                         <td>{$row['role']}</td>
-                        <td>{$row['team_id']}</td>
+                        <td>{$row['team_name']}</td>
                         <td>
                             <a href='/Cricket-League-Website/includes/coachesDelete.php?id={$row['coach_id']}' 
                                class='btn-delete' 
@@ -84,8 +88,19 @@ include __DIR__ . '/db.php';
             </select>
             <br><br>
 
-            <label>Team ID</label>
-            <input type="text" name="team_id" required>
+            <label>Team</label>
+            <select name="team_id" required>
+
+                <option value="">Select Team</option>
+
+                <?php
+                $teams = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name ASC");
+                while ($team = $teams->fetch_assoc()) {
+                    echo "<option value='{$team['team_id']}'>{$team['team_name']}</option>";
+                }
+                ?>
+                
+            </select>
             <br><br>
 
             <button type="submit" class="btn-submit">Add Coach</button>

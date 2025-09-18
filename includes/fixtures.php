@@ -32,7 +32,7 @@ if ($teams_result->num_rows > 0) {
     <table class="fixtures-table">
         <thead>
             <tr>
-                <th>ID</th>
+                
                 <th>Home Team</th>
                 <th>Visiting Team</th>
                 <th>Match Date</th>
@@ -49,7 +49,7 @@ if ($teams_result->num_rows > 0) {
                 $counter = 1;
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
-                        <td>{$counter}</td> 
+                        
                         <td>{$row['home_team_name']}</td>
                         <td>{$row['visit_team_name']}</td>
                         <td>{$row['date']}</td>
