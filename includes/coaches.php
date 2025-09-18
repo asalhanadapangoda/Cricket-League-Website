@@ -23,7 +23,7 @@ include __DIR__ . '/db.php';
     <table class="coaches-table">
         <thead>
             <tr>
-                <th>ID</th>
+        
                 <th>Name</th>
                 <th>Role</th>
                 <th>Team ID</th>
