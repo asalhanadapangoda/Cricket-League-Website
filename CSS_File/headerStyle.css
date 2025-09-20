@@ -1,3 +1,4 @@
+
 /* Reset */
 * { 
   margin: 0; 
@@ -13,19 +14,31 @@ body {
 }
 
 /* Header (Fixed at top) */
+/* Header (Fixed at top with Moving Gradient) */
 .header {
   display: flex;
   justify-content: space-between;  
   align-items: center;
-  background: #001771;
-  padding: 12px 40px;
-  position: fixed;   /* lock navbar */
+  background: linear-gradient(270deg, #001771, #001f9c, #001771);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+  padding: 14px 40px;
+  position: fixed;  
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;     /* keep it on top */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* nice shadow */
+  z-index: 1000;     
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
+
+/* Keyframes for gradient movement */
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
 
 .logo-container {
   flex: 0 0 auto;
@@ -175,4 +188,4 @@ body {
   .dropdown:focus-within .dropdown-menu {
     display: block; /* open on click */
   }
-}
+} 
