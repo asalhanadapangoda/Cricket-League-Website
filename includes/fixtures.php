@@ -21,7 +21,7 @@ if ($teams_result->num_rows > 0) {
     <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/fixturesStyle.css">
 </head>
 <body>
-
+<?php include 'adminDashboardNav.php'; ?>
 <div class="container">
     <h2 class="text-center">Manage Fixtures</h2>
 

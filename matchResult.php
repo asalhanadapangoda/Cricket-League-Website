@@ -109,7 +109,7 @@ if (isset($_POST['insert_match'])) {
     </script>
 </head>
 <body>
-
+<?php include 'adminDashboardNav.php'; ?>
 <div id="notification"></div>
 
 <h2>Recent Matches</h2>

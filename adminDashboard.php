@@ -67,6 +67,9 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             case 'performance':
                 include __DIR__ . '../addPlayerPreformance.php';
                 break;
+            case 'team':
+                include __DIR__ . '../addTeam.php';
+                break;
             case 'livescore':
                 include __DIR__ . '/includes/manageliveScore.php';
                 break;
@@ -105,6 +108,7 @@ if ($playerResult && mysqli_num_rows($playerResult) > 0) {
             <button class="action-btn" onclick="location.href='addPlayerPreformance.php'">Player Performance</button>
             <button class="action-btn" onclick="location.href='adminDashboard.php?page=fixtures'">Fixtures</button>
             <button class="action-btn" onclick="location.href='adminDashboard.php?page=results'">Match Results</button>
+            <button class="action-btn" onclick="location.href='addTeam.php'">Team</button>
             <button class="action-btn" onclick="location.href='adminDashboard.php?page=livescore'">Update Live Score</button>
         </div>
         <?php

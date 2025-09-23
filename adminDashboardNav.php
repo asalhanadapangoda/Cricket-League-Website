@@ -20,6 +20,7 @@
             <li><a href="addPlayerPreformance.php">Player Performance</a></li>
             <li><a href="adminDashboard.php?page=fixtures">Fixtures</a></li>
             <li><a href="adminDashboard.php?page=results">Match Results</a></li>
+            <li><a href="addTeam.php">Team</a></li>
             <li><a href="adminDashboard.php?page=livescore">Update Live Score</a></li>
             <li id="logout"><a href="includes/logout.php">Logout</a></li>
         </ul>

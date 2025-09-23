@@ -31,6 +31,10 @@ $sql_2 = "SELECT um.*,
 
 $result_pre = mysqli_query($conn, $sql_1);
 $result_next = mysqli_query($conn, $sql_2);
+
+// Teams for logos section
+$sql_teams = "SELECT team_id, team_name, logo FROM team ORDER BY team_name";
+$result_teams = mysqli_query($conn, $sql_teams);
 ?>
 
 
@@ -149,7 +153,6 @@ $result_next = mysqli_query($conn, $sql_2);
           echo "</tr>";
           $pos++;
       }
-      mysqli_close($conn);
       ?>
     </tbody>
   </table>
@@ -162,24 +165,18 @@ $result_next = mysqli_query($conn, $sql_2);
     <div class="Main-topic-header">TEAMS</div>
 
     <div class="Teams-Logo">
-      <a href="teamKandy.php">
-        <img src="Pictures/Kandy-1.png" alt="B-Love Kandy Logo">
-      </a>
-      <a href="teamDambulla.php">
-        <img src="Pictures/DabullaLogo.png" alt="Dambulla Aura Logo">
-      </a>
-      <a href="teamColombo.php">
-       <img src="Pictures/Colombo-1.png" alt="Colombo Logo">
-      </a>
-      <a href="teamJaffna.php">
-        <img src="Pictures/Jaffna-1.png" alt="Jaffna Logo">
-      </a>
-      <a href="teamGalle.php">
-       <img src="Pictures/Galle-1.png" alt="Galle Logo">
-      </a>
+      <?php if ($result_teams && mysqli_num_rows($result_teams) > 0) { ?>
+      <?php while($t = mysqli_fetch_assoc($result_teams)) { ?>
+        <a href="teamPage.php?team_id=<?php echo htmlspecialchars($t['team_id']); ?>">
+          <img src="<?php echo htmlspecialchars($t['logo']); ?>" alt="<?php echo htmlspecialchars($t['team_name']); ?> Logo">
+        </a>
+      <?php } ?>
+      <?php } ?>
    </div>
   </main>
 </body>
 </html>
 <?php include 'footer.php'; ?>
+
+<?php mysqli_close($conn); ?>
 

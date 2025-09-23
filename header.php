@@ -1,3 +1,17 @@
+<?php
+require_once __DIR__ . '/includes/db.php';
+
+$teams = [];
+if (isset($conn) && $conn) {
+  $sql = "SELECT team_id, team_name FROM team ORDER BY team_name";
+  if ($result = mysqli_query($conn, $sql)) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $teams[] = $row;
+    }
+    mysqli_free_result($result);
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,11 +38,11 @@
         <li class="dropdown">
           <a href="">TEAMS ▾</a>
           <ul class="dropdown-menu">
-            <li><a href="teamKandy.php">B-Love Kandy</a></li>
-            <li><a href="teamDambulla.php">Dambulla Aura</a></li>
-            <li><a href="teamGalle.php">Galle Titans</a></li>
-            <li><a href="teamColombo.php">Colombo Strikers</a></li>
-            <li><a href="teamJaffna.php">Jaffna Kings</a></li>
+<?php
+foreach ($teams as $team) {
+  echo '<li><a href="teamPage.php?team_id=' . htmlspecialchars($team['team_id']) . '">' . htmlspecialchars($team['team_name']) . '</a></li>';
+}
+?>
           </ul>
         </li>
         <li><a href="fixturesAndResults.php">FIXTURES & RESULTS</a></li>
