@@ -1,102 +1,78 @@
-/* General Body Styles */
-body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+/* =======================
+   Body Backgrounds per Team
+======================= */
+body{
+    background: #6994c3;
+    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f0f2f5;
-    color: #1c1e21;
-}
-
-/* Header Styles */
-header {
-    background-color: #061e3a;
-    color: white;
-    padding: 20px 0;
+    padding: 100px 0 0;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-    margin: 0;
-    font-size: 2.5em;
-    font-weight: bold;
+/* =======================
+   Team Logo
+======================= */
+.team-image {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
 }
 
-
-/* Main Container for Team Cards */
-.teams-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    padding: 30px;
-    max-width: 1400px;
-    margin: 20px auto;
+.team-image img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Individual Team Card Styles */
-.team-card {
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+/* =======================
+   Section Headers
+======================= */
+.Main-topic-header {
+    text-align: center;        
+    font-size: 2rem;            
+    font-weight: bold;           
+    margin: 30px 0;            
+    color: #000000;            
+    letter-spacing: 2px;       
+    text-transform: uppercase;  
+}
+
+/* Optional smaller titles */
+.title {
     text-align: center;
-    padding: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Team Card Hover Effect */
-.team-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-/* Team Logo Styles */
-.team-card img {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-/* Team Name */
-.team-card h2 {
-    margin: 10px 0;
-    font-size: 1.5em;
-    color: #061e3a;
-}
-
-/* Captain Name */
-.team-card .captain {
-    color: #606770;
-    font-size: 1em;
-    margin-bottom: 15px;
-}
-
-/* Winning Years Section */
-.winning-years {
-    background-color: #f0f2f5;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: auto; /* Pushes to the bottom if the card is a flex container */
-}
-
-.winning-years p {
-    margin: 0 0 5px 0;
-    font-weight: bold;
     color: #333;
+    margin-bottom: 20px;
 }
 
-.winning-years span {
-    font-size: 0.9em;
-    color: #0073e6;
-    font-weight: bold;
+/* =======================
+   Table Styling
+======================= */
+.table {
+    width: 60%;
+    margin: 0 auto 50px;
+    border-collapse: collapse;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+    background: #e9e9e9;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* Footer Styles */
-footer {
-    background-color: #061e3a;
-    color: #ccc;
+.table th, 
+.table td {
+    padding: 12px 15px;
     text-align: center;
-    padding: 15px 0;
-    font-size: 0.9em;
+    border-bottom: 1px solid #ddd;
 }
+
+.table th {
+    background: #2c3e50;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table tr:hover {
+    background: #f1f1f1;
+}
+
