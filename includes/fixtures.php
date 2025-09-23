@@ -22,8 +22,8 @@ if ($teams_result->num_rows > 0) {
 </head>
 <body>
 <?php include 'adminDashboardNav.php'; ?>
+<h2 class="text-center">Manage Fixtures</h2>
 <div class="container">
-    <h2 class="text-center">Manage Fixtures</h2>
 
     <div class="button-row">
         <button class="btn-add" onclick="openAddModal()">Add New Match</button>

@@ -48,6 +48,8 @@ $teams = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name AS
 
   <?php include 'adminDashboardNav.php'; ?>
 
+   <h2 class="text-center">Manage Players</h2>
+
     <form method="POST">
       <h2>Add Player</h2>
         <label>First Name</label>
