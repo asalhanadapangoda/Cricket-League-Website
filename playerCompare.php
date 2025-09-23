@@ -55,6 +55,7 @@ if (isset($_POST['compare'])) {
 <body class="bg-light">
 
 <div class="container mt-5">
+    <div style="height: 2.5rem;"></div>
     <form id="compareForm" method="POST" autocomplete="off" class="card p-4 shadow-sm">
         <div class="row g-3">
             <div class="col-md-6">
@@ -163,3 +164,4 @@ attachAutocomplete('player2_input','player2_list');
 
 </body>
 </html>
+<?php include 'footer.php'; ?>
