@@ -187,7 +187,6 @@ body {
     cursor: pointer;
     border-bottom: 1px solid #f1f3fb;
     font-size: 0.98rem;
-    transition: background 0.15s, color 0.15s;
 }
 
 
