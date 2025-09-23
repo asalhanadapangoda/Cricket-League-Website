@@ -27,19 +27,40 @@ if (isset($_POST['delete'])) {
 
 // Search players
 $search = "";
-if (isset($_GET['search'])) {
-    $search = $_GET['search'];
+if (isset($_GET['player_search'])) {
+    $search = trim($_GET['player_search']);
 }
 
-$query = "SELECT p.player_id, p.first_name, p.last_name, t.team_name
-          FROM player p
-          LEFT JOIN team t ON p.team_id = t.team_id
-          WHERE CONCAT(p.first_name, ' ', p.last_name) LIKE ?";
-$stmt = $conn->prepare($query);
-$like_search = "%$search%";
-$stmt->bind_param("s", $like_search);
+if ($search !== "") {
+    $sql = "SELECT p.player_id, p.first_name, p.last_name, t.team_name
+              FROM player p
+              LEFT JOIN team t ON p.team_id = t.team_id
+              WHERE LOWER(p.first_name) LIKE ?
+                 OR LOWER(p.last_name) LIKE ?
+                 OR LOWER(CONCAT(p.first_name, ' ', p.last_name)) LIKE ?
+              ORDER BY p.first_name, p.last_name";
+    $stmt = $conn->prepare($sql);
+    $like = '%' . mb_strtolower($search, 'UTF-8') . '%';
+    $stmt->bind_param("sss", $like, $like, $like);
+} else {
+    $sql = "SELECT p.player_id, p.first_name, p.last_name, t.team_name
+              FROM player p
+              LEFT JOIN team t ON p.team_id = t.team_id
+              ORDER BY p.first_name, p.last_name";
+    $stmt = $conn->prepare($sql);
+}
+
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Fetch all to avoid any cursor issues
+$players = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $players[] = $row;
+    }
+}
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -55,8 +76,8 @@ $result = $stmt->get_result();
 <div class="container">
 
     <div class="d-flex">
-        <form class="form-inline" method="GET" action="">
-            <input type="text" name="search" class="form-control mr-2" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
+        <form class="form-inline" method="GET" action="managePlayers.php">
+            <input type="text" name="player_search" class="form-control mr-2" placeholder="Search by first or last name" value="<?php echo htmlspecialchars($search); ?>">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
         <a href="player.php" class="btn btn-success">Add New Player</a>
@@ -71,10 +92,10 @@ $result = $stmt->get_result();
             </tr>
         </thead>
         <tbody>
-        <?php while ($row = $result->fetch_assoc()): ?>
+        <?php foreach ($players as $row): ?>
             <tr>
-                <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
-                <td><?php echo $row['team_name']; ?></td>
+                <td><?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?></td>
+                <td><?php echo htmlspecialchars($row['team_name']); ?></td>
                 <td>
                     <form method="POST" onsubmit="return confirm('Are you sure you want to delete this player?');">
                             <input type="hidden" name="player_id" value="<?php echo $row['player_id']; ?>">
@@ -82,7 +103,7 @@ $result = $stmt->get_result();
                     </form>
                 </td>
             </tr>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
 
