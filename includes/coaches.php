@@ -12,9 +12,8 @@ include __DIR__ . '/db.php';
 <body>
 
 
-
+<h2 class="text-center">Manage Coaches</h2>
 <div class="container">
-    <h2 class="text-center">Manage Coaches</h2>
 
     <div class="button-row">
         <button class="btn-add" onclick="openAddModal()">Add New Coach</button>

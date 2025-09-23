@@ -1,70 +1,90 @@
 /* General page styling */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(to bottom right, #0d5c2d, #1b8a47);
+    background: #d4f5e3;
     margin: 0;
+    margin-left: 200px;
     padding: 0;
     min-height: 100vh;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: #fff;
+    justify-content: flex-start;
+    color: #d4f5e3;
 }
 
 /* Headings */
 h2 {
-    color: #000000;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    color: #003558;
+    margin-top: 36px;
+    margin-bottom: 24px;
     text-align: center;
-    font-size: 24px;
-    letter-spacing: 1px;
+    font-size: 28px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
+
 
 /* Form styling */
 form {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.13);
+    padding: 24px 32px;
     margin: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.13);
     text-align: center;
-    width: 320px;
+    width: 340px;
+    transition: box-shadow 0.3s;
+}
+
+form:hover {
+    box-shadow: 0 10px 32px rgba(0,0,0,0.18);
 }
 
 /* Labels */
 label {
     display: block;
     text-align: left;
-    margin-top: 10px;
-    font-weight: bold;
-    color: #000000;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #003558;
+    letter-spacing: 0.5px;
 }
+
 
 /* Inputs and selects */
 input[type="number"],
 input[type="text"],
 select {
     width: 100%;
-    padding: 8px 10px;
-    margin-top: 6px;
-    margin-bottom: 12px;
+    padding: 10px 12px;
+    margin-top: 7px;
+    margin-bottom: 16px;
     border: none;
-    border-radius: 6px;
-    font-size: 14px;
+    border-radius: 10px;
+    font-size: 15px;
     outline: none;
     box-sizing: border-box;
     background: #f9f9f9;
     color: #333;
+    transition: box-shadow 0.2s, border 0.2s;
 }
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+    box-shadow: 0 0 0 2px #1b8a47;
+    border: 1px solid #1b8a47;
+}
+
 
 /* Dropdown style */
 select {
     background: #fff;
     color: #333;
     cursor: pointer;
+    font-weight: 500;
 }
 
 /* Buttons */
@@ -73,43 +93,73 @@ button,
     background: #003558;
     border: none;
     color: #ffffff;
-    padding: 10px 16px;
-    margin-top: 10px;
-    border-radius: 8px;
-    font-size: 15px;
+    padding: 11px 20px;
+    margin-top: 12px;
+    border-radius: 12px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s ease;
     text-decoration: none;
     display: inline-block;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 button:hover,
 .back-btn:hover {
-    background: #0062a3;
-    transform: scale(1.05);
+    background: #001f3f;
+    transform: scale(1.06);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
 }
 
 /* Success message */
 .success {
     background: #2ecc71;
-    padding: 10px;
-    border-radius: 6px;
-    margin: 10px auto;
+    padding: 10px 18px;
+    border-radius: 8px;
+    margin: 14px auto;
     width: fit-content;
     color: #041b3a;
     font-weight: bold;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 /* Error message */
 .error {
     background: #e74c3c;
-    padding: 10px;
-    border-radius: 6px;
-    margin: 10px auto;
+    padding: 10px 18px;
+    border-radius: 8px;
+    margin: 14px auto;
     width: fit-content;
     color: #fff;
     font-weight: bold;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Card and container layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 18px;
+    margin-bottom: 36px;
+}
+
+.card {
+    background: rgba(255,255,255,0.18);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    padding: 28px 18px;
+    margin: 0 8px 0 32px;
+    min-width: 340px;
+    max-width: 370px;
+    flex: 1 1 340px;
+    transition: box-shadow 0.3s;
+}
+.card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
 }

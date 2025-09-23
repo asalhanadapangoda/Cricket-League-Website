@@ -20,6 +20,8 @@ body {
 h2.text-center {
     color: #000000;
     margin-bottom: 30px;
+    text-align: center;
+    font-size: 32px;
 }
 
 /* Table Styles */

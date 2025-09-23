@@ -11,8 +11,8 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 require_once "includes/db.php";
 
-// Step 1: Get all team IDs for dropdown
-$sql_1= "SELECT team_id FROM point_table";
+// Step 1: Get all team IDs, names, and logos for dropdown (join team table)
+$sql_1= "SELECT p.team_id, t.team_name, t.logo FROM point_table p JOIN team t ON p.team_id = t.team_id";
 $teamResult = mysqli_query($conn, $sql_1);
 
 // Initialize variables
@@ -71,7 +71,8 @@ if (isset($_POST['update'])) {
                 <?php
                 while ($row = mysqli_fetch_assoc($teamResult)) {
                     $selected = ($selectedTeam == $row['team_id']) ? 'selected' : '';
-                    echo "<option value='{$row['team_id']}' $selected>{$row['team_id']}</option>";
+                    $display =$row['team_name'];
+                    echo "<option value='{$row['team_id']}' $selected>$display</option>";
                 }
                 ?>
             </select>
