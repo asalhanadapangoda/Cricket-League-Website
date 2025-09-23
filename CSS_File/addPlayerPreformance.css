@@ -1,112 +1,155 @@
 /* General page styling */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(to bottom right, #0d5c2d, #1b8a47);
+    background: linear-gradient(135deg, #0d5c2d 0%, #1b8a47 100%);
     margin: 0;
+    margin-left: 250px;
     padding: 0;
     min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+    color: #222;
 }
 
 /* Center each form section */
+
 .form-container {
     text-align: center;
-    margin: 20px auto; /* space between boxes */
+    margin: 32px auto 32px auto;
+    padding: 32px 36px 28px 36px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+    max-width: 370px;
+    min-width: 270px;
+    transition: box-shadow 0.2s;
+}
+.form-container:hover {
+    box-shadow: 0 10px 32px rgba(0,0,0,0.18);
 }
 
+
 /* Headings */
+
 h2 {
-    color: #000000;
-    margin-bottom: 15px;
-    font-size: 24px;
+    color: #003558;
+    margin-bottom: 18px;
+    font-size: 1.35rem;
     letter-spacing: 1px;
+    font-weight: 600;
 }
 
 /* Form styling */
-form {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px 30px;
 
+form {
+    background: rgba(255,255,255,0.22);
+    padding: 22px 18px 18px 18px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     text-align: center;
-    width: 300px;
-    margin: auto; /* center form itself */
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* Labels */
+
 label {
     display: block;
     text-align: left;
     margin-top: 10px;
-    font-weight: bold;
-    color: #000000;
+    margin-bottom: 2px;
+    font-weight: 600;
+    color: #003558;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
 }
 
 /* Inputs and selects */
+
 input[type="number"],
 input[type="text"],
-
 select {
     width: 100%;
-    padding: 8px 10px;
+    padding: 10px 12px;
     margin-top: 6px;
-    margin-bottom: 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
+    margin-bottom: 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 7px;
+    font-size: 1rem;
     outline: none;
     box-sizing: border-box;
+    background: #f9f9f9;
+    color: #222;
+    transition: border 0.2s;
+}
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+    border: 1.5px solid #1b8a47;
+    background: #fff;
 }
 
 /* Dropdown style */
+
 select {
     background: #fff;
     color: #333;
     cursor: pointer;
+    font-weight: 500;
 }
 
 /* Buttons */
+
 button, .back-btn {
     background: #003558;
     border: none;
-    color: #ffffff;
-    padding: 10px 16px;
+    color: #fff;
+    padding: 11px 22px;
     margin-top: 10px;
     border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: background 0.2s, transform 0.2s;
     text-decoration: none;
     display: inline-block;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
 }
-
 button:hover, .back-btn:hover {
-    background: #0062a3;
-    transform: scale(1.05);
+    background: #002244;
+    transform: translateY(-2px) scale(1.06);
 }
 
 /* Success message */
+
 p {
-    background: #2ecc71;
-    padding: 10px;
-    border-radius: 6px;
-    margin: 10px auto;
+    background: #e6f9ed;
+    padding: 12px 18px;
+    border-radius: 7px;
+    margin: 18px auto 0 auto;
     width: fit-content;
-    color: #041b3a;
-    font-weight: bold;
+    color: #1b8a47;
+    font-weight: 600;
     text-align: center;
+    font-size: 1.08rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 
 /* Card-like form inputs */
-form input[type="number"],
-form input[type="text"] {
-    background: #f9f9f9;
-    color: #333;
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .form-container {
+        padding: 18px 6px 14px 6px;
+        min-width: unset;
+        max-width: 98vw;
+    }
+    form {
+        padding: 12px 2vw 10px 2vw;
+    }
+    h2.text-center {
+        font-size: 1.3rem;
+    }
 }

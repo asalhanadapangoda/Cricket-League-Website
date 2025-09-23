@@ -1,7 +1,7 @@
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #eafaf1, #d4f5e3);
+    background: linear-gradient(135deg, #eafaf1, #c6ccc9);
     margin: 0;
     padding: 0;
     color: #222;
@@ -15,13 +15,6 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-h2.text-center {
-    color: #000000;
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 32px;
 }
 
 /* Table Styles */

@@ -22,7 +22,6 @@ if ($teams_result->num_rows > 0) {
 </head>
 <body>
 <?php include 'adminDashboardNav.php'; ?>
-<h2 class="text-center">Manage Fixtures</h2>
 <div class="container">
 
     <div class="button-row">

@@ -19,14 +19,6 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-h2.text-center {
-    color: #000000; /* dark blue heading */
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 32px;
-}
-
-
 .fixtures-table {
     width: 100%;
     border-collapse: collapse;

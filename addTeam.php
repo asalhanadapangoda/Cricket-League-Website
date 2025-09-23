@@ -98,6 +98,7 @@ $teams = mysqli_query($conn, "SELECT team_id, team_name, logo FROM team ORDER BY
 <body>
 <?php include 'adminDashboardNav.php'; ?>
 <div class="page-container">
+  <div class="card">
 
   <div class="add-btn">
     <button id="btnShowForm" class="btn" type="button">Add Team</button>
@@ -113,22 +114,15 @@ $teams = mysqli_query($conn, "SELECT team_id, team_name, logo FROM team ORDER BY
     echo "<div class='msg'>".htmlspecialchars($message)."</div>";
   } ?>
 
-  <!-- Modal Add Form -->
-  <div id="addForm" class="modal">
-    <div class="form-card">
-      <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="add">
-        <label>Team ID <input type="text" name="team_id" required></label><br><br>
-        <label>Team Name <input type="text" name="team_name" required></label><br><br>
-        <label>Logo <input type="file" name="team_logo" accept="image/*" required></label><br><br>
-        <button type="button" id="btnCancel" class="btn secondary">Cancel</button>
-        <button type="submit" class="btn">Submit</button>
-      </form>
-    </div>
-  </div>
-
   <table>
-    <thead><tr><th>Logo</th><th>Name</th><th>ID</th><th>Actions</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Logo</th>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
     <tbody>
     <?php if(mysqli_num_rows($teams)==0): ?>
       <tr><td colspan="4">No teams found.</td></tr>
@@ -148,6 +142,20 @@ $teams = mysqli_query($conn, "SELECT team_id, team_name, logo FROM team ORDER BY
     <?php endwhile; endif; ?>
     </tbody>
   </table>
+  </div>
+   <!-- Modal Add Form -->
+  <div id="addForm" class="modal">
+    <div class="form-card">
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="add">
+        <label>Team ID <input type="text" name="team_id" required></label><br><br>
+        <label>Team Name <input type="text" name="team_name" required></label><br><br>
+        <label>Logo <input type="file" name="team_logo" accept="image/*" required></label><br><br>
+        <button type="button" id="btnCancel" class="btn secondary">Cancel</button>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>

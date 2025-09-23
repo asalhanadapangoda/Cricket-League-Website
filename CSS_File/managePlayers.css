@@ -56,19 +56,19 @@ a.btn-success {
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background-color: #051147;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #04305e;
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #051147;
 }
 
 .btn-success:hover {
-    background-color: #1e7e34;
+    background-color: #030c59;
 }
 
 .btn-danger {
@@ -93,7 +93,7 @@ table {
 }
 
 table thead tr {
-    background-color: #007bff;
+    background-color: #051147;
     color: #fff;
 }
 

@@ -111,10 +111,44 @@ if (isset($_POST['insert_match'])) {
 <body>
 <?php include 'adminDashboardNav.php'; ?>
 <div id="notification"></div>
-
-<h2>Recent Matches</h2>
-
+<div class="card">
 <button class="add-btn" onclick="openModal()">Add Match Result</button>
+
+<!-- Matches Table -->
+<table>
+    <tr>
+        <th>Home Team</th>
+        <th>Visit Team</th>
+        <th>Result</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+    <?php
+    $matches = $conn->query("SELECT m.*, 
+                h.team_name AS home_name, 
+                v.team_name AS visit_name
+                FROM recent_match m
+                JOIN team h ON m.home_team_id=h.team_id
+                JOIN team v ON m.visit_team_id=v.team_id
+                ORDER BY m.date DESC");
+
+    while ($row = $matches->fetch_assoc()) {
+        echo "<tr>
+            <td>{$row['home_name']} ({$row['home_team_runs']}/{$row['home_team_wickets']} in {$row['home_team_overs']} ov)</td>
+            <td>{$row['visit_name']} ({$row['visit_team_runs']}/{$row['visit_team_wickets']} in {$row['visit_team_overs']} ov)</td>
+            <td>{$row['final_result']}</td>
+            <td>{$row['date']}</td>
+            <td>
+                <form method='POST' onsubmit=\"return confirm('Delete this match?');\">
+                    <input type='hidden' name='match_id' value='{$row['match_id']}'>
+                    <button type='submit' name='delete'>Delete</button>
+                </form>
+            </td>
+        </tr>";
+    }
+    ?>
+</table>
+</div>
 
 <!-- Modal Form -->
 <div id="modal" class="modal">
@@ -166,42 +200,9 @@ if (isset($_POST['insert_match'])) {
             <button type="submit" name="insert_match">Save</button>
         </form>
     </div>
-</div>
+  </div>
 
-<!-- Matches Table -->
-<table>
-    <tr>
-        <th>Home Team</th>
-        <th>Visit Team</th>
-        <th>Result</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-    <?php
-    $matches = $conn->query("SELECT m.*, 
-                h.team_name AS home_name, 
-                v.team_name AS visit_name
-                FROM recent_match m
-                JOIN team h ON m.home_team_id=h.team_id
-                JOIN team v ON m.visit_team_id=v.team_id
-                ORDER BY m.date DESC");
 
-    while ($row = $matches->fetch_assoc()) {
-        echo "<tr>
-            <td>{$row['home_name']} ({$row['home_team_runs']}/{$row['home_team_wickets']} in {$row['home_team_overs']} ov)</td>
-            <td>{$row['visit_name']} ({$row['visit_team_runs']}/{$row['visit_team_wickets']} in {$row['visit_team_overs']} ov)</td>
-            <td>{$row['final_result']}</td>
-            <td>{$row['date']}</td>
-            <td>
-                <form method='POST' onsubmit=\"return confirm('Delete this match?');\">
-                    <input type='hidden' name='match_id' value='{$row['match_id']}'>
-                    <button type='submit' name='delete'>Delete</button>
-                </form>
-            </td>
-        </tr>";
-    }
-    ?>
-</table>
 
 </body>
 </html>

@@ -10,9 +10,6 @@ include __DIR__ . '/db.php';
     <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/coachesStyle.css">
 </head>
 <body>
-
-
-<h2 class="text-center">Manage Coaches</h2>
 <div class="container">
 
     <div class="button-row">

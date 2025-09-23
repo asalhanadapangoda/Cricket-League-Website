@@ -48,8 +48,6 @@ $teams = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name AS
 
   <?php include 'adminDashboardNav.php'; ?>
 
-   <h2 class="text-center">Manage Players</h2>
-
     <form method="POST">
       <h2>Add Player</h2>
         <label>First Name</label>
@@ -62,7 +60,7 @@ $teams = $conn->query("SELECT team_id, team_name FROM team ORDER BY team_name AS
         <select name="type" required>
             <option value="">Select type</option>
             <option value="Batsman">Batsman</option>
-            <option value="Captain/Batsman">Captain/Batsman</option>
+            <option value="Captain/Batsman">Captain</option>
             <option value="Bowler">Bowler</option>
             <option value="All-Rounder">All-Rounder</option>
             <option value="Wicket-Keeper">Wicket-Keeper</option>
