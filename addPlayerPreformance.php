@@ -45,6 +45,7 @@ if (isset($_POST['update_performance'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="CSS_File/addPlayerPreformance.css">
 </head>
 <body>

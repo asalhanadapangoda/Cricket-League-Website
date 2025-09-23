@@ -53,6 +53,7 @@ if (isset($_POST['update'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="CSS_File/updateTeamPointStyle.css">
 </head>
 <body>

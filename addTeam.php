@@ -93,6 +93,7 @@ $teams = mysqli_query($conn, "SELECT team_id, team_name, logo FROM team ORDER BY
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Admin Dashboard</title>
 <link rel="stylesheet" href="CSS_File/addTeam.css">
 </head>
 <body>

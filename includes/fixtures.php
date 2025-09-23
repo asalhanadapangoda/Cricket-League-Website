@@ -16,8 +16,6 @@ if ($teams_result->num_rows > 0) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Fixtures</title>
-
     <link rel="stylesheet" href="/Cricket-League-Website/CSS_File/fixturesStyle.css">
 </head>
 <body>
@@ -75,10 +73,10 @@ if ($teams_result->num_rows > 0) {
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Match</h3>
 
-        <form action="includes/fixturesAdd.php" method="POST">
+    <form action="includes/fixturesAdd.php" method="POST" onsubmit="return validateTeams(this)">
 
             <label>Home Team</label>
-            <select name="team1" required>
+            <select name="team1" id="add_team1" required onchange="syncTeamDropdowns('add_team1','add_team2')">
                 <option value="">Select Home Team</option>
                 <?php foreach ($teams as $team): ?>
                     <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
@@ -86,7 +84,7 @@ if ($teams_result->num_rows > 0) {
             </select>
             <br><br>
             <label>Visiting Team</label>
-            <select name="team2" required>
+            <select name="team2" id="add_team2" required onchange="syncTeamDropdowns('add_team2','add_team1')">
                 <option value="">Select Visiting Team</option>
                 <?php foreach ($teams as $team): ?>
                     <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
@@ -108,10 +106,10 @@ if ($teams_result->num_rows > 0) {
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
         <h3>Edit Match</h3>
-        <form action="/Cricket-League-Website/includes/fixturesUpdate.php" method="POST">
+    <form action="/Cricket-League-Website/includes/fixturesUpdate.php" method="POST" onsubmit="return validateTeams(this)">
             <input type="hidden" name="match_id" id="edit_id">
             <label>Home Team</label>
-            <select name="team1" id="edit_team1" required>
+            <select name="team1" id="edit_team1" required onchange="syncTeamDropdowns('edit_team1','edit_team2')">
                 <option value="">Select Home Team</option>
                 <?php foreach ($teams as $team): ?>
                     <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
@@ -119,7 +117,7 @@ if ($teams_result->num_rows > 0) {
             </select>
             <br><br>
             <label>Visiting Team</label>
-            <select name="team2" id="edit_team2" required>
+            <select name="team2" id="edit_team2" required onchange="syncTeamDropdowns('edit_team2','edit_team1')">
                 <option value="">Select Visiting Team</option>
                 <?php foreach ($teams as $team): ?>
                     <option value="<?php echo htmlspecialchars($team['team_id']); ?>"><?php echo htmlspecialchars($team['team_name']); ?></option>
@@ -159,6 +157,36 @@ function closeEditModal() {
 window.onclick = function(event) {
     if (event.target == document.getElementById('addModal')) closeAddModal();
     if (event.target == document.getElementById('editModal')) closeEditModal();
+}
+
+// Disable selected team in the other dropdown
+function syncTeamDropdowns(changedId, otherId) {
+    var changed = document.getElementById(changedId);
+    var other = document.getElementById(otherId);
+    var selectedValue = changed.value;
+    for (var i = 0; i < other.options.length; i++) {
+        other.options[i].disabled = false;
+        if (other.options[i].value && other.options[i].value === selectedValue) {
+            other.options[i].disabled = true;
+        }
+    }
+}
+
+// Initialize disables when modals open
+function openAddModal() {
+    document.getElementById('addModal').style.display = 'block';
+    syncTeamDropdowns('add_team1','add_team2');
+    syncTeamDropdowns('add_team2','add_team1');
+}
+function openEditModal(id, home_id, visit_id, date, time) {
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_team1').value = home_id;
+    document.getElementById('edit_team2').value = visit_id;
+    document.getElementById('edit_date').value = date;
+    document.getElementById('edit_time').value = time;
+    document.getElementById('editModal').style.display = 'block';
+    syncTeamDropdowns('edit_team1','edit_team2');
+    syncTeamDropdowns('edit_team2','edit_team1');
 }
 </script>
 

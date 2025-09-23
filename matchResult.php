@@ -70,6 +70,7 @@ if (isset($_POST['insert_match'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="CSS_File/matchResult.css">
     <script>
         function openModal() { document.getElementById("modal").style.display = "block"; }
