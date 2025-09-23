@@ -20,7 +20,7 @@
             .catch(error => console.error('Error fetching live score:', error));
         }
 
-        setInterval(fetchLiveScore, 5000);
+        setInterval(fetchLiveScore, 50);
 
         fetchLiveScore();
     </script>
