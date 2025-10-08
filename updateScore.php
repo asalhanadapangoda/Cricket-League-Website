@@ -41,7 +41,8 @@ if ($is_setup) {
     }
     $stmt->execute();
     $stmt->close();
-    echo json_encode(['runs' => 0, 'wickets' => 0, 'balls' => 0, 'innings_over' => false]);
+    $response = ['runs' => 0, 'wickets' => 0, 'balls' => 0, 'innings_over' => false, 'striker_id' => $striker_id, 'non_striker_id' => $non_striker_id];
+    echo json_encode($response);
     exit;
 }
 
@@ -64,18 +65,25 @@ $innings_over = false;
 $runs_scored = (int)($_POST['runs_scored'] ?? 0);
 $extras_type = $_POST['extras_type'] ?? 'none';
 $is_wicket = isset($_POST['is_wicket']) && $_POST['is_wicket'] === 'true';
+$is_legal_delivery = ($extras_type !== 'wide' && $extras_type !== 'noball');
 
 if ($extras_type === 'wide' || $extras_type === 'noball') {
     $current_score['runs'] += 1;
 }
 $current_score['runs'] += $runs_scored;
 
-if ($extras_type !== 'wide' && $extras_type !== 'noball') {
+if ($is_legal_delivery) {
     $current_score['balls']++;
 }
 
 if ($is_wicket) {
     $current_score['wickets']++;
+}
+
+if ($is_legal_delivery && $runs_scored % 2 !== 0) {
+    $temp_striker = $striker_id;
+    $striker_id = $non_striker_id;
+    $non_striker_id = $temp_striker;
 }
 
 if ($current_score['innings_no'] == 1 && ($current_score['balls'] >= 120 || $current_score['wickets'] >= 10)) {
@@ -89,6 +97,12 @@ $overs_whole = floor($current_score['balls'] / 6);
 $overs_balls = $current_score['balls'] % 6;
 $overs_decimal = (float)($overs_whole . '.' . $overs_balls);
 
+if ($is_legal_delivery && $overs_balls === 0 && $current_score['balls'] > 0 && !$innings_over) {
+    $temp_striker = $striker_id;
+    $striker_id = $non_striker_id;
+    $non_striker_id = $temp_striker;
+}
+
 $sql = "UPDATE live_score SET runs=?, wickets=?, overs=?, striker_id=?, non_striker_id=?, bowler_id=?, target=? WHERE id=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("iidiiisi", $current_score['runs'], $current_score['wickets'], $overs_decimal, $striker_id, $non_striker_id, $bowler_id, $current_score['target'], $latest_innings_row['id']);
@@ -96,5 +110,8 @@ $stmt->execute();
 $stmt->close();
 
 $current_score['innings_over'] = $innings_over;
+$current_score['striker_id'] = $striker_id;
+$current_score['non_striker_id'] = $non_striker_id;
+
 echo json_encode($current_score);
 ?>
