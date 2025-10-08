@@ -1,4 +1,3 @@
-/* General */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f5f7fa;
@@ -8,7 +7,7 @@ body {
     margin-top: 50px;
 }
 
-/* Heading */
+
 h2 {
     text-align: center;
     font-size: 35px;
@@ -34,7 +33,7 @@ h2 {
      background: #0d278d;
     }
 
-/* Modal */
+
 .modal {
     display: none;
     position: fixed;
@@ -88,7 +87,7 @@ h2 {
     background: #219150;
 }
 
-/* Table */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -111,7 +110,7 @@ table tr:hover {
     background: #f1f1f1;
 }
 
-/* Delete Button */
+
 table form button {
     padding: 6px 12px;
     background: #e74c3c;

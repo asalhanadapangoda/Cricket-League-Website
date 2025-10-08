@@ -1,6 +1,4 @@
-/* =======================
-   Body Backgrounds per Team
-======================= */
+
 body{
     background: #6994c3;
     font-family: Arial, sans-serif;
@@ -9,9 +7,7 @@ body{
     text-align: center;
 }
 
-/* =======================
-   Team Logo
-======================= */
+
 .team-image {
     display: flex;
     justify-content: center;
@@ -25,9 +21,7 @@ body{
     box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
 }
 
-/* =======================
-   Section Headers
-======================= */
+
 .Main-topic-header {
     text-align: center;        
     font-size: 2rem;            
@@ -38,16 +32,14 @@ body{
     text-transform: uppercase;  
 }
 
-/* Optional smaller titles */
+
 .title {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* =======================
-   Table Styling
-======================= */
+
 .table {
     width: 60%;
     margin: 0 auto 50px;

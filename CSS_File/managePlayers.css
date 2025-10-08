@@ -1,4 +1,4 @@
-/* ---------------- Body & Container ---------------- */
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f6fa;
@@ -16,10 +16,10 @@ body {
     margin-right: 110px;
 }
 
-/* ---------------- Form & Add Button Container ---------------- */
+
 .d-flex {
     display: flex;
-    justify-content: space-between; /* Search left, button right */
+    justify-content: space-between; 
     align-items: center;
     flex-wrap: wrap;
     margin-bottom: 20px;
@@ -33,10 +33,10 @@ body {
 }
 
 a.btn-success {
-    margin-left: auto; /* Pushes Add New Player button to the right */
+    margin-left: auto; 
 }
 
-/* ---------------- Form Controls & Buttons ---------------- */
+
 .form-control {
     padding: 6px 12px;
     border-radius: 5px;
@@ -84,7 +84,7 @@ a.btn-success {
     font-size: 12px;
 }
 
-/* ---------------- Table Styles ---------------- */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -111,7 +111,7 @@ table tbody tr:hover {
     background-color: #e9ecef;
 }
 
-/* Center text in Action column */
+
 table td:last-child {
     text-align: center;
 }

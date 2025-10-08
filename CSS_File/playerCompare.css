@@ -1,16 +1,14 @@
-/* Add space after the form */
 
-/* --- General Page & Container --- */
 body {
     background: linear-gradient(135deg, #132f6f 0%, #153c6e 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
     line-height: 1.7;
     margin: 0;
-    padding-top: 90px; /* More space for fixed navbar */
+    padding-top: 90px; 
     
 }
-/* --- Container --- */
+
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -19,10 +17,9 @@ body {
     background: rgba(255,255,255,0.97);
     border-radius: 18px;
     box-shadow: 0 6px 24px rgba(17, 38, 146, 0.10);
-    margin-bottom: 3rem; /* Add space below container before footer */
+    margin-bottom: 3rem; 
 }
 
-/* --- Card Styling --- */
 
 .card {
     border: none;
@@ -52,7 +49,7 @@ body {
     font-size: 1.02rem;
 }
 
-/* Increased specificity for player labels and button */
+
 
 .container form .form-label {
     margin: 20px auto 10px;
@@ -63,7 +60,7 @@ body {
     margin: 2rem auto 0;
 }
 
-/* Original rule for form-label and btn-primary, can be removed if the above works */
+
 
 .form-label {
     margin: 18px;
@@ -120,7 +117,7 @@ body {
     box-shadow: 0 16px 32px rgba(58, 123, 213, 0.28);
 }
 
-/* --- Player Stat Card Styling --- */
+
 
 .row.mt-4 {
     display: flex;
@@ -159,7 +156,7 @@ body {
     color: #2d3a4a;
 }
 
-/* --- Autocomplete List Styling --- */
+
 .autocomplete-wrapper {
     position: relative;
 }
@@ -200,7 +197,6 @@ body {
     color: #1a6aff;
 }
 
-/* --- Responsive layout --- */
 @media (max-width: 768px) {
     .container { max-width: 100%; padding: 0.7rem 0.3rem; }
     .row.mt-4 { gap: 0.7rem; }

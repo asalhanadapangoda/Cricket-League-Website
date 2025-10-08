@@ -28,7 +28,7 @@ body {
 }
 
 .table thead {
-  background: #0073e6; /* Blue header */
+  background: #0073e6; 
   color: #fff;
   text-align: center;
   font-weight: bold;

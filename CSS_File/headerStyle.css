@@ -9,7 +9,7 @@ body {
   font-family: Arial, sans-serif; 
   font-size: large;
   margin: 0;
-  padding-top: 110px; /* prevents content hiding under navbar */
+  padding-top: 110px; 
 }
 
 /* Header (Fixed at top) */
@@ -19,12 +19,12 @@ body {
   align-items: center;
   background: #001771;
   padding: 12px 40px;
-  position: fixed;   /* lock navbar */
+  position: fixed;   
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;     /* keep it on top */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* nice shadow */
+  z-index: 1000;    
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
 }
 
 .logo-container {
@@ -170,9 +170,9 @@ body {
     border-radius: 0;
   }
   .dropdown:hover .dropdown-menu {
-    display: none; /* disable hover */
+    display: none; 
   }
   .dropdown:focus-within .dropdown-menu {
-    display: block; /* open on click */
+    display: block; 
   }
 }

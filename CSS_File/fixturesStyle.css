@@ -1,6 +1,4 @@
-/* -------------------------
-   General Body Styles
-------------------------- */
+
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #eafaf1, #d4f5e3); 
@@ -33,7 +31,7 @@ body {
 }
 
 .fixtures-table thead tr {
-    background: linear-gradient(90deg, #002347, #001c4f); /* gold tones for header */
+    background: linear-gradient(90deg, #002347, #001c4f); 
     color: #fff;
     text-transform: uppercase;
     font-weight: 700;
@@ -45,7 +43,7 @@ body {
 }
 
 .fixtures-table tbody tr:nth-child(even) {
-    background-color: #e6f4ea; /* light green alternate row */
+    background-color: #e6f4ea; 
 }
 
 .fixtures-table tbody tr:hover {
@@ -73,21 +71,21 @@ button {
 
 
 .btn-add {
-    background: #003558; /* light blue */
+    background: #003558; 
     color: #fff;
 }
 
 .btn-add:hover {
-    background: #0062a3; /* darker blue on hover */
+    background: #0062a3; 
 }
 
 .btn-edit {
-    background: #003558; /* slightly lighter blue */
+    background: #003558; 
     color: #fff;
 }
 
 .btn-edit:hover {
-    background: #0062a3; /* darker blue on hover */
+    background: #0062a3; 
 }
 
 .btn-delete {
@@ -100,11 +98,11 @@ button {
     font-weight: 600;         
     cursor: pointer;
     transition: all 0.3s ease;
-    text-decoration: none;     /* remove underline if it's a link */
+    text-decoration: none;     
 }
 
 .btn-delete:hover {
-    background-color: #a71d2a; /* darker red on hover */
+    background-color: #a71d2a; 
 }
 
 
