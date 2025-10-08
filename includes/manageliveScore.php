@@ -259,10 +259,24 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
         })
         .then(response => response.json())
         .then(score => {
+            if (score.error) {
+                alert(score.error);
+                return;
+            }
+
             currentScore = score;
             const overs = Math.floor(score.balls / 6);
             const ball_in_over = score.balls % 6;
             document.getElementById('score-display').innerText = `${score.runs}/${score.wickets} (${overs}.${ball_in_over})`;
+            
+            document.getElementById('striker_id').value = score.striker_id;
+            document.getElementById('non_striker_id').value = score.non_striker_id;
+            
+            const newStriker = teamPlayers.batting.find(p => p.player_id === score.striker_id);
+            const newNonStriker = teamPlayers.batting.find(p => p.player_id === score.non_striker_id);
+            
+            if(newStriker) document.getElementById('striker-name').innerText = newStriker.first_name + ' ' + newStriker.last_name;
+            if(newNonStriker) document.getElementById('non-striker-name').innerText = newNonStriker.first_name + ' ' + newNonStriker.last_name;
             
             if (score.innings_over && !isSecondInnings) {
                 document.getElementById('target-display').innerText = score.target;
@@ -272,14 +286,11 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
             }
 
             const isLegalDelivery = !['wide', 'noball'].includes(document.getElementById('extras_type').value);
-            if (!isSetup) {
-                if ([1, 3, 5].includes(parseInt(document.getElementById('runs_scored').value, 10))) {
-                    swapStrikers();
-                }
-                if (isLegalDelivery && score.balls > 0 && ball_in_over === 0) {
-                    openNewBowlerModal();
-                }
+            
+            if (!isSetup && isLegalDelivery && score.balls > 0 && ball_in_over === 0 && !score.innings_over) {
+                 openNewBowlerModal();
             }
+
              if (!isSetup) resetBallInputs();
         })
         .catch(error => console.error('Error fetching score:', error));
@@ -380,7 +391,6 @@ $upcoming_matches_result = mysqli_query($conn, $upcoming_matches_query);
                 newBowlerSelect.innerHTML += `<option value="${player.player_id}">${player.first_name} ${player.last_name}</option>`;
             }
         });
-        swapStrikers();
         document.getElementById('new-bowler-modal').style.display = 'flex';
     }
 
